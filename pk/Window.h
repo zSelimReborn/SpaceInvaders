@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include <glm/glm.hpp>
 #include <stdexcept>
@@ -9,7 +10,15 @@ struct GLFWwindow;
 class Window
 {
 public:
+	typedef std::shared_ptr<Window> SharedPtr;
+	typedef std::unique_ptr<Window> UniquePtr;
+
 	Window(const int _Width, const int _Height, const std::string& _Title);
+	Window(const Window&) = delete;
+	Window(const Window&&) = delete;
+	void operator=(const Window&) = delete;
+	void operator=(const Window&&) = delete;
+
 	void Initialize();
 
 	int GetWidth() const;
@@ -25,7 +34,7 @@ public:
 	bool IsPressed(int Key) const;
 	bool IsReleased(int Key) const;
 
-	void ClearColor(const float Color[]) const;
+	void ClearColor(const glm::vec4& Color) const;
 	void ClearFlags(int Flags) const;
 
 	void SetBlendFunction(int Key, int Value) const;

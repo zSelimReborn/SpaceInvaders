@@ -14,10 +14,9 @@ namespace Math
 
 namespace Colors
 {
-	const float White[] = { 1.f, 1.f, 1.f };
-	const float Black[] = { 0.f, 0.f, 0.f };
-	const float BlackAlpha[] = { 0.f, 0.f, 0.f, 1.f };
-	const float Red[] = { 1.f, 0.f, 0.f };
-	const float Green[] = { 0.f, 1.f, 0.f };
-	const float LightBlack[] = { 0.14f, 0.15f, 0.15f, 1.f };
+	const glm::vec4 White(1.f, 1.f, 1.f, 1.f);
+	const glm::vec4 Black(0.f, 0.f, 0.f, 1.f);
+	const glm::vec4 Red(1.f, 0.f, 0.f, 1.f);
+	const glm::vec4 Green(0.f, 1.f, 0.f, 1.f);
+	const glm::vec4 LightBlack(0.14f, 0.15f, 0.15f, 1.f);
 }

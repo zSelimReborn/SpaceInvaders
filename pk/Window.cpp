@@ -93,9 +93,9 @@ bool Window::IsReleased(int Key) const
     return glfwGetKey(WindowPtr, Key) == GLFW_RELEASE;
 }
 
-void Window::ClearColor(const float Color[]) const
+void Window::ClearColor(const glm::vec4& Color) const
 {
-    glClearColor(Color[0], Color[1], Color[2], Color[3]);
+    glClearColor(Color.x, Color.y, Color.z, Color.w);
 }
 
 void Window::ClearFlags(int Flags) const
