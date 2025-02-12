@@ -20,3 +20,24 @@ namespace Colors
 	const glm::vec4 Green(0.f, 1.f, 0.f, 1.f);
 	const glm::vec4 LightBlack(0.14f, 0.15f, 0.15f, 1.f);
 }
+
+struct Transform
+{
+	glm::vec3 Location;
+	glm::vec3 Size;
+
+	Transform();
+	Transform(const glm::vec3& _Location, const glm::vec3& _Size);
+};
+
+struct BoundingBox
+{
+	Transform mTransform;
+	glm::vec2 ScaleOffset;
+
+	BoundingBox(const Transform& _Transform);
+	float Top() const;
+	float Bottom() const;
+	float Right() const;
+	float Left() const;
+};

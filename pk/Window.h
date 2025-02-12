@@ -11,6 +11,7 @@ class Window
 {
 public:
 	typedef std::shared_ptr<Window> SharedPtr;
+	typedef std::weak_ptr<Window> WeakPtr;
 	typedef std::unique_ptr<Window> UniquePtr;
 
 	Window(const int _Width, const int _Height, const std::string& _Title);
