@@ -15,7 +15,7 @@ public:
 	typedef std::weak_ptr<Scene> WeakPtr;
 
 	typedef std::shared_ptr<Actor> ActorSharedPtr;
-	typedef std::vector<ActorSharedPtr>::const_iterator ActorIterator;
+	typedef std::vector<ActorSharedPtr>::iterator ActorIterator;
 
 	Scene(const Window::WeakPtr& InWindow);
 
