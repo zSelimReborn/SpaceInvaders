@@ -119,19 +119,17 @@ void Scene::Add(const Actor::SharedPtr& InActor)
 
 void Scene::Destroyer()
 {
-	std::vector<ActorIterator> PendingDestroy;
-	for (ActorIterator ActorIt = Actors.begin(), ActorEnd = Actors.end(); ActorIt != ActorEnd; ++ActorIt)
+	for (ActorIterator ActorIt = Actors.begin(), ActorEnd = Actors.end(); ActorIt != ActorEnd;)
 	{
 		const Actor::SharedPtr Actor = *ActorIt;
 		if (Actor->IsDestroyed())
 		{
-			PendingDestroy.push_back(ActorIt);
+			ActorIt = Actors.erase(ActorIt);
 		}
-	}
-
-	for (const ActorIterator& It : PendingDestroy)
-	{
-		Actors.erase(It);
+		else
+		{
+			++ActorIt;
+		}
 	}
 }
 

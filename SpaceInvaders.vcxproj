@@ -167,14 +167,14 @@
     <ClInclude Include="pk\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Shaders\shape.frag" />
+    <None Include="Assets\Shaders\shape.vert" />
     <None Include="Assets\Shaders\sprite.frag" />
     <None Include="Assets\Shaders\sprite.vert" />
     <None Include="Assets\Shaders\particle.frag" />
     <None Include="Assets\Shaders\particle.vert" />
     <None Include="Assets\Shaders\text.frag" />
     <None Include="Assets\Shaders\text.vert" />
-    <None Include="shape.frag" />
-    <None Include="shape.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
