@@ -15,8 +15,6 @@ Scene::Scene(const Window::WeakPtr& InWindow)
 	: WindowPtr(InWindow)
 {
 	Projection = glm::ortho(0.f, static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight()), 0.f, -1.0f, 1.0f);
-
-	Self = std::make_shared<Scene>(*this);
 }
 
 void Scene::Begin()
@@ -40,6 +38,7 @@ void Scene::Frame()
 	Update(Delta);
 	Render(Delta);
 
+	AddPendingActors();
 	Destroyer();
 	GetWindow()->CloseFrame();
 }
@@ -59,9 +58,20 @@ void Scene::Update(const float Delta)
 
 void Scene::Input(const float Delta)
 {
-	if (GetWindow()->IsPressed(GLFW_KEY_ESCAPE))
+	if (WindowPtr.expired())
 	{
-		GetWindow()->ShouldClose(true);
+		return;
+	}
+
+	Window::SharedPtr Window = GetWindow();
+	if (Window->IsPressed(GLFW_KEY_ESCAPE))
+	{
+		Window->ShouldClose(true);
+	}
+
+	for (const Actor::SharedPtr& Actor : Actors)
+	{
+		Actor->Input(*GetWindow(), Delta);
 	}
 }
 
@@ -112,8 +122,8 @@ void Scene::Add(const Actor::SharedPtr& InActor)
 {
 	if (InActor != nullptr)
 	{
-		InActor->SetScene(Self);
-		Actors.push_back(InActor);
+		InActor->SetScene(weak_from_this());
+		PendingActors.push_back(InActor);
 	}
 }
 
@@ -123,7 +133,7 @@ void Scene::Destroyer()
 	for (ActorIterator ActorIt = Actors.begin(), ActorEnd = Actors.end(); ActorIt != ActorEnd; ++ActorIt)
 	{
 		const Actor::SharedPtr Actor = *ActorIt;
-		if (Actor->IsDestroyed())
+		if (Actor->IsDestroyed() || Actor == nullptr)
 		{
 			PendingDestroy.push_back(ActorIt);
 		}
@@ -134,6 +144,17 @@ void Scene::Destroyer()
 		It->reset();
 		Actors.erase(It);
 	}
+}
+
+void Scene::AddPendingActors()
+{
+	if (PendingActors.empty())
+	{
+		return;
+	}
+
+	Actors.insert(Actors.end(), PendingActors.begin(), PendingActors.end());
+	PendingActors.clear();
 }
 
 Scene::~Scene() = default;

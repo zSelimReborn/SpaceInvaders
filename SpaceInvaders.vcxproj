@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="image_loader.cpp" />
     <ClCompile Include="main.cpp" />
@@ -151,9 +152,11 @@
     <ClCompile Include="pk\SoundEngine.cpp" />
     <ClCompile Include="pk\Texture.cpp" />
     <ClCompile Include="pk\Window.cpp" />
+    <ClCompile Include="Ship.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Assets.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="pk\Actor.h" />
     <ClInclude Include="pk\AssetManager.h" />
     <ClInclude Include="pk\Common.h" />
@@ -165,6 +168,7 @@
     <ClInclude Include="pk\SoundEngine.h" />
     <ClInclude Include="pk\Texture.h" />
     <ClInclude Include="pk\Window.h" />
+    <ClInclude Include="Ship.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\shape.frag" />
