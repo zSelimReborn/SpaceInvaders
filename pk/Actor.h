@@ -17,8 +17,8 @@ public:
 	typedef std::shared_ptr<Scene> SceneSharedPtr;
 	typedef std::weak_ptr<Scene> SceneWeakPtr;
 
-	Actor(const Transform& _Transform);
-	Actor(const glm::vec3& _Location, const glm::vec3 _Size);
+	Actor(const Transform& InTransform);
+	Actor(const glm::vec3& InLocation, const glm::vec3 InSize);
 
 	void SetScene(const SceneWeakPtr& InScene);
 	SceneSharedPtr GetScene() const;
@@ -42,6 +42,10 @@ public:
 	void SetColor(const glm::vec4& _Color);
 	glm::vec4 GetColor() const;
 
+	float GetInitialLifeSpan() const;
+	void SetInitialLifeSpan(float InLifeSpan);
+	float GetLifeSpan() const;
+
 	glm::mat4 GetRenderModel() const;
 	BoundingBox GetBoundingBox() const;
 	void BindTexture() const;
@@ -57,12 +61,18 @@ public:
 	bool IsDestroyed() const;
 	void Destroy();
 
+	bool IsInViewport() const;
+
 	virtual ~Actor() = default;
 
 protected:
 	void Move(const float Delta);
+	void UpdateLifeSpan(const float Delta);
 
 private:
+	float InitialLifeSpan;
+	float LifeSpan;
+
 	Transform mTransform;
 	glm::vec3 Velocity;
 

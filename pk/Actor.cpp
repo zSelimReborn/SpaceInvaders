@@ -6,13 +6,14 @@
 #include "Renderer.h"
 #include "Scene.h"
 
-Actor::Actor(const ::Transform& _Transform)
-	: mTransform(_Transform), Velocity(0.f), Color(Colors::Black), bPendingDestroy(false)
+Actor::Actor(const ::Transform& InTransform)
+	: InitialLifeSpan(0.f), LifeSpan(0.f),
+		mTransform(InTransform), Velocity(0.f), Color(Colors::Black), bPendingDestroy(false)
 {
 }
 
-Actor::Actor(const glm::vec3& _Location, const glm::vec3 _Size)
-	: mTransform(_Location, _Size), Color(Colors::Black), bPendingDestroy(false)
+Actor::Actor(const glm::vec3& InLocation, const glm::vec3 InSize)
+	: Actor(Transform(InLocation, InSize))
 {
 }
 
@@ -81,10 +82,40 @@ glm::vec4 Actor::GetColor() const
 	return Color;
 }
 
+float Actor::GetInitialLifeSpan() const
+{
+	return InitialLifeSpan;
+}
+
+void Actor::SetInitialLifeSpan(float InLifeSpan)
+{
+	InitialLifeSpan = std::max(0.f, InLifeSpan);
+}
+
+float Actor::GetLifeSpan() const
+{
+	return LifeSpan;
+}
+
 void Actor::Move(const float Delta)
 {
 	mTransform.Location += Velocity * Delta;
 }
+
+void Actor::UpdateLifeSpan(const float Delta)
+{
+	if (InitialLifeSpan <= 0.f)
+	{
+		return;
+	}
+
+	LifeSpan += Delta;
+	if (LifeSpan >= InitialLifeSpan)
+	{
+		Destroy();
+	}
+}
+
 
 glm::mat4 Actor::GetRenderModel() const
 {
@@ -137,6 +168,7 @@ void Actor::Begin()
 void Actor::Update(const float Delta)
 {
 	Move(Delta);
+	UpdateLifeSpan(Delta);
 }
 
 void Actor::Input(const Window& Window, const float Delta)
@@ -164,6 +196,40 @@ bool Actor::IsDestroyed() const
 void Actor::Destroy()
 {
 	bPendingDestroy = true;
+}
+
+bool Actor::IsInViewport() const
+{
+	const SceneSharedPtr CurrentScene = GetScene();
+	if (CurrentScene == nullptr)
+	{
+		return false;
+	}
+
+	const Window::SharedPtr CurrentWindow = CurrentScene->GetWindow();
+	if (CurrentWindow == nullptr)
+	{
+		return false;
+	}
+
+	const glm::vec3 Location = GetLocation();
+	const glm::vec2 SizeOffset = GetBoundingBox().ScaleOffset;
+	const float WindowWidth = static_cast<float>(CurrentWindow->GetWidth());
+	const float WindowHeight = static_cast<float>(CurrentWindow->GetHeight());
+
+	if (Location.x + SizeOffset.x <= 0.f 
+		|| Location.x - SizeOffset.x >= WindowWidth)
+	{
+		return false;
+	}
+
+	if (Location.y + SizeOffset.y <= 0.f || 
+		Location.y - SizeOffset.y >= WindowHeight)
+	{
+		return false;
+	}
+
+	return true;
 }
 
 void Actor::SetLocation(const glm::vec3 NewLocation)
