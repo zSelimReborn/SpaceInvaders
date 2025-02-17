@@ -5,6 +5,7 @@
 #include "pk/Window.h"
 #include "Assets.h"
 #include "Game.h"
+#include "pk/SettingsReader.h"
 
 constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HEIGHT = 600;

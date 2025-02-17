@@ -66,6 +66,12 @@
     <ClCompile Include="Projectile.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
+    <ClCompile Include="pk\Settings.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\SettingsReader.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pk\AssetManager.h">
@@ -114,6 +120,12 @@
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="Types.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\SettingsReader.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\Settings.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>
