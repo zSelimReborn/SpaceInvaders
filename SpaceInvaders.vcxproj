@@ -152,6 +152,7 @@
     <ClCompile Include="pk\SoundEngine.cpp" />
     <ClCompile Include="pk\Texture.cpp" />
     <ClCompile Include="pk\Window.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Ship.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -168,7 +169,9 @@
     <ClInclude Include="pk\SoundEngine.h" />
     <ClInclude Include="pk\Texture.h" />
     <ClInclude Include="pk\Window.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="Ship.h" />
+    <ClInclude Include="Types.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\shape.frag" />

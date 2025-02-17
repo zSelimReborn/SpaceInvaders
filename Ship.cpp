@@ -5,6 +5,7 @@
 
 #include "pk/Scene.h"
 #include "pk/Window.h"
+#include "Projectile.h"
 
 Ship::Ship(const Transform& InTransform, float InMaxSpeed)
 	: Actor(InTransform), MaxSpeed(InMaxSpeed), Speed(InMaxSpeed),
@@ -37,6 +38,11 @@ void Ship::SetShootCooldown(float InCooldown)
 float Ship::GetShootCooldown() const
 {
 	return ShootCooldown;
+}
+
+void Ship::SetProjectileData(const ProjectileData& InProjectileInfo)
+{
+	ProjectileInfo = InProjectileInfo;
 }
 
 float Ship::GetSpeed() const
@@ -108,18 +114,22 @@ void Ship::Shoot()
 	const Scene::SharedPtr CurrentScene = GetScene();
 
 	glm::vec3 SpawnLocation(GetLocation());
-	SpawnLocation.y -= GetSize().y;
+	SpawnLocation += ProjectileInfo.SpawnOffset;
 
-	glm::vec3 Size(5.f, 10.f, 1.f);
+	glm::vec3 Size(ProjectileInfo.Size);
 
-	glm::vec3 Direction(0.f, -1.f, 0.f);
-	glm::vec3 Velocity = Direction * 350.f;
+	glm::vec3 Direction(ProjectileInfo.Direction);
+	glm::vec3 Velocity = Direction * ProjectileInfo.Speed;
 
-	Actor::SharedPtr Projectile = std::make_shared<Actor>(SpawnLocation, Size);
-	Projectile->SetVelocity(Velocity);
-	Projectile->SetShader(GetShader());
+	Projectile::SharedPtr NewProjectile = std::make_shared<Projectile>(SpawnLocation, Size);
+	NewProjectile->SetVelocity(Velocity);
+	NewProjectile->SetShader(ProjectileInfo.Shader);
+	NewProjectile->SetInitialLifeSpan(ProjectileInfo.InitialLifeSpan);
 
-	CurrentScene->Add(Projectile);
+	Projectile::OnHitDelegate Callback = [this](const Actor::SharedPtr& HitActor) { OnProjectileHit(HitActor); };
+	NewProjectile->OnHitActor(Callback);
+
+	CurrentScene->Add(NewProjectile);
 }
 
 void Ship::UpdateCooldown(const float Delta)
@@ -135,5 +145,10 @@ void Ship::UpdateCooldown(const float Delta)
 		bShouldCooldown = false;
 		CurrentCooldown = 0.f;
 	}
+}
+
+void Ship::OnProjectileHit(const Actor::SharedPtr& HitActor)
+{
+	std::cout << "Hit actor!\n";
 }
 

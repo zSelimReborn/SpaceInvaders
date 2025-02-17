@@ -12,11 +12,12 @@ Game::Game(const Window::WeakPtr& InWindow)
 	
 }
 
-void Game::Initialize(Transform ShipInitialTransform, float ShipSpeed, float ShipCooldown)
+void Game::Initialize(Transform ShipInitialTransform, float ShipSpeed, float ShipCooldown, const ProjectileData& ShipProjectileInfo)
 {
 	PlayerShip = std::make_shared<Ship>(ShipInitialTransform, ShipSpeed);
 	PlayerShip->SetColor(Colors::White);
 	PlayerShip->SetShootCooldown(ShipCooldown);
+	PlayerShip->SetProjectileData(ShipProjectileInfo);
 
 	Add(PlayerShip);
 }
