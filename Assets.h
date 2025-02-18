@@ -6,6 +6,15 @@ namespace Assets
 {
 	const std::string BasePath = "Assets/";
 
+	namespace Config
+	{
+		const std::string InnerPath = "Config/";
+
+		const std::string WindowFile = BasePath + InnerPath + "window.txt";
+		const std::string GameFile = BasePath + InnerPath + "game.txt";
+		const std::string PlayerFile = BasePath + InnerPath + "player.txt";
+	}
+
 	namespace Shaders
 	{
 		const std::string InnerPath = "Shaders/";

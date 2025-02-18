@@ -1,0 +1,5 @@
+Speed=450
+Cooldown=1
+Color=1,1,1,1
+ProjectileSize=5,10,1
+ProjectileSpeed=500
