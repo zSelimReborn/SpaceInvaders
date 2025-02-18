@@ -6,8 +6,13 @@
 class Ship : public Actor
 {
 public:
-	Ship(const Transform& InTransform, float InMaxSpeed);
-	Ship(const glm::vec3& InLocation, const glm::vec3& InSize, float InMaxSpeed);
+	static const float DEFAULT_SPEED;
+	static const float DEFAULT_COOLDOWN;
+	static const glm::vec3 DEFAULT_PROJECTILE_SIZE;
+	static const float DEFAULT_PROJECTILE_SPEED;
+
+	Ship(const Transform& InTransform);
+	Ship(const glm::vec3& InLocation, const glm::vec3& InSize);
 
 	void SetSpeed(float InSpeed);
 	float GetSpeed() const;
@@ -18,10 +23,12 @@ public:
 
 	void SetProjectileData(const ProjectileData& InProjectileInfo);
 
+	void LoadConfig() override;
 	void Input(const Window& Window, const float Delta) override;
 	void Update(const float Delta) override;
 
 private:
+	void ConstraintInViewport(const float Delta);
 	void Shoot();
 	void UpdateCooldown(const float Delta);
 

@@ -8,7 +8,7 @@
 
 Actor::Actor(const ::Transform& InTransform)
 	: InitialLifeSpan(0.f), LifeSpan(0.f),
-		mTransform(InTransform), Velocity(0.f), Color(Colors::Black), bPendingDestroy(false)
+		mTransform(InTransform), Velocity(0.f), Color(Colors::Black), bPendingDestroy(false), ConfigFile("")
 {
 }
 
@@ -97,6 +97,16 @@ float Actor::GetLifeSpan() const
 	return LifeSpan;
 }
 
+void Actor::SetConfig(const std::string& InConfigFile)
+{
+	ConfigFile = InConfigFile;
+}
+
+std::string Actor::GetConfigFile() const
+{
+	return ConfigFile;
+}
+
 void Actor::Move(const float Delta)
 {
 	mTransform.Location += Velocity * Delta;
@@ -161,8 +171,13 @@ bool Actor::Collide(const Actor& Other) const
 	return bCollidedX && bCollidedY;
 }
 
+void Actor::LoadConfig()
+{
+}
+
 void Actor::Begin()
 {
+	LoadConfig();
 }
 
 void Actor::Update(const float Delta)

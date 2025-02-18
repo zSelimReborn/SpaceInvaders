@@ -12,11 +12,17 @@ public:
 	typedef std::shared_ptr<Game> SharedPtr;
 	typedef std::shared_ptr<Ship> ShipSharedPtr;
 
+	static const glm::vec3 DEFAULT_SHIP_SIZE;
+
 	Game(const Window::WeakPtr& InWindow);
-	void Initialize(Transform ShipInitialTransform, float ShipSpeed, float ShipCooldown, const ProjectileData& ShipProjectileInfo);
 
 	void Begin() override;
 
 private:
+	void LoadConfig();
+	void SpawnPlayer();
+
+	glm::vec3 ShipSize;
+
 	ShipSharedPtr PlayerShip;
 };

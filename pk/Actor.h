@@ -46,6 +46,9 @@ public:
 	void SetInitialLifeSpan(float InLifeSpan);
 	float GetLifeSpan() const;
 
+	void SetConfig(const std::string& InConfigFile);
+	std::string GetConfigFile() const;
+
 	glm::mat4 GetRenderModel() const;
 	BoundingBox GetBoundingBox() const;
 	void BindTexture() const;
@@ -53,6 +56,7 @@ public:
 
 	bool Collide(const Actor& Other) const;
 
+	virtual void LoadConfig();
 	virtual void Begin();
 	virtual void Update(const float Delta);
 	virtual void Input(const Window& Window, const float Delta);
@@ -81,6 +85,8 @@ private:
 	glm::vec4 Color;
 
 	bool bPendingDestroy;
+
+	std::string ConfigFile;
 
 	SceneWeakPtr ScenePtr;
 };

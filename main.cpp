@@ -7,33 +7,17 @@
 #include "Game.h"
 #include "pk/SettingsReader.h"
 
-constexpr int WINDOW_WIDTH = 800;
-constexpr int WINDOW_HEIGHT = 600;
+Window::SharedPtr CreateWindow();
 
-const std::string WINDOW_TITLE = "Space Invaders";
+constexpr int DEFAULT_WINDOW_WIDTH = 800;
+constexpr int DEFAULT_WINDOW_HEIGHT = 600;
 
-const glm::vec3 SHIP_SIZE(75.f, 20.f, 1.f);
-const glm::vec3 SHIP_SIZE_HALF(SHIP_SIZE.x / 2.f, SHIP_SIZE.y / 2.f, 1.f);
-const glm::vec3 SHIP_BASE_LOCATION(WINDOW_WIDTH / 2, WINDOW_HEIGHT - SHIP_SIZE_HALF.y, 1.0f);
-const Transform SHIP_TRANSFORM(SHIP_BASE_LOCATION, SHIP_SIZE);
-constexpr float SHIP_SPEED = 450.f;
-constexpr float SHIP_COOLDOWN = 1.f;
-
-const glm::vec3 PROJECTILE_SIZE(5.f, 10.f, 1.f);
-constexpr float PROJECTILE_SPEED(500.f);
-constexpr float PROJECTILE_LIFE_SPAN(0.f);
-const std::string PROJECTILE_SHADER = Assets::Shaders::ShapeName;
-
-const glm::vec3 SHIP_SPAWN_OFFSET(0.f, -SHIP_SIZE.y, 0.f);
-const glm::vec3 SHIP_PROJECTILE_DIRECTION(0.f, -1.f, 0.f);
+const std::string DEFAULT_WINDOW_TITLE = "Space Invaders";
 
 int main(int argc, char** argv)
 {
-	Window::SharedPtr WindowPtr = std::make_shared<Window>(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
+	Window::SharedPtr WindowPtr = CreateWindow();
 	Game::SharedPtr GamePtr = std::make_shared<Game>(WindowPtr);
-
-	ProjectileData ShipProjectileInfo(PROJECTILE_LIFE_SPAN, PROJECTILE_SPEED, SHIP_SPAWN_OFFSET, PROJECTILE_SIZE, SHIP_PROJECTILE_DIRECTION, PROJECTILE_SHADER);
-	GamePtr->Initialize(SHIP_TRANSFORM, SHIP_SPEED, SHIP_COOLDOWN, ShipProjectileInfo);
 
 	try
 	{
@@ -51,4 +35,25 @@ int main(int argc, char** argv)
 	}
 
 	return 0;
+}
+
+Window::SharedPtr CreateWindow()
+{
+	int WindowWidth = DEFAULT_WINDOW_WIDTH, WindowHeight = DEFAULT_WINDOW_HEIGHT;
+	std::string WindowTitle = DEFAULT_WINDOW_TITLE;
+
+	Settings::SharedConstPtr WindowSetting = SettingsReader::Load(Assets::Config::WindowFile);
+	if (WindowSetting != nullptr)
+	{
+		WindowSetting->Get("Width", DEFAULT_WINDOW_WIDTH, WindowWidth);
+		WindowSetting->Get("Height", DEFAULT_WINDOW_HEIGHT, WindowHeight);
+		WindowSetting->Get("Title", DEFAULT_WINDOW_TITLE, WindowTitle);
+	}
+	else
+	{
+		std::cout << "Unable to read Window configuration. Back to defaults\n";
+	}
+
+	Window::SharedPtr WindowPtr = std::make_shared<Window>(WindowWidth, WindowHeight, WindowTitle);
+	return WindowPtr;
 }

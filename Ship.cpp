@@ -6,16 +6,22 @@
 #include "pk/Scene.h"
 #include "pk/Window.h"
 #include "Projectile.h"
+#include "pk/SettingsReader.h"
 
-Ship::Ship(const Transform& InTransform, float InMaxSpeed)
-	: Actor(InTransform), MaxSpeed(InMaxSpeed), Speed(InMaxSpeed),
-		ShootCooldown(0.f), CurrentCooldown(0.f), bShouldCooldown(false)
+const float Ship::DEFAULT_SPEED = 450.f;
+const float Ship::DEFAULT_COOLDOWN = 1.f;
+const float Ship::DEFAULT_PROJECTILE_SPEED = 500.f;
+const glm::vec3 Ship::DEFAULT_PROJECTILE_SIZE = glm::vec3(5.f, 10.f, 1.f);
+
+Ship::Ship(const Transform& InTransform)
+	: Actor(InTransform), MaxSpeed(DEFAULT_SPEED), Speed(DEFAULT_SPEED),
+		ShootCooldown(DEFAULT_COOLDOWN), CurrentCooldown(0.f), bShouldCooldown(false)
 {
 	
 }
 
-Ship::Ship(const glm::vec3& InLocation, const glm::vec3& InSize, float InMaxSpeed)
-	: Ship(Transform(InLocation, InSize), InMaxSpeed)
+Ship::Ship(const glm::vec3& InLocation, const glm::vec3& InSize)
+	: Ship(Transform(InLocation, InSize))
 {
 	
 }
@@ -43,6 +49,42 @@ float Ship::GetShootCooldown() const
 void Ship::SetProjectileData(const ProjectileData& InProjectileInfo)
 {
 	ProjectileInfo = InProjectileInfo;
+}
+
+void Ship::LoadConfig()
+{
+	Actor::LoadConfig();
+
+	ProjectileInfo.Shader = GetShader();
+	ProjectileInfo.Direction = glm::vec3(0.f, -1.f, 0.f);
+	ProjectileInfo.SpawnOffset = glm::vec3(0.f, -GetSize().y, 0.f);
+
+	Settings::SharedConstPtr ShipSettings = SettingsReader::Load(GetConfigFile());
+
+	if (ShipSettings != nullptr)
+	{
+		ShipSettings->Get("Speed", DEFAULT_SPEED, MaxSpeed);
+		Speed = MaxSpeed;
+
+		ShipSettings->Get("Cooldown", DEFAULT_COOLDOWN, ShootCooldown);
+		CurrentCooldown = 0.f;
+
+		ShipSettings->Get("ProjectileSize", ProjectileInfo.Size);
+		ShipSettings->Get("ProjectileSpeed", DEFAULT_PROJECTILE_SPEED, ProjectileInfo.Speed);
+
+		glm::vec4 SettingColor(Colors::White);
+		ShipSettings->Get("Color", SettingColor);
+		SetColor(SettingColor);
+	}
+	else
+	{
+		std::cout << "Unable to load player config file. Restoring defaults.\n";
+		MaxSpeed = DEFAULT_SPEED;
+		Speed = DEFAULT_SPEED;
+		ShootCooldown = DEFAULT_COOLDOWN;
+		ProjectileInfo.Size = DEFAULT_PROJECTILE_SIZE;
+		ProjectileInfo.Speed = DEFAULT_PROJECTILE_SPEED;
+	}
 }
 
 float Ship::GetSpeed() const
@@ -76,7 +118,11 @@ void Ship::Update(const float Delta)
 	Actor::Update(Delta);
 
 	UpdateCooldown(Delta);
+	ConstraintInViewport(Delta);
+}
 
+void Ship::ConstraintInViewport(const float Delta)
+{
 	const glm::vec3 Location(GetLocation());
 	const BoundingBox Box(GetBoundingBox());
 	const glm::vec2 ScaleOffset(Box.ScaleOffset);
