@@ -1,6 +1,7 @@
 #include "Settings.h"
 
 #include <sstream>
+#include <glm/gtc/matrix_transform.hpp>
 
 Settings::Settings()
 	: Map()
@@ -22,10 +23,11 @@ bool Settings::Exists(const Key& InKey) const
 	return Map.count(InKey) > 0;
 }
 
-bool Settings::Get(const Key& InKey, int& OutValue) const
+bool Settings::Get(const Key& InKey, const int Default, int& OutValue) const
 {
 	if (!Exists(InKey))
 	{
+		OutValue = Default;
 		return false;
 	}
 
@@ -34,10 +36,11 @@ bool Settings::Get(const Key& InKey, int& OutValue) const
 	return true;
 }
 
-bool Settings::Get(const Key& InKey, float& OutValue) const
+bool Settings::Get(const Key& InKey, const float Default, float& OutValue) const
 {
 	if (!Exists(InKey))
 	{
+		OutValue = Default;
 		return false;
 	}
 
@@ -46,10 +49,11 @@ bool Settings::Get(const Key& InKey, float& OutValue) const
 	return true;
 }
 
-bool Settings::Get(const Key& InKey, Value& OutValue) const
+bool Settings::Get(const Key& InKey, const std::string& Default, Value& OutValue) const
 {
 	if (!Exists(InKey))
 	{
+		OutValue = Default;
 		return false;
 	}
 
@@ -57,7 +61,7 @@ bool Settings::Get(const Key& InKey, Value& OutValue) const
 	return true;
 }
 
-bool Settings::GetList(const Key& InKey, IntList& OutList) const
+bool Settings::Get(const Key& InKey, IntList& OutList) const
 {
 	if (!Exists(InKey))
 	{
@@ -76,7 +80,7 @@ bool Settings::GetList(const Key& InKey, IntList& OutList) const
 	return true;
 }
 
-bool Settings::GetList(const Key& InKey, FloatList& OutList) const
+bool Settings::Get(const Key& InKey, FloatList& OutList) const
 {
 	if (!Exists(InKey))
 	{
@@ -95,7 +99,7 @@ bool Settings::GetList(const Key& InKey, FloatList& OutList) const
 	return true;
 }
 
-bool Settings::GetList(const Key& InKey, StringList& OutList) const
+bool Settings::Get(const Key& InKey, StringList& OutList) const
 {
 	if (!Exists(InKey))
 	{
@@ -105,6 +109,72 @@ bool Settings::GetList(const Key& InKey, StringList& OutList) const
 	const Value TempValue = Map.at(InKey);
 	OutList.clear();
 	OutList = Split(TempValue);
+	return true;
+}
+
+bool Settings::Get(const Key& InKey, Vec2& OutVec) const
+{
+	if (!Exists(InKey))
+	{
+		return false;
+	}
+
+	const Value TempValue = Map.at(InKey);
+	const StringList Splitted = Split(TempValue);
+	if (Splitted.size() < 2)
+	{
+		return false;
+	}
+
+	const FloatList Floats = AsFloat(Splitted);
+	OutVec.x = Floats[0];
+	OutVec.y = Floats[1];
+
+	return true;
+}
+
+bool Settings::Get(const Key& InKey, Vec3& OutVec) const
+{
+	if (!Exists(InKey))
+	{
+		return false;
+	}
+
+	const Value TempValue = Map.at(InKey);
+	const StringList Splitted = Split(TempValue);
+	if (Splitted.size() < 3)
+	{
+		return false;
+	}
+
+	const FloatList Floats = AsFloat(Splitted);
+	OutVec.x = Floats[0];
+	OutVec.y = Floats[1];
+	OutVec.z = Floats[2];
+
+	return true;
+}
+
+bool Settings::Get(const Key& InKey, Vec4& OutVec) const
+{
+	if (!Exists(InKey))
+	{
+		return false;
+	}
+
+	const Value TempValue = Map.at(InKey);
+	const StringList Splitted = Split(TempValue);
+	if (Splitted.size() < 4)
+	{
+		return false;
+	}
+
+	const FloatList Floats = AsFloat(Splitted);
+	OutVec.x = Floats[0];
+	OutVec.y = Floats[1];
+	OutVec.z = Floats[2];
+	OutVec.w = Floats[3];
+
 	return true;
 }
 
@@ -121,4 +191,15 @@ Settings::StringList Settings::Split(const Value& InValue)
 	}
 
 	return Result;
+}
+
+Settings::FloatList Settings::AsFloat(const StringList& InList)
+{
+	FloatList OutList;
+	for (const std::string& Element : InList)
+	{
+		OutList.push_back(std::stof(Element));
+	}
+
+	return OutList;
 }
