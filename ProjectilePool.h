@@ -19,7 +19,19 @@ public:
 	ProjectilePool(const std::string& InConfigFile);
 	Projectile::SharedPtr Create(const glm::vec3& InLocation, const std::string& InShaderName);
 
+	int GetPoolSize() const;
+	float GetLifeSpan() const;
+	float GetSpeed() const;
+	glm::vec3 GetSize() const;
+	glm::vec3 GetDirection() const;
+
+	void SetLifeSpan(float InLifeSpan);
+	void SetSpeed(float InSpeed);
+	void SetSize(const glm::vec3& InSize);
+	void SetDirection(const glm::vec3& InDirection);
+
 private:
+	void SetPoolSize(int InPoolSize);
 	void SetDefaults();
 	void LoadConfig();
 	void CreatePool();

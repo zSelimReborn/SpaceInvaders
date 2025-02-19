@@ -25,13 +25,62 @@ Projectile::SharedPtr ProjectilePool::Create(const glm::vec3& InLocation, const 
 	OutProjectile->SetSize(ProjectileInfo.Size);
 	OutProjectile->SetInitialLifeSpan(ProjectileInfo.InitialLifeSpan);
 
-	const glm::vec3 Velocity = glm::normalize(ProjectileInfo.Direction) * ProjectileInfo.Speed;
+	const glm::vec3 Velocity = ProjectileInfo.Direction * ProjectileInfo.Speed;
 	OutProjectile->SetVelocity(Velocity);
 
 	OutProjectile->SetShader(InShaderName);
 
 	NextIndex = (NextIndex + 1) % PoolSize;
 	return OutProjectile;
+}
+
+int ProjectilePool::GetPoolSize() const
+{
+}
+
+float ProjectilePool::GetLifeSpan() const
+{
+	return ProjectileInfo.InitialLifeSpan;
+}
+
+float ProjectilePool::GetSpeed() const
+{
+	return ProjectileInfo.Speed;
+}
+
+glm::vec3 ProjectilePool::GetSize() const
+{
+	return ProjectileInfo.Size;
+}
+
+glm::vec3 ProjectilePool::GetDirection() const
+{
+	return ProjectileInfo.Direction;
+}
+
+void ProjectilePool::SetLifeSpan(float InLifeSpan)
+{
+	ProjectileInfo.InitialLifeSpan = std::max(0.f, InLifeSpan);
+}
+
+void ProjectilePool::SetSpeed(float InSpeed)
+{
+	ProjectileInfo.Speed = std::max(0.f, InSpeed);
+}
+
+void ProjectilePool::SetSize(const glm::vec3& InSize)
+{
+	ProjectileInfo.Size = glm::abs(InSize);
+}
+
+void ProjectilePool::SetDirection(const glm::vec3& InDirection)
+{
+	ProjectileInfo.Direction = glm::normalize(InDirection);
+}
+
+void ProjectilePool::SetPoolSize(int InPoolSize)
+{
+	PoolSize = std::max(DEFAULT_POOL_SIZE, InPoolSize);
 }
 
 void ProjectilePool::SetDefaults()
@@ -48,10 +97,20 @@ void ProjectilePool::LoadConfig()
 		return;
 	}
 
-	PoolSettings->Get("PoolSize", DEFAULT_POOL_SIZE, PoolSize);
-	PoolSettings->Get("ProjectileSpeed", DEFAULT_SPEED, ProjectileInfo.Speed);
-	PoolSettings->Get("ProjectileSize", ProjectileInfo.Size);
-	PoolSettings->Get("ProjectileDirection", ProjectileInfo.Direction);
+	int InPoolSize;
+	float InSpeed, InLifeSpan;
+	glm::vec3 InSize, InDirection;
+	PoolSettings->Get("PoolSize", DEFAULT_POOL_SIZE, InPoolSize);
+	PoolSettings->Get("ProjectileSpeed", DEFAULT_SPEED, InSpeed);
+	PoolSettings->Get("ProjectileLifeSpan", DEFAULT_LIFE_SPAN, InLifeSpan);
+	PoolSettings->Get("ProjectileSize", InSize);
+	PoolSettings->Get("ProjectileDirection", InDirection);
+
+	SetPoolSize(InPoolSize);
+	SetLifeSpan(InLifeSpan);
+	SetSpeed(InSpeed);
+	SetSize(InSize);
+	SetDirection(InDirection);
 }
 
 void ProjectilePool::CreatePool()
