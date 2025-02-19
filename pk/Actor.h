@@ -17,6 +17,7 @@ public:
 	typedef std::shared_ptr<Scene> SceneSharedPtr;
 	typedef std::weak_ptr<Scene> SceneWeakPtr;
 
+	Actor();
 	Actor(const Transform& InTransform);
 	Actor(const glm::vec3& InLocation, const glm::vec3 InSize);
 
@@ -31,15 +32,16 @@ public:
 
 	Transform GetTransform() const;
 
-	void SetLocation(const glm::vec3 NewLocation);
+	void SetLocation(const glm::vec3& InLocation);
 	glm::vec3 GetLocation() const;
 
+	void SetSize(const glm::vec3& InSize);
 	glm::vec3 GetSize() const;
 
 	void SetVelocity(const glm::vec3& InVelocity);
 	glm::vec3 GetVelocity() const;
 
-	void SetColor(const glm::vec4& _Color);
+	void SetColor(const glm::vec4& InColor);
 	glm::vec4 GetColor() const;
 
 	float GetInitialLifeSpan() const;
@@ -63,7 +65,8 @@ public:
 	virtual void Render() const;
 
 	bool IsDestroyed() const;
-	void Destroy();
+	virtual void Destroy();
+	void CancelDestroy();
 
 	bool IsInViewport() const;
 
@@ -89,5 +92,7 @@ private:
 	std::string ConfigFile;
 
 	SceneWeakPtr ScenePtr;
+
+	friend class Scene;
 };
 

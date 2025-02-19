@@ -1,0 +1,4 @@
+PoolSize=5
+ProjectileSize=5,20,1
+ProjectileSpeed=400
+ProjectileDirection=0,-1,0

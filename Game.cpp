@@ -1,6 +1,7 @@
 #include "Game.h"
 
 #include "Assets.h"
+#include "ProjectilePool.h"
 #include "Ship.h"
 #include "pk/AssetManager.h"
 #include "pk/SettingsReader.h"
@@ -38,6 +39,7 @@ void Game::SpawnPlayer()
 
 	PlayerShip = std::make_shared<Ship>(ShipTransform);
 	PlayerShip->SetConfig(Config::PlayerFile);
+	PlayerShip->SetProjectilePool(PlayerProjectilePool);
 	PlayerShip->SetShader(Shaders::ShapeName);
 
 	Add(PlayerShip);
@@ -48,6 +50,8 @@ void Game::Begin()
 	Shader::SharedPtr ShapeShader = AssetManager::Get().LoadShader(Shaders::ShapeName, Shaders::ShapeVertexFile, Shaders::ShapeFragmentFile);
 	ShapeShader->Use();
 	ShapeShader->SetMatrix("projection", GetProjection());
+
+	PlayerProjectilePool = std::make_shared<ProjectilePool>(Config::PlayerProjectilePool);
 
 	SpawnPlayer();
 	AddPendingActors();

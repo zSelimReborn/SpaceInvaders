@@ -1,15 +1,14 @@
 #pragma once
 
 #include "pk/Actor.h"
-#include "Types.h"
+
+class ProjectilePool;
 
 class Ship : public Actor
 {
 public:
 	static const float DEFAULT_SPEED;
 	static const float DEFAULT_COOLDOWN;
-	static const glm::vec3 DEFAULT_PROJECTILE_SIZE;
-	static const float DEFAULT_PROJECTILE_SPEED;
 
 	Ship(const Transform& InTransform);
 	Ship(const glm::vec3& InLocation, const glm::vec3& InSize);
@@ -21,7 +20,7 @@ public:
 	void SetShootCooldown(float InCooldown);
 	float GetShootCooldown() const;
 
-	void SetProjectileData(const ProjectileData& InProjectileInfo);
+	void SetProjectilePool(const std::shared_ptr<ProjectilePool>& InProjectilePool);
 
 	void LoadConfig() override;
 	void Input(const Window& Window, const float Delta) override;
@@ -40,5 +39,5 @@ private:
 	float CurrentCooldown;
 	bool bShouldCooldown;
 
-	ProjectileData ProjectileInfo;
+	std::shared_ptr<ProjectilePool> ProjectilePoolPtr;
 };

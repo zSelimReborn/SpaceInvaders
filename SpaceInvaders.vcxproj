@@ -155,6 +155,7 @@
     <ClCompile Include="pk\Texture.cpp" />
     <ClCompile Include="pk\Window.cpp" />
     <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="ProjectilePool.cpp" />
     <ClCompile Include="Ship.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +175,7 @@
     <ClInclude Include="pk\Texture.h" />
     <ClInclude Include="pk\Window.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="ProjectilePool.h" />
     <ClInclude Include="Ship.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>

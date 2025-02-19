@@ -5,13 +5,12 @@
 
 #include "pk/Scene.h"
 #include "pk/Window.h"
-#include "Projectile.h"
 #include "pk/SettingsReader.h"
+#include "Projectile.h"
+#include "ProjectilePool.h"
 
 const float Ship::DEFAULT_SPEED = 450.f;
 const float Ship::DEFAULT_COOLDOWN = 1.f;
-const float Ship::DEFAULT_PROJECTILE_SPEED = 500.f;
-const glm::vec3 Ship::DEFAULT_PROJECTILE_SIZE = glm::vec3(5.f, 10.f, 1.f);
 
 Ship::Ship(const Transform& InTransform)
 	: Actor(InTransform), MaxSpeed(DEFAULT_SPEED), Speed(DEFAULT_SPEED),
@@ -46,45 +45,32 @@ float Ship::GetShootCooldown() const
 	return ShootCooldown;
 }
 
-void Ship::SetProjectileData(const ProjectileData& InProjectileInfo)
+void Ship::SetProjectilePool(const std::shared_ptr<ProjectilePool>& InProjectilePool)
 {
-	ProjectileInfo = InProjectileInfo;
+	ProjectilePoolPtr = InProjectilePool;
 }
 
 void Ship::LoadConfig()
 {
 	Actor::LoadConfig();
 
-	ProjectileInfo.Shader = GetShader();
-	ProjectileInfo.Direction = glm::vec3(0.f, -1.f, 0.f);
-	ProjectileInfo.SpawnOffset = glm::vec3(0.f, -GetSize().y, 0.f);
-
 	Settings::SharedConstPtr ShipSettings = SettingsReader::Load(GetConfigFile());
 
-	if (ShipSettings != nullptr)
-	{
-		ShipSettings->Get("Speed", DEFAULT_SPEED, MaxSpeed);
-		Speed = MaxSpeed;
-
-		ShipSettings->Get("Cooldown", DEFAULT_COOLDOWN, ShootCooldown);
-		CurrentCooldown = 0.f;
-
-		ShipSettings->Get("ProjectileSize", ProjectileInfo.Size);
-		ShipSettings->Get("ProjectileSpeed", DEFAULT_PROJECTILE_SPEED, ProjectileInfo.Speed);
-
-		glm::vec4 SettingColor(Colors::White);
-		ShipSettings->Get("Color", SettingColor);
-		SetColor(SettingColor);
-	}
-	else
+	if (ShipSettings == nullptr)
 	{
 		std::cout << "Unable to load player config file. Restoring defaults.\n";
-		MaxSpeed = DEFAULT_SPEED;
-		Speed = DEFAULT_SPEED;
-		ShootCooldown = DEFAULT_COOLDOWN;
-		ProjectileInfo.Size = DEFAULT_PROJECTILE_SIZE;
-		ProjectileInfo.Speed = DEFAULT_PROJECTILE_SPEED;
+		return;
 	}
+
+	ShipSettings->Get("Speed", DEFAULT_SPEED, MaxSpeed);
+	Speed = MaxSpeed;
+
+	ShipSettings->Get("Cooldown", DEFAULT_COOLDOWN, ShootCooldown);
+	CurrentCooldown = 0.f;
+
+	glm::vec4 SettingColor(Colors::White);
+	ShipSettings->Get("Color", SettingColor);
+	SetColor(SettingColor);
 }
 
 float Ship::GetSpeed() const
@@ -157,21 +143,18 @@ void Ship::ConstraintInViewport(const float Delta)
 
 void Ship::Shoot()
 {
+	if (ProjectilePoolPtr == nullptr)
+	{
+		std::cout << "[Ship] - Unable to shoot, no pool obtained.\n";
+		return;
+	}
+
 	const Scene::SharedPtr CurrentScene = GetScene();
 
 	glm::vec3 SpawnLocation(GetLocation());
-	SpawnLocation += ProjectileInfo.SpawnOffset;
+	SpawnLocation.y -= GetSize().y;
 
-	glm::vec3 Size(ProjectileInfo.Size);
-
-	glm::vec3 Direction(ProjectileInfo.Direction);
-	glm::vec3 Velocity = Direction * ProjectileInfo.Speed;
-
-	Projectile::SharedPtr NewProjectile = std::make_shared<Projectile>(SpawnLocation, Size);
-	NewProjectile->SetVelocity(Velocity);
-	NewProjectile->SetShader(ProjectileInfo.Shader);
-	NewProjectile->SetInitialLifeSpan(ProjectileInfo.InitialLifeSpan);
-
+	Projectile::SharedPtr NewProjectile = ProjectilePoolPtr->Create(SpawnLocation, GetShader());
 	Projectile::OnHitDelegate Callback = [this](const Actor::SharedPtr& HitActor) { OnProjectileHit(HitActor); };
 	NewProjectile->OnHitActor(Callback);
 

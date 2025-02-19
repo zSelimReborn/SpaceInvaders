@@ -28,6 +28,12 @@ void Projectile::Update(const float Delta)
 	}
 }
 
+void Projectile::Destroy()
+{
+	Actor::Destroy();
+	OnHitFunctions.clear();
+}
+
 Projectile::~Projectile()
 {
 	std::cout << "Projectile destroyed!\n";

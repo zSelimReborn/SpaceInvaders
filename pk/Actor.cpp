@@ -6,10 +6,13 @@
 #include "Renderer.h"
 #include "Scene.h"
 
+Actor::Actor()
+	: InitialLifeSpan(0.f), LifeSpan(0.f), Velocity(0.f), Color(Colors::Black), bPendingDestroy() {}
+
 Actor::Actor(const ::Transform& InTransform)
-	: InitialLifeSpan(0.f), LifeSpan(0.f),
-		mTransform(InTransform), Velocity(0.f), Color(Colors::Black), bPendingDestroy(false), ConfigFile("")
+	:Actor()
 {
+	mTransform = InTransform;
 }
 
 Actor::Actor(const glm::vec3& InLocation, const glm::vec3 InSize)
@@ -52,9 +55,19 @@ Transform Actor::GetTransform() const
 	return mTransform;
 }
 
+void Actor::SetLocation(const glm::vec3& InLocation)
+{
+	mTransform.Location = InLocation;
+}
+
 glm::vec3 Actor::GetLocation() const
 {
 	return mTransform.Location;
+}
+
+void Actor::SetSize(const glm::vec3& InSize)
+{
+	mTransform.Size = InSize;
 }
 
 glm::vec3 Actor::GetSize() const
@@ -72,9 +85,9 @@ glm::vec3 Actor::GetVelocity() const
 	return Velocity;
 }
 
-void Actor::SetColor(const glm::vec4& _Color)
+void Actor::SetColor(const glm::vec4& InColor)
 {
-	Color = _Color;
+	Color = InColor;
 }
 
 glm::vec4 Actor::GetColor() const
@@ -213,6 +226,11 @@ void Actor::Destroy()
 	bPendingDestroy = true;
 }
 
+void Actor::CancelDestroy()
+{
+	bPendingDestroy = false;
+}
+
 bool Actor::IsInViewport() const
 {
 	const SceneSharedPtr CurrentScene = GetScene();
@@ -245,9 +263,4 @@ bool Actor::IsInViewport() const
 	}
 
 	return true;
-}
-
-void Actor::SetLocation(const glm::vec3 NewLocation)
-{
-	mTransform.Location = NewLocation;
 }

@@ -10,12 +10,15 @@ public:
 	typedef std::function<void(const Actor::SharedPtr& HitActor)> OnHitDelegate;
 	typedef std::shared_ptr<Projectile> SharedPtr;
 
+	Projectile() = default;
 	Projectile(const Transform& InTransform);
 	Projectile(const glm::vec3& InLocation, const glm::vec3& InSize);
 
 	void OnHitActor(OnHitDelegate InDelegate);
 
 	void Update(const float Delta) override;
+
+	void Destroy() override;
 
 	virtual ~Projectile();
 
