@@ -1,6 +1,5 @@
 #pragma once
 
-#include <string>
 #include <glm/gtc/matrix_transform.hpp>
 
 struct ProjectileData

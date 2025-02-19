@@ -13,6 +13,7 @@ public:
 	typedef std::shared_ptr<ProjectilePool> ProjectilePoolPtr;
 
 	static const glm::vec3 DEFAULT_SHIP_SIZE;
+	static const glm::vec3 DEFAULT_ALIEN_SIZE;
 
 	Game(const Window::WeakPtr& InWindow);
 
@@ -21,10 +22,13 @@ public:
 private:
 	void LoadConfig();
 	void SpawnPlayer();
+	void SpawnAliens();
 
 	glm::vec3 ShipSize;
+	glm::vec3 AlienSize;
 
 	ShipSharedPtr PlayerShip;
 
 	ProjectilePoolPtr PlayerProjectilePool;
+	ProjectilePoolPtr AlienProjectilePool;
 };

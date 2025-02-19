@@ -13,7 +13,11 @@ namespace Assets
 		const std::string WindowFile = BasePath + InnerPath + "window.txt";
 		const std::string GameFile = BasePath + InnerPath + "game.txt";
 		const std::string PlayerFile = BasePath + InnerPath + "player.txt";
+
+		const std::string SquidFile = BasePath + InnerPath + "squid.txt";
+
 		const std::string PlayerProjectilePool = BasePath + InnerPath + "player_projectile.txt";
+		const std::string AlienProjectilePool = BasePath + InnerPath + "alien_projectile.txt";
 	}
 
 	namespace Shaders
