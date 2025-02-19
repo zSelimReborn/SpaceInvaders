@@ -2,13 +2,18 @@
 
 #include "pk/SettingsReader.h"
 
-Alien::Alien(const Transform& InTransform)
-	: Actor(InTransform), Score(0)
+Alien::Alien(AlienType InType)
+	: Score(0), Type(InType)
 {
 }
 
-Alien::Alien(const glm::vec3& InLocation, const glm::vec3& InSize)
-	: Alien(Transform(InLocation, InSize))
+Alien::Alien(const Transform& InTransform, AlienType InAlienType)
+	: Actor(InTransform), Score(0), Type(InAlienType)
+{
+}
+
+Alien::Alien(const glm::vec3& InLocation, const glm::vec3& InSize, AlienType InAlienType)
+	: Alien(Transform(InLocation, InSize), InAlienType)
 {
 }
 
@@ -20,6 +25,11 @@ void Alien::SetProjectilePool(const std::shared_ptr<ProjectilePool>& InProjectil
 int Alien::GetScore() const
 {
 	return Score;
+}
+
+AlienType Alien::GetType() const
+{
+	return Type;
 }
 
 void Alien::LoadConfig()

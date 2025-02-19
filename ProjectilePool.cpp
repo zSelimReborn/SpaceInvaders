@@ -36,6 +36,7 @@ Projectile::SharedPtr ProjectilePool::Create(const glm::vec3& InLocation, const 
 
 int ProjectilePool::GetPoolSize() const
 {
+	return PoolSize;
 }
 
 float ProjectilePool::GetLifeSpan() const

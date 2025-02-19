@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "Alien.h"
+#include "AlienGroup.h"
 #include "Assets.h"
 #include "ProjectilePool.h"
 #include "Ship.h"
@@ -12,10 +13,9 @@
 using namespace Assets;
 
 const glm::vec3 Game::DEFAULT_SHIP_SIZE = glm::vec3(75.f, 20.f, 1.f);
-const glm::vec3 Game::DEFAULT_ALIEN_SIZE = glm::vec3(10.f, 10.f, 1.f);
 
 Game::Game(const Window::WeakPtr& InWindow)
-	: Scene(InWindow), ShipSize(DEFAULT_SHIP_SIZE), AlienSize(DEFAULT_ALIEN_SIZE)
+	: Scene(InWindow), ShipSize(DEFAULT_SHIP_SIZE)
 {
 	LoadConfig();
 }
@@ -30,7 +30,6 @@ void Game::LoadConfig()
 	}
 
 	GameSettings->Get("ShipSize", ShipSize);
-	GameSettings->Get("AlienSize", AlienSize);
 }
 
 void Game::SpawnPlayer()
@@ -52,15 +51,11 @@ void Game::SpawnPlayer()
 
 void Game::SpawnAliens()
 {
-	const glm::vec2 Center(GetScreenCenter());
-	const glm::vec3 SpawnLocation(Center.x, Center.y, 1.f);
+	MainAlienGroup = std::make_shared<AlienGroup>();
+	MainAlienGroup->SetConfig(Config::AlienGroupFile);
+	MainAlienGroup->SetProjectilePool(AlienProjectilePool);
 
-	Alien::SharedPtr TempAlien = std::make_shared<Alien>(SpawnLocation, AlienSize);
-	TempAlien->SetConfig(Config::SquidFile);
-	TempAlien->SetProjectilePool(AlienProjectilePool);
-	TempAlien->SetShader(Shaders::ShapeName);
-
-	Add(TempAlien);
+	Add(MainAlienGroup);
 }
 
 void Game::Begin()

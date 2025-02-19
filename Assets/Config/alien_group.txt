@@ -1,0 +1,7 @@
+AlienSize=25.0,25.0,1.0
+NumRowsPerType=2
+NumAlienPerRow=11
+MoveDelay=1.0
+ChanceToShoot=0.2
+HorizontalMoveStep=10.0
+VerticalMoveStep=5
