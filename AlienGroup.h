@@ -21,6 +21,8 @@ public:
 	static const float DEFAULT_CHANCE_TO_SHOOT;
 	static const float DEFAULT_H_MOVE_STEP;
 	static const float DEFAULT_V_MOVE_STEP;
+	static const float DEFAULT_H_DISTANCE;
+	static const float DEFAULT_V_DISTANCE;
 	static const glm::vec3 DEFAULT_ALIEN_SIZE;
 
 	AlienGroup();
@@ -31,6 +33,8 @@ public:
 	float GetChanceToShoot() const;
 	float GetHorizontalMoveStep() const;
 	float GetVerticalMoveStep() const;
+	float GetHorizontalDistance() const;
+	float GetVerticalDistance() const;
 	glm::vec3 GetAlienSize() const;
 
 	void SetNumRowsPerType(int InNum);
@@ -39,6 +43,8 @@ public:
 	void SetChanceToShoot(float InChanceToShoot);
 	void SetHorizontalMoveStep(float InMoveStep);
 	void SetVerticalMoveStep(float InMoveStep);
+	void SetHorizontalDistance(float InDistance);
+	void SetVerticalDistance(float InDistance);
 	void SetAlienSize(const glm::vec3& InAlienSize);
 
 	void SetProjectilePool(const std::shared_ptr<ProjectilePool>& InProjectilePool);
@@ -52,13 +58,23 @@ public:
 private:
 	void BuildMatrix();
 	void BuildMatrixPerType(AlienType Type);
+	bool ReachedEnd() const;
+	void UpdateOuterCols();
+	void MoveAliens(const float Delta);
 
+	bool bRightDirection;
+	bool bGoDown;
 	int NumRowsPerType;
 	int NumAlienPerRow;
+	int OuterLeftCol;
+	int OuterRightCol;
 	float MoveDelay;
+	float CurrentDelay;
 	float ChanceToShoot;
 	float HorizontalMoveStep;
 	float VerticalMoveStep;
+	float HorizontalDistance;
+	float VerticalDistance;
 	glm::vec3 AlienSize;
 
 	std::shared_ptr<ProjectilePool> ProjectilePoolPtr;
