@@ -44,19 +44,21 @@ Settings::SharedConstPtr SettingsReader::ReadFile(const std::string& InPath)
     Settings::SettingsMap NewSettingsMap;
 
     std::ifstream Handler;
-    Handler.exceptions(std::ifstream::badbit | std::ifstream::failbit);
+    Handler.exceptions(std::ifstream::badbit);
 
     try {
         Handler.open(InPath);
-        while (!Handler.eof())
+        std::string Line;
+        while (std::getline(Handler, Line))
         {
-            std::string Line;
-            std::getline(Handler, Line);
+            if (Line.empty())
+            {
+                continue;
+            }
+
             SettingPair NewPair = Split(Line);
             NewSettingsMap.insert(NewPair);
         }
-
-        Handler.close();
     }
     catch (const std::ifstream::failure& e) {
         std::cout << "[SettingsReader] - Error reading setting file: " << InPath << " " << e.what() << "\n";
