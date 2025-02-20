@@ -69,7 +69,6 @@ void Game::Begin()
 
 	SpawnPlayer();
 	SpawnAliens();
-	AddPendingActors();
 
 	Scene::Begin();
 }

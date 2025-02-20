@@ -20,10 +20,7 @@ Scene::Scene(const Window::WeakPtr& InWindow)
 void Scene::Begin()
 {
 	OldTime = static_cast<float>(glfwGetTime());
-	for (const Actor::SharedPtr& Actor : Actors)
-	{
-		Actor->Begin();
-	}
+	AddPendingActors();
 }
 
 void Scene::Frame()
@@ -123,6 +120,7 @@ void Scene::Add(const Actor::SharedPtr& InActor)
 	if (InActor != nullptr)
 	{
 		InActor->SetScene(weak_from_this());
+		InActor->Begin();
 		PendingActors.push_back(InActor);
 	}
 }
