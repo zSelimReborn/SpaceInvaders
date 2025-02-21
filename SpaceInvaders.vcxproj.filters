@@ -81,6 +81,9 @@
     <ClCompile Include="AlienGroup.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
+    <ClCompile Include="pk\Random.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pk\AssetManager.h">
@@ -144,6 +147,9 @@
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="AlienGroup.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\Random.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>
