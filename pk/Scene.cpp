@@ -1,5 +1,7 @@
 #include "Scene.h"
 
+#include <algorithm>
+
 #include "Window.h"
 #include "Common.h"
 #include "Font.h"
@@ -12,9 +14,14 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 Scene::Scene(const Window::WeakPtr& InWindow)
-	: WindowPtr(InWindow)
+	: WindowPtr(InWindow), NextId(0)
 {
 	Projection = glm::ortho(0.f, static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight()), 0.f, -1.0f, 1.0f);
+}
+
+int Scene::GetNextId() const
+{
+	return NextId;
 }
 
 void Scene::Begin()
@@ -47,9 +54,11 @@ bool Scene::ShouldClose() const
 
 void Scene::Update(const float Delta)
 {
-	for (const Actor::SharedPtr& Actor : Actors)
+	UpdateCollisionActorsVector();
+
+	for (const ActorMapPair ActorPair : Actors)
 	{
-		Actor->Update(Delta);
+		ActorPair.second->Update(Delta);
 	}
 }
 
@@ -66,17 +75,17 @@ void Scene::Input(const float Delta)
 		Window->ShouldClose(true);
 	}
 
-	for (const Actor::SharedPtr& Actor : Actors)
+	for (const ActorMapPair ActorPair : Actors)
 	{
-		Actor->Input(*GetWindow(), Delta);
+		ActorPair.second->Input(*GetWindow(), Delta);
 	}
 }
 
 void Scene::Render(const float Delta)
 {
-	for (const Actor::SharedPtr& Actor : Actors)
+	for (const ActorMapPair ActorPair : Actors)
 	{
-		Actor->Render();
+		ActorPair.second->Render();
 	}
 }
 
@@ -117,20 +126,43 @@ Window::SharedPtr Scene::GetWindow() const
 
 void Scene::Add(const Actor::SharedPtr& InActor)
 {
+	if (Actors.count(InActor->GetId()) > 0)
+	{
+		return;
+	}
+
 	if (InActor != nullptr)
 	{
+		InActor->Id = NextId++;
 		InActor->SetScene(weak_from_this());
 		InActor->Begin();
 		PendingActors.push_back(InActor);
 	}
 }
 
+std::vector<Scene::ActorSharedPtr> Scene::GetCollisionActors() const
+{
+	return CollisionActorsVector;
+}
+
 void Scene::Destroyer()
 {
-	Actors.erase(
-		std::remove_if(Actors.begin(), Actors.end(), [](const Actor::SharedPtr& Actor) { return Actor == nullptr || Actor->IsDestroyed(); }), 
-		Actors.end()
-	);
+	std::vector<int> RemovingIds;
+	for (const ActorMapPair ActorPair : Actors)
+	{
+		const ActorSharedPtr Actor = ActorPair.second;
+		if (Actor == nullptr || Actor->IsDestroyed())
+		{
+			RemovingIds.push_back(Actor->GetId());
+			Actor->Id = -1;
+		}
+	}
+
+	for (int Id : RemovingIds)
+	{
+		Actors.erase(Id);
+		CollisionActors.erase(Id);
+	}
 }
 
 void Scene::AddPendingActors()
@@ -140,8 +172,27 @@ void Scene::AddPendingActors()
 		return;
 	}
 
-	Actors.insert(Actors.end(), PendingActors.begin(), PendingActors.end());
+	for (const ActorSharedPtr& Actor : PendingActors)
+	{
+		Actors.insert(ActorMapPair(Actor->GetId(), Actor));
+		if (Actor->HasCollision())
+		{
+			CollisionActors.insert(ActorMapPair(Actor->GetId(), Actor));
+		}
+	}
+
 	PendingActors.clear();
+}
+
+void Scene::UpdateCollisionActorsVector()
+{
+	CollisionActorsVector.clear();
+	CollisionActorsVector.reserve(CollisionActors.size());
+
+	for (const ActorMapPair ActorPair : CollisionActors)
+	{
+		CollisionActorsVector.push_back(ActorPair.second);
+	}
 }
 
 Scene::~Scene() = default;

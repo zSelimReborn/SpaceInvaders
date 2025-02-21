@@ -7,10 +7,10 @@
 #include "Scene.h"
 
 Actor::Actor()
-	: InitialLifeSpan(0.f), LifeSpan(0.f), Velocity(0.f), Color(Colors::Black), bPendingDestroy() {}
+	: Id(-1), InitialLifeSpan(0.f), LifeSpan(0.f), Velocity(0.f), Color(Colors::Black), bPendingDestroy(), bHasCollision(false) {}
 
 Actor::Actor(const ::Transform& InTransform)
-	:Actor()
+	: Actor()
 {
 	mTransform = InTransform;
 }
@@ -18,6 +18,11 @@ Actor::Actor(const ::Transform& InTransform)
 Actor::Actor(const glm::vec3& InLocation, const glm::vec3 InSize)
 	: Actor(Transform(InLocation, InSize))
 {
+}
+
+int Actor::GetId() const
+{
+	return Id;
 }
 
 void Actor::SetScene(const Scene::WeakPtr& InScene)
@@ -118,6 +123,16 @@ void Actor::SetConfig(const std::string& InConfigFile)
 std::string Actor::GetConfigFile() const
 {
 	return ConfigFile;
+}
+
+void Actor::HasCollision(bool bInCollision)
+{
+	bHasCollision = bInCollision;
+}
+
+bool Actor::HasCollision() const
+{
+	return bHasCollision;
 }
 
 void Actor::Move(const float Delta)

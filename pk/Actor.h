@@ -21,6 +21,8 @@ public:
 	Actor(const Transform& InTransform);
 	Actor(const glm::vec3& InLocation, const glm::vec3 InSize);
 
+	int GetId() const;
+
 	void SetScene(const SceneWeakPtr& InScene);
 	SceneSharedPtr GetScene() const;
 
@@ -51,6 +53,9 @@ public:
 	void SetConfig(const std::string& InConfigFile);
 	std::string GetConfigFile() const;
 
+	void HasCollision(bool bInCollision);
+	bool HasCollision() const;
+
 	glm::mat4 GetRenderModel() const;
 	BoundingBox GetBoundingBox() const;
 	void BindTexture() const;
@@ -77,6 +82,7 @@ protected:
 	void UpdateLifeSpan(const float Delta);
 
 private:
+	int Id;
 	float InitialLifeSpan;
 	float LifeSpan;
 
@@ -88,6 +94,7 @@ private:
 	glm::vec4 Color;
 
 	bool bPendingDestroy;
+	bool bHasCollision;
 
 	std::string ConfigFile;
 
