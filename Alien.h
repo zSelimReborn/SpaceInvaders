@@ -27,6 +27,8 @@ public:
 
 	void LoadConfig() override;
 
+	void Shoot();
+
 private:
 	int Score;
 	AlienType Type;

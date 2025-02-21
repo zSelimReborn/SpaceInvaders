@@ -1,8 +1,9 @@
 AlienSize=30.0,30.0,1.0
 NumRowsPerType=2
 NumAlienPerRow=11
-MoveDelay=0.2
-ChanceToShoot=0.2
+MoveDelay=1.0
+ShootMaxCooldown=3.0
+ShootMinCooldown=1.0
 HorizontalMoveStep=12.0
 VerticalMoveStep=20
 HorizontalDistance=20

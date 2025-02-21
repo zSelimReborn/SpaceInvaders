@@ -1,5 +1,10 @@
 #include "Alien.h"
 
+#include <iostream>
+
+#include "Projectile.h"
+#include "ProjectilePool.h"
+#include "pk/Scene.h"
 #include "pk/SettingsReader.h"
 
 Alien::Alien(AlienType InType)
@@ -46,4 +51,21 @@ void Alien::LoadConfig()
 	glm::vec4 SettingColor(Colors::White);
 	AlienSettings->Get("Color", SettingColor);
 	SetColor(SettingColor);
+}
+
+void Alien::Shoot()
+{
+	if (ProjectilePoolPtr == nullptr)
+	{
+		std::cout << "[Alien] - Unable to shoot, no pool obtained.\n";
+		return;
+	}
+
+	const Scene::SharedPtr CurrentScene = GetScene();
+
+	glm::vec3 SpawnLocation(GetLocation());
+	SpawnLocation.y += GetSize().y;
+
+	Projectile::SharedPtr NewProjectile = ProjectilePoolPtr->Create(SpawnLocation, GetShader());
+	CurrentScene->Add(NewProjectile);
 }

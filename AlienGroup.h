@@ -18,7 +18,8 @@ public:
 	static const int DEFAULT_NUM_ROWS_PER_TYPE;
 	static const int DEFAULT_ALIEN_PER_ROW;
 	static const float DEFAULT_MOVE_DELAY;
-	static const float DEFAULT_CHANCE_TO_SHOOT;
+	static const float DEFAULT_SHOOT_MAX_COOLDOWN;
+	static const float DEFAULT_SHOOT_MIN_COOLDOWN;
 	static const float DEFAULT_H_MOVE_STEP;
 	static const float DEFAULT_V_MOVE_STEP;
 	static const float DEFAULT_H_DISTANCE;
@@ -30,7 +31,8 @@ public:
 	int GetNumRowsPerType() const;
 	int GetNumAlienPerRow() const;
 	float GetMoveDelay() const;
-	float GetChanceToShoot() const;
+	float GetShootMaxCooldown() const;
+	float GetShootMinCooldown() const;
 	float GetHorizontalMoveStep() const;
 	float GetVerticalMoveStep() const;
 	float GetHorizontalDistance() const;
@@ -40,7 +42,8 @@ public:
 	void SetNumRowsPerType(int InNum);
 	void SetNumAlienPerRow(int InNum);
 	void SetMoveDelay(float InMoveDelay);
-	void SetChanceToShoot(float InChanceToShoot);
+	void SetShootMaxCooldown(float InShootMaxCooldown);
+	void SetShootMinCooldown(float InShootMinCooldown);
 	void SetHorizontalMoveStep(float InMoveStep);
 	void SetVerticalMoveStep(float InMoveStep);
 	void SetHorizontalDistance(float InDistance);
@@ -62,6 +65,9 @@ private:
 	void UpdateOuterCols();
 	void MoveAliens(const float Delta);
 
+	void GenerateShootCooldown();
+	void Shoot() const;
+
 	bool bRightDirection;
 	bool bGoDown;
 	int NumRowsPerType;
@@ -70,7 +76,10 @@ private:
 	int OuterRightCol;
 	float MoveDelay;
 	float CurrentDelay;
-	float ChanceToShoot;
+	float ShootMaxCooldown;
+	float ShootMinCooldown;
+	float SelectedShootCooldown;
+	float CurrentShootCooldown;
 	float HorizontalMoveStep;
 	float VerticalMoveStep;
 	float HorizontalDistance;
