@@ -166,6 +166,7 @@
     <ClInclude Include="AlienGroup.h" />
     <ClInclude Include="Assets.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="ITeamDefiner.h" />
     <ClInclude Include="pk\Actor.h" />
     <ClInclude Include="pk\AssetManager.h" />
     <ClInclude Include="pk\Common.h" />
