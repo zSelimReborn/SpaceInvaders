@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <map>
+#include <set>
 
 #include "Alien.h"
 
@@ -11,7 +12,7 @@ class AlienGroup : public Actor
 {
 public:
 	typedef std::shared_ptr<AlienGroup> SharedPtr;
-	typedef std::vector<std::vector<Alien::SharedPtr>> AlienMatrix;
+	typedef std::vector<Alien::SharedPtr> AlienList;
 	typedef std::map<AlienType, std::string> ConfigMap;
 	typedef std::pair<AlienType, std::string> ConfigMapPair;
 
@@ -29,6 +30,7 @@ public:
 	AlienGroup();
 
 	int GetNumRowsPerType() const;
+	int GetNumRowsTotal() const;
 	int GetNumAlienPerRow() const;
 	float GetMoveDelay() const;
 	float GetShootMaxCooldown() const;
@@ -68,6 +70,8 @@ private:
 	void GenerateShootCooldown();
 	void Shoot() const;
 
+	void UpdateAliveAliens();
+
 	bool bRightDirection;
 	bool bGoDown;
 	int NumRowsPerType;
@@ -88,6 +92,8 @@ private:
 
 	std::shared_ptr<ProjectilePool> ProjectilePoolPtr;
 
-	AlienMatrix Matrix;
+	AlienList AllAliens;
+	std::vector<int> AliveAliensIdx;
+
 	ConfigMap ConfigTypeMapping;
 };

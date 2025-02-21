@@ -38,6 +38,11 @@ int AlienGroup::GetNumRowsPerType() const
 	return NumRowsPerType;
 }
 
+int AlienGroup::GetNumRowsTotal() const
+{
+	return NumRowsPerType * static_cast<int>(ConfigTypeMapping.size());
+}
+
 int AlienGroup::GetNumAlienPerRow() const
 {
 	return NumAlienPerRow;
@@ -192,6 +197,8 @@ void AlienGroup::Update(const float Delta)
 {
 	Actor::Update(Delta);
 
+	UpdateAliveAliens();
+
 	CurrentShootCooldown += Delta;
 	if (CurrentShootCooldown >= SelectedShootCooldown)
 	{
@@ -234,20 +241,24 @@ void AlienGroup::StartGroup()
 	CurrentLocation.y = (AlienSize.y * static_cast<float>(NumRowsPerType));
 	CurrentLocation.x = StartX + (AlienSize.x / 2);
 
-	for (const std::vector<Alien::SharedPtr>& Row : Matrix)
+	AliveAliensIdx.clear();
+	AliveAliensIdx.reserve(AllAliens.size());
+	for (int i = 0; i < AllAliens.size(); ++i)
 	{
-		for (const Alien::SharedPtr& Alien : Row)
+		const Alien::SharedPtr& Alien = AllAliens[i];
+		Alien->CancelDestroy();
+		CurrentScene->Add(Alien);
+		Alien->SetSize(AlienSize);
+		Alien->SetLocation(CurrentLocation);
+		AliveAliensIdx.push_back(i);
+
+		CurrentLocation.x += HorizontalDistance + (AlienSize.x);
+
+		if ((i + 1) % NumAlienPerRow == 0)
 		{
-			Alien->CancelDestroy();
-			CurrentScene->Add(Alien);
-			Alien->SetSize(AlienSize);
-			Alien->SetLocation(CurrentLocation);
-
-			CurrentLocation.x += HorizontalDistance + (AlienSize.x);
+			CurrentLocation.x = StartX + (AlienSize.x / 2);
+			CurrentLocation.y += VerticalDistance + (AlienSize.y);
 		}
-
-		CurrentLocation.x = StartX + (AlienSize.x / 2);
-		CurrentLocation.y += VerticalDistance + (AlienSize.y);
 	}
 }
 
@@ -260,20 +271,15 @@ void AlienGroup::BuildMatrix()
 
 void AlienGroup::BuildMatrixPerType(AlienType Type)
 {
-	for (int i = 0; i < NumRowsPerType; ++i)
+	const int AlienToSpawn = NumRowsPerType * NumAlienPerRow;
+	for (int i = 0; i < AlienToSpawn; ++i)
 	{
-		std::vector<Alien::SharedPtr> Row;
-		for (int j = 0; j < NumAlienPerRow; ++j)
-		{
-			Alien::SharedPtr NewAlien = std::make_shared<Alien>(Type);
-			NewAlien->SetConfig(ConfigTypeMapping[Type]);
-			NewAlien->SetShader(Assets::Shaders::ShapeName);
-			NewAlien->SetProjectilePool(ProjectilePoolPtr);
+		Alien::SharedPtr NewAlien = std::make_shared<Alien>(Type);
+		NewAlien->SetConfig(ConfigTypeMapping[Type]);
+		NewAlien->SetShader(Assets::Shaders::ShapeName);
+		NewAlien->SetProjectilePool(ProjectilePoolPtr);
 
-			Row.push_back(NewAlien);
-		}
-
-		Matrix.push_back(Row);
+		AllAliens.push_back(NewAlien);
 	}
 }
 
@@ -286,8 +292,8 @@ bool AlienGroup::ReachedEnd() const
 	}
 
 	const float Width = static_cast<float>(CurrentScene->GetScreenWidth());
-	const Alien::SharedPtr LeftAlien = Matrix[0][OuterLeftCol];
-	const Alien::SharedPtr RightAlien = Matrix[0][OuterRightCol];
+	const Alien::SharedPtr LeftAlien = AllAliens[OuterLeftCol];
+	const Alien::SharedPtr RightAlien = AllAliens[OuterRightCol];
 	const glm::vec3 LeftLocation = LeftAlien->GetLocation();
 	const glm::vec3 RightLocation = RightAlien->GetLocation();
 
@@ -306,17 +312,24 @@ bool AlienGroup::ReachedEnd() const
 
 void AlienGroup::UpdateOuterCols()
 {
-	for (int j = 0; j < Matrix.size(); ++j)
+	const int RowCount = GetNumRowsTotal();
+
+	OuterLeftCol = NumAlienPerRow - 1;
+	OuterRightCol = 0;
+
+	for (int j = 0; j < NumAlienPerRow; ++j)
 	{
-		for (int i = 0; i < NumRowsPerType; ++i)
+		for (int i = 0; i < RowCount; ++i)
 		{
-			if (!Matrix[i][j]->IsDestroyed() && j < OuterLeftCol)
+			const int LeftCalcIndex = i * NumAlienPerRow + j;
+			if (!AllAliens[LeftCalcIndex]->IsDestroyed() && j < OuterLeftCol)
 			{
 				OuterLeftCol = j;
 			}
 
-			const int RightIndex = NumAlienPerRow - j - 1;
-			if (!Matrix[i][RightIndex]->IsDestroyed() && RightIndex > OuterRightCol)
+			const int RightIndex = (NumAlienPerRow - j - 1);
+			const int RightCalcIndex = i * NumAlienPerRow + (RightIndex);
+			if (!AllAliens[RightCalcIndex]->IsDestroyed() && RightIndex > OuterRightCol)
 			{
 				OuterRightCol = RightIndex;
 			}
@@ -341,13 +354,10 @@ void AlienGroup::MoveAliens(const float Delta)
 		MoveOffset.x = -HorizontalMoveStep;
 	}
 
-	for (const std::vector<Alien::SharedPtr>& Row : Matrix)
+	for (const Alien::SharedPtr& Alien : AllAliens)
 	{
-		for (const Alien::SharedPtr& Alien : Row)
-		{
-			const glm::vec3 NewLocation = Alien->GetLocation() + MoveOffset;
-			Alien->SetLocation(NewLocation);
-		}
+		const glm::vec3 NewLocation = Alien->GetLocation() + MoveOffset;
+		Alien->SetLocation(NewLocation);
 	}
 
 	if (ReachedEnd())
@@ -364,9 +374,17 @@ void AlienGroup::GenerateShootCooldown()
 
 void AlienGroup::Shoot() const
 {
-	const int RowCount = static_cast<int>(Matrix.size()) - 1;
-	const int Row = Random::Get(0, RowCount);
-	const int Col = Random::Get(0, NumAlienPerRow - 1);
+	const int AliveCount = static_cast<int>(AliveAliensIdx.size()) - 1;
+	const int RandomAlienIndex = Random::Get(0, AliveCount);
+	const int AliveAlien = AliveAliensIdx[RandomAlienIndex];
 
-	Matrix[Row][Col]->Shoot();
+	AllAliens[AliveAlien]->Shoot();
+}
+
+void AlienGroup::UpdateAliveAliens()
+{
+	AliveAliensIdx.erase(
+		std::remove_if(AliveAliensIdx.begin(), AliveAliensIdx.end(), [this](int Index) { return AllAliens[Index]->IsDestroyed(); }),
+		AliveAliensIdx.end()
+	);
 }
