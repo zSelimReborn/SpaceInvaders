@@ -172,6 +172,7 @@
     <ClInclude Include="pk\Common.h" />
     <ClInclude Include="pk\Emitter.h" />
     <ClInclude Include="pk\Font.h" />
+    <ClInclude Include="pk\IDamageable.h" />
     <ClInclude Include="pk\Random.h" />
     <ClInclude Include="pk\Renderer.h" />
     <ClInclude Include="pk\Scene.h" />
