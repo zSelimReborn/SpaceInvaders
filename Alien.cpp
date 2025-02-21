@@ -8,13 +8,16 @@
 #include "pk/SettingsReader.h"
 
 Alien::Alien(AlienType InType)
-	: Score(0), Type(InType)
+	: Score(0), Type(InType), CurrentTeam(Team::Alien)
 {
+	HasCollision(true);
 }
 
 Alien::Alien(const Transform& InTransform, AlienType InAlienType)
-	: Actor(InTransform), Score(0), Type(InAlienType)
+	: Alien(InAlienType)
 {
+	SetLocation(InTransform.Location);
+	SetSize(InTransform.Size);
 }
 
 Alien::Alien(const glm::vec3& InLocation, const glm::vec3& InSize, AlienType InAlienType)
@@ -53,6 +56,16 @@ void Alien::LoadConfig()
 	SetColor(SettingColor);
 }
 
+void Alien::SetTeam(Team InTeam)
+{
+	CurrentTeam = InTeam;
+}
+
+Team Alien::GetTeam() const
+{
+	return CurrentTeam;
+}
+
 void Alien::Shoot()
 {
 	if (ProjectilePoolPtr == nullptr)
@@ -64,8 +77,8 @@ void Alien::Shoot()
 	const Scene::SharedPtr CurrentScene = GetScene();
 
 	glm::vec3 SpawnLocation(GetLocation());
-	SpawnLocation.y += GetSize().y;
+	SpawnLocation.y += (GetSize().y + 5.f);
 
-	Projectile::SharedPtr NewProjectile = ProjectilePoolPtr->Create(SpawnLocation, GetShader());
+	Projectile::SharedPtr NewProjectile = ProjectilePoolPtr->Create(SpawnLocation, CurrentTeam, GetShader());
 	CurrentScene->Add(NewProjectile);
 }

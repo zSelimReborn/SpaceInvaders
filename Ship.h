@@ -1,10 +1,11 @@
 #pragma once
 
 #include "pk/Actor.h"
+#include "ITeamDefiner.h"
 
 class ProjectilePool;
 
-class Ship : public Actor
+class Ship : public Actor, public ITeamDefiner
 {
 public:
 	static const float DEFAULT_SPEED;
@@ -26,6 +27,9 @@ public:
 	void Input(const Window& Window, const float Delta) override;
 	void Update(const float Delta) override;
 
+	void SetTeam(Team InTeam) override;
+	Team GetTeam() const override;
+
 private:
 	void ConstraintInViewport(const float Delta);
 	void Shoot();
@@ -38,6 +42,8 @@ private:
 	float ShootCooldown;
 	float CurrentCooldown;
 	bool bShouldCooldown;
+
+	Team CurrentTeam;
 
 	std::shared_ptr<ProjectilePool> ProjectilePoolPtr;
 };

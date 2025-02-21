@@ -17,11 +17,12 @@ ProjectilePool::ProjectilePool(const std::string& InConfigFile)
 	CreatePool();
 }
 
-Projectile::SharedPtr ProjectilePool::Create(const glm::vec3& InLocation, const std::string& InShaderName)
+Projectile::SharedPtr ProjectilePool::Create(const glm::vec3& InLocation, Team InTeam, const std::string& InShaderName)
 {
 	Projectile::SharedPtr OutProjectile = Pool[NextIndex];
 	OutProjectile->CancelDestroy();
 	OutProjectile->SetLocation(InLocation);
+	OutProjectile->SetTeam(InTeam);
 	OutProjectile->SetSize(ProjectileInfo.Size);
 	OutProjectile->SetInitialLifeSpan(ProjectileInfo.InitialLifeSpan);
 

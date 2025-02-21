@@ -14,9 +14,9 @@ const float Ship::DEFAULT_COOLDOWN = 1.f;
 
 Ship::Ship(const Transform& InTransform)
 	: Actor(InTransform), MaxSpeed(DEFAULT_SPEED), Speed(DEFAULT_SPEED),
-		ShootCooldown(DEFAULT_COOLDOWN), CurrentCooldown(0.f), bShouldCooldown(false)
+		ShootCooldown(DEFAULT_COOLDOWN), CurrentCooldown(0.f), bShouldCooldown(false), CurrentTeam(Team::Human)
 {
-	
+	HasCollision(true);
 }
 
 Ship::Ship(const glm::vec3& InLocation, const glm::vec3& InSize)
@@ -107,6 +107,16 @@ void Ship::Update(const float Delta)
 	ConstraintInViewport(Delta);
 }
 
+void Ship::SetTeam(Team InTeam)
+{
+	CurrentTeam = InTeam;
+}
+
+Team Ship::GetTeam() const
+{
+	return CurrentTeam;
+}
+
 void Ship::ConstraintInViewport(const float Delta)
 {
 	const glm::vec3 Location(GetLocation());
@@ -152,9 +162,9 @@ void Ship::Shoot()
 	const Scene::SharedPtr CurrentScene = GetScene();
 
 	glm::vec3 SpawnLocation(GetLocation());
-	SpawnLocation.y -= GetSize().y;
+	SpawnLocation.y -= (GetSize().y + 5.f);
 
-	Projectile::SharedPtr NewProjectile = ProjectilePoolPtr->Create(SpawnLocation, GetShader());
+	Projectile::SharedPtr NewProjectile = ProjectilePoolPtr->Create(SpawnLocation, CurrentTeam, GetShader());
 	Projectile::OnHitDelegate Callback = [this](const Actor::SharedPtr& HitActor) { OnProjectileHit(HitActor); };
 	NewProjectile->OnHitActor(Callback);
 
@@ -178,6 +188,5 @@ void Ship::UpdateCooldown(const float Delta)
 
 void Ship::OnProjectileHit(const Actor::SharedPtr& HitActor)
 {
-	std::cout << "Hit actor!\n";
 }
 

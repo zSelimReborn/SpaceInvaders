@@ -17,7 +17,7 @@ public:
 	typedef std::vector<Projectile::SharedPtr> ProjectileList;
 
 	ProjectilePool(const std::string& InConfigFile);
-	Projectile::SharedPtr Create(const glm::vec3& InLocation, const std::string& InShaderName);
+	Projectile::SharedPtr Create(const glm::vec3& InLocation, Team InTeam, const std::string& InShaderName);
 
 	int GetPoolSize() const;
 	float GetLifeSpan() const;
