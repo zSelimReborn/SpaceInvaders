@@ -84,6 +84,9 @@
     <ClCompile Include="pk\Random.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
+    <ClCompile Include="Secret.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pk\AssetManager.h">
@@ -156,6 +159,9 @@
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="pk\IDamageable.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="Secret.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>

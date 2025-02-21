@@ -7,7 +7,7 @@
 #include "Scene.h"
 
 Actor::Actor()
-	: Id(-1), InitialLifeSpan(0.f), LifeSpan(0.f), Velocity(0.f), Color(Colors::Black), bPendingDestroy(), bHasCollision(false) {}
+	: Id(-1), InitialLifeSpan(0.f), LifeSpan(0.f), Velocity(0.f), Color(Colors::Black), bPendingDestroy(false), bHasCollision(false) {}
 
 Actor::Actor(const ::Transform& InTransform)
 	: Actor()

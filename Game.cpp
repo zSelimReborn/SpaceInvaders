@@ -6,6 +6,7 @@
 #include "AlienGroup.h"
 #include "Assets.h"
 #include "ProjectilePool.h"
+#include "Secret.h"
 #include "Ship.h"
 #include "pk/AssetManager.h"
 #include "pk/SettingsReader.h"
@@ -58,6 +59,14 @@ void Game::SpawnAliens()
 	Add(MainAlienGroup);
 }
 
+void Game::SpawnSecretAlien()
+{
+	SecretAlien = std::make_shared<Secret>();
+	SecretAlien->SetConfig(Config::SecretAlienFile);
+
+	Add(SecretAlien);
+}
+
 void Game::Begin()
 {
 	Shader::SharedPtr ShapeShader = AssetManager::Get().LoadShader(Shaders::ShapeName, Shaders::ShapeVertexFile, Shaders::ShapeFragmentFile);
@@ -69,6 +78,7 @@ void Game::Begin()
 
 	SpawnPlayer();
 	SpawnAliens();
+	SpawnSecretAlien();
 
 	Scene::Begin();
 }

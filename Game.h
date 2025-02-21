@@ -5,6 +5,7 @@
 class Ship;
 class ProjectilePool;
 class AlienGroup;
+class Secret;
 
 class Game : public Scene
 {
@@ -13,6 +14,7 @@ public:
 	typedef std::shared_ptr<Ship> ShipSharedPtr;
 	typedef std::shared_ptr<ProjectilePool> ProjectilePoolPtr;
 	typedef std::shared_ptr<AlienGroup> AlienGroupPtr;
+	typedef std::shared_ptr<Secret> SecretAlienPtr;
 
 	static const glm::vec3 DEFAULT_SHIP_SIZE;
 
@@ -24,11 +26,13 @@ private:
 	void LoadConfig();
 	void SpawnPlayer();
 	void SpawnAliens();
+	void SpawnSecretAlien();
 
 	glm::vec3 ShipSize;
 
 	ShipSharedPtr PlayerShip;
 	AlienGroupPtr MainAlienGroup;
+	SecretAlienPtr SecretAlien;
 
 	ProjectilePoolPtr PlayerProjectilePool;
 	ProjectilePoolPtr AlienProjectilePool;

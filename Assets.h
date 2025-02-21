@@ -18,6 +18,7 @@ namespace Assets
 		const std::string SquidFile = BasePath + InnerPath + "squid.txt";
 		const std::string CrabFile = BasePath + InnerPath + "crab.txt";
 		const std::string OctopusFile = BasePath + InnerPath + "octopus.txt";
+		const std::string SecretAlienFile = BasePath + InnerPath + "a_secret.txt";
 
 		const std::string PlayerProjectilePool = BasePath + InnerPath + "player_projectile.txt";
 		const std::string AlienProjectilePool = BasePath + InnerPath + "alien_projectile.txt";

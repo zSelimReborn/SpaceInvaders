@@ -159,6 +159,7 @@
     <ClCompile Include="pk\Window.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ProjectilePool.cpp" />
+    <ClCompile Include="Secret.cpp" />
     <ClCompile Include="Ship.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +185,7 @@
     <ClInclude Include="pk\Window.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ProjectilePool.h" />
+    <ClInclude Include="Secret.h" />
     <ClInclude Include="Ship.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>

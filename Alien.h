@@ -10,7 +10,8 @@ enum class AlienType : uint8_t
 {
 	Squid,
 	Crab,
-	Octopus
+	Octopus,
+	Secret
 };
 
 class Alien : public Actor, public ITeamDefiner, public IDamageable
