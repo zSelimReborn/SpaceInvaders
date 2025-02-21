@@ -1,12 +1,13 @@
 #pragma once
 
 #include "pk/Actor.h"
+#include "pk/IDamageable.h"
 #include "ITeamDefiner.h"
 
 #include <functional>
 #include <vector>
 
-class Projectile : public Actor, public ITeamDefiner
+class Projectile : public Actor, public ITeamDefiner, public IDamageable
 {
 public:
 	typedef std::function<void(const Actor::SharedPtr& HitActor)> OnHitDelegate;
@@ -18,6 +19,8 @@ public:
 
 	void SetTeam(Team InTeam) override;
 	Team GetTeam() const override;
+
+	bool TakeDamage(float InDamage) override;
 
 	void OnHitActor(OnHitDelegate InDelegate);
 

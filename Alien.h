@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pk/Actor.h"
+#include "pk/IDamageable.h"
 #include "ITeamDefiner.h"
 
 class ProjectilePool;
@@ -12,7 +13,7 @@ enum class AlienType : uint8_t
 	Octopus
 };
 
-class Alien : public Actor, public ITeamDefiner
+class Alien : public Actor, public ITeamDefiner, public IDamageable
 {
 public:
 	typedef std::shared_ptr<Alien> SharedPtr;
@@ -30,6 +31,8 @@ public:
 
 	void SetTeam(Team InTeam) override;
 	Team GetTeam() const override;
+
+	bool TakeDamage(float InDamage) override;
 
 	void Shoot();
 

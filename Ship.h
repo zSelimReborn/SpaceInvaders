@@ -1,11 +1,12 @@
 #pragma once
 
 #include "pk/Actor.h"
+#include "pk/IDamageable.h"
 #include "ITeamDefiner.h"
 
 class ProjectilePool;
 
-class Ship : public Actor, public ITeamDefiner
+class Ship : public Actor, public ITeamDefiner, public IDamageable
 {
 public:
 	static const float DEFAULT_SPEED;
@@ -29,6 +30,8 @@ public:
 
 	void SetTeam(Team InTeam) override;
 	Team GetTeam() const override;
+
+	bool TakeDamage(float InDamage) override;
 
 private:
 	void ConstraintInViewport(const float Delta);

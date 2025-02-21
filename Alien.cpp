@@ -66,6 +66,12 @@ Team Alien::GetTeam() const
 	return CurrentTeam;
 }
 
+bool Alien::TakeDamage(float InDamage)
+{
+	Destroy();
+	return true;
+}
+
 void Alien::Shoot()
 {
 	if (ProjectilePoolPtr == nullptr)

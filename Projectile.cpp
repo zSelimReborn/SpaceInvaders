@@ -32,6 +32,12 @@ Team Projectile::GetTeam() const
 	return CurrentTeam;
 }
 
+bool Projectile::TakeDamage(float InDamage)
+{
+	Destroy();
+	return true;
+}
+
 void Projectile::OnHitActor(OnHitDelegate InDelegate)
 {
 	OnHitFunctions.push_back(InDelegate);
@@ -86,7 +92,6 @@ void Projectile::CheckCollisions()
 
 void Projectile::OnHit(const Actor::SharedPtr& HitActor)
 {
-	// TODO Deal damage
 	std::shared_ptr<ITeamDefiner> TeamActor = std::dynamic_pointer_cast<ITeamDefiner>(HitActor);
 	// Skip same team
 	if (!TeamActor || TeamActor->GetTeam() == GetTeam())
@@ -94,8 +99,14 @@ void Projectile::OnHit(const Actor::SharedPtr& HitActor)
 		return;
 	}
 
-	std::cout << "Hit Actor\n";
+	std::shared_ptr<IDamageable> DamageableActor = std::dynamic_pointer_cast<IDamageable>(HitActor);
+	if (!DamageableActor)
+	{
+		return;
+	}
+
 	NotifyHit(HitActor);
+	DamageableActor->TakeDamage(0.f);
 	Destroy();
 }
 

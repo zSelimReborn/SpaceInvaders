@@ -117,6 +117,12 @@ Team Ship::GetTeam() const
 	return CurrentTeam;
 }
 
+bool Ship::TakeDamage(float InDamage)
+{
+	// TODO Define lives
+	return false;
+}
+
 void Ship::ConstraintInViewport(const float Delta)
 {
 	const glm::vec3 Location(GetLocation());
