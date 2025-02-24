@@ -10,12 +10,13 @@
 const float Secret::DEFAULT_SPAWN_TIME_MIN = 5.f;
 const float Secret::DEFAULT_SPAWN_TIME_MAX = 8.f;
 const float Secret::DEFAULT_ALIEN_SPEED = 500.f;
+const float Secret::DEFAULT_ALIEN_TOP_OFFSET = 10.f;
 const glm::vec3 Secret::DEFAULT_ALIEN_SIZE = glm::vec3(40.f, 20.f, 1.f);
 
 Secret::Secret()
 	: Actor(),
 		bAlienActive(false), SpawnTimeMin(DEFAULT_SPAWN_TIME_MIN), SpawnTimeMax(DEFAULT_SPAWN_TIME_MAX),
-		SelectedSpawnTime(0.f), CurrentSpawnTime(0.f),
+		SelectedSpawnTime(0.f), CurrentSpawnTime(0.f), TopOffset(DEFAULT_ALIEN_TOP_OFFSET),
 		AlienSpeed(DEFAULT_ALIEN_SPEED), AlienSize(DEFAULT_ALIEN_SIZE)
 {
 }
@@ -38,6 +39,11 @@ float Secret::GetSelectedSpawnTime() const
 float Secret::GetAlienSpeed() const
 {
 	return AlienSpeed;
+}
+
+float Secret::GetTopOffset() const
+{
+	return TopOffset;
 }
 
 glm::vec3 Secret::GetAlienSize() const
@@ -64,6 +70,11 @@ void Secret::SetAlienSpeed(float InSpeed)
 	AlienSpeed = std::abs(InSpeed);
 }
 
+void Secret::SetTopOffset(float InTopOffset)
+{
+	TopOffset = std::abs(InTopOffset);
+}
+
 void Secret::SetAlienSize(const glm::vec3& InSize)
 {
 	AlienSize = glm::abs(InSize);
@@ -79,16 +90,18 @@ void Secret::LoadConfig()
 		return;
 	}
 
-	float InSpawnTimeMin, InSpawnTimeMax, InAlienSpeed;
+	float InSpawnTimeMin, InSpawnTimeMax, InAlienSpeed, InTopOffset;
 	glm::vec3 InAlienSize;
 	SecretSettings->Get("SpawnTimeMin", DEFAULT_SPAWN_TIME_MIN, InSpawnTimeMin);
 	SecretSettings->Get("SpawnTimeMax", DEFAULT_SPAWN_TIME_MAX, InSpawnTimeMax);
 	SecretSettings->Get("AlienSpeed", DEFAULT_ALIEN_SPEED, InAlienSpeed);
+	SecretSettings->Get("TopOffset", DEFAULT_ALIEN_TOP_OFFSET, InTopOffset);
 	SecretSettings->Get("AlienSize", InAlienSize);
 
 	SetSpawnTimeMin(InSpawnTimeMin);
 	SetSpawnTimeMax(InSpawnTimeMax);
 	SetAlienSpeed(InAlienSpeed);
+	SetTopOffset(InTopOffset);
 	SetAlienSize(InAlienSize);
 }
 
@@ -166,7 +179,7 @@ void Secret::SpawnAlien()
 	const float DirectionX = (bRight) ? 1.f : -1.f;
 
 	const glm::vec3 Direction(DirectionX, 0.f, 0.f);
-	const glm::vec3 Location(LocationX, (AlienSize.y / 2) + 10.f, 0.f);
+	const glm::vec3 Location(LocationX, (AlienSize.y / 2) + TopOffset, 0.f);
 	const glm::vec3 Velocity = Direction * AlienSpeed;
 
 	CurrentAlien->CancelDestroy();
