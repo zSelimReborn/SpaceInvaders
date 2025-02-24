@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "AssetManager.h"
+#include "Component.h"
 #include "Renderer.h"
 #include "Scene.h"
 
@@ -154,6 +155,27 @@ void Actor::UpdateLifeSpan(const float Delta)
 	}
 }
 
+void Actor::AddComponent(const ComponentSharedPtr& InComponent)
+{
+	Components.push_back(InComponent);
+}
+
+void Actor::BeginComponents() const
+{
+	for (const ComponentSharedPtr& CurrentComponent : Components)
+	{
+		CurrentComponent->Begin();
+	}
+}
+
+void Actor::UpdateComponents(const float Delta) const
+{
+	for (const ComponentSharedPtr& CurrentComponent : Components)
+	{
+		CurrentComponent->Update(Delta);
+	}
+}
+
 
 glm::mat4 Actor::GetRenderModel() const
 {
@@ -206,12 +228,14 @@ void Actor::LoadConfig()
 void Actor::Begin()
 {
 	LoadConfig();
+	BeginComponents();
 }
 
 void Actor::Update(const float Delta)
 {
 	Move(Delta);
 	UpdateLifeSpan(Delta);
+	UpdateComponents(Delta);
 }
 
 void Actor::Input(const Window& Window, const float Delta)
@@ -229,6 +253,11 @@ void Actor::Render() const
 		GetRenderModel(),
 		Color
 	);
+}
+
+Actor::ComponentList Actor::GetComponents() const
+{
+	return Components;
 }
 
 bool Actor::IsDestroyed() const

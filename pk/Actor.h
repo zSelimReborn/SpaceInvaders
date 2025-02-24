@@ -3,19 +3,23 @@
 #include <glm/glm.hpp>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "Texture.h"
 #include "Common.h"
 
 class Scene;
 class Window;
+class Component;
 
-class Actor
+class Actor : public std::enable_shared_from_this<Actor>
 {
 public:
 	typedef std::shared_ptr<Actor> SharedPtr;
 	typedef std::shared_ptr<Scene> SceneSharedPtr;
 	typedef std::weak_ptr<Scene> SceneWeakPtr;
+	typedef std::shared_ptr<Component> ComponentSharedPtr;
+	typedef std::vector<ComponentSharedPtr> ComponentList;
 
 	Actor();
 	Actor(const Transform& InTransform);
@@ -69,6 +73,11 @@ public:
 	virtual void Input(const Window& Window, const float Delta);
 	virtual void Render() const;
 
+	ComponentList GetComponents() const;
+
+	template<class T>
+	std::shared_ptr<T> GetComponent() const;
+
 	bool IsDestroyed() const;
 	virtual void Destroy();
 	void CancelDestroy();
@@ -80,6 +89,9 @@ public:
 protected:
 	void Move(const float Delta);
 	void UpdateLifeSpan(const float Delta);
+	void AddComponent(const ComponentSharedPtr& InComponent);
+	void BeginComponents() const;
+	void UpdateComponents(const float Delta) const;
 
 private:
 	int Id;
@@ -100,6 +112,22 @@ private:
 
 	SceneWeakPtr ScenePtr;
 
+	ComponentList Components;
+
 	friend class Scene;
 };
 
+template <class T>
+std::shared_ptr<T> Actor::GetComponent() const
+{
+	for (const ComponentSharedPtr& CurrentComponent : Components)
+	{
+		std::shared_ptr<T> FoundComponent = std::dynamic_pointer_cast<T>(CurrentComponent);
+		if (FoundComponent != nullptr)
+		{
+			return FoundComponent;
+		}
+	}
+
+	return nullptr;
+}
