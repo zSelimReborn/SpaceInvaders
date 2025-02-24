@@ -2,13 +2,16 @@
 
 #include "pk/Actor.h"
 #include "pk/IDamageable.h"
-#include "ITeamDefiner.h"
 
 class ProjectilePool;
+class TeamComponent;
 
-class Ship : public Actor, public ITeamDefiner, public IDamageable
+class Ship : public Actor, public IDamageable
 {
 public:
+	typedef std::shared_ptr<ProjectilePool> ProjectilePoolPtr;
+	typedef std::shared_ptr<TeamComponent> TeamComponentPtr;
+
 	static const float DEFAULT_SPEED;
 	static const float DEFAULT_COOLDOWN;
 
@@ -22,14 +25,11 @@ public:
 	void SetShootCooldown(float InCooldown);
 	float GetShootCooldown() const;
 
-	void SetProjectilePool(const std::shared_ptr<ProjectilePool>& InProjectilePool);
+	void SetProjectilePool(const ProjectilePoolPtr& InProjectilePool);
 
 	void LoadConfig() override;
 	void Input(const Window& Window, const float Delta) override;
 	void Update(const float Delta) override;
-
-	void SetTeam(Team InTeam) override;
-	Team GetTeam() const override;
 
 	bool TakeDamage(float InDamage) override;
 
@@ -46,7 +46,7 @@ private:
 	float CurrentCooldown;
 	bool bShouldCooldown;
 
-	Team CurrentTeam;
+	TeamComponentPtr TeamPtr;
 
-	std::shared_ptr<ProjectilePool> ProjectilePoolPtr;
+	ProjectilePoolPtr CurrentProjectilePool;
 };

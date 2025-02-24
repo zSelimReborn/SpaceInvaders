@@ -4,13 +4,18 @@
 
 #include "Projectile.h"
 #include "ProjectilePool.h"
+#include "TeamComponent.h"
 #include "pk/Scene.h"
 #include "pk/SettingsReader.h"
 
 Alien::Alien(AlienType InType)
-	: Score(0), Type(InType), CurrentTeam(Team::Alien)
+	: Score(0), Type(InType)
 {
 	HasCollision(true);
+
+	TeamPtr = std::make_shared<TeamComponent>(weak_from_this());
+	TeamPtr->SetTeam(Team::Alien);
+	AddComponent(TeamPtr);
 }
 
 Alien::Alien(const Transform& InTransform, AlienType InAlienType)
@@ -25,9 +30,9 @@ Alien::Alien(const glm::vec3& InLocation, const glm::vec3& InSize, AlienType InA
 {
 }
 
-void Alien::SetProjectilePool(const std::shared_ptr<ProjectilePool>& InProjectilePool)
+void Alien::SetProjectilePool(const ProjectilePoolPtr& InProjectilePool)
 {
-	ProjectilePoolPtr = InProjectilePool;
+	CurrentProjectilePool = InProjectilePool;
 }
 
 int Alien::GetScore() const
@@ -56,16 +61,6 @@ void Alien::LoadConfig()
 	SetColor(SettingColor);
 }
 
-void Alien::SetTeam(Team InTeam)
-{
-	CurrentTeam = InTeam;
-}
-
-Team Alien::GetTeam() const
-{
-	return CurrentTeam;
-}
-
 bool Alien::TakeDamage(float InDamage)
 {
 	Destroy();
@@ -74,7 +69,7 @@ bool Alien::TakeDamage(float InDamage)
 
 void Alien::Shoot()
 {
-	if (ProjectilePoolPtr == nullptr)
+	if (CurrentProjectilePool == nullptr)
 	{
 		std::cout << "[Alien] - Unable to shoot, no pool obtained.\n";
 		return;
@@ -85,6 +80,6 @@ void Alien::Shoot()
 	glm::vec3 SpawnLocation(GetLocation());
 	SpawnLocation.y += (GetSize().y + 5.f);
 
-	Projectile::SharedPtr NewProjectile = ProjectilePoolPtr->Create(SpawnLocation, CurrentTeam, GetShader());
+	Projectile::SharedPtr NewProjectile = CurrentProjectilePool->Create(SpawnLocation, TeamPtr->GetTeam(), GetShader());
 	CurrentScene->Add(NewProjectile);
 }

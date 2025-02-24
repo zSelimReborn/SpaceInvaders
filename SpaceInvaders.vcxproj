@@ -146,6 +146,7 @@
     <ClCompile Include="pk\Actor.cpp" />
     <ClCompile Include="pk\AssetManager.cpp" />
     <ClCompile Include="pk\Common.cpp" />
+    <ClCompile Include="pk\Component.cpp" />
     <ClCompile Include="pk\Emitter.cpp" />
     <ClCompile Include="pk\Font.cpp" />
     <ClCompile Include="pk\Random.cpp" />
@@ -161,16 +162,17 @@
     <ClCompile Include="ProjectilePool.cpp" />
     <ClCompile Include="Secret.cpp" />
     <ClCompile Include="Ship.cpp" />
+    <ClCompile Include="TeamComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Alien.h" />
     <ClInclude Include="AlienGroup.h" />
     <ClInclude Include="Assets.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="ITeamDefiner.h" />
     <ClInclude Include="pk\Actor.h" />
     <ClInclude Include="pk\AssetManager.h" />
     <ClInclude Include="pk\Common.h" />
+    <ClInclude Include="pk\Component.h" />
     <ClInclude Include="pk\Emitter.h" />
     <ClInclude Include="pk\Font.h" />
     <ClInclude Include="pk\IDamageable.h" />
@@ -187,6 +189,7 @@
     <ClInclude Include="ProjectilePool.h" />
     <ClInclude Include="Secret.h" />
     <ClInclude Include="Ship.h" />
+    <ClInclude Include="TeamComponent.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>
   <ItemGroup>

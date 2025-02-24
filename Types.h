@@ -24,3 +24,10 @@ struct ProjectileData
 		Direction = InDirection;
 	}
 };
+
+enum class Team : std::uint8_t
+{
+	None,
+	Human,
+	Alien
+};

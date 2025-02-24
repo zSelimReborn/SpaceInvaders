@@ -87,6 +87,12 @@
     <ClCompile Include="Secret.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
+    <ClCompile Include="pk\Component.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="TeamComponent.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pk\AssetManager.h">
@@ -155,13 +161,16 @@
     <ClInclude Include="pk\Random.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="ITeamDefiner.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
     <ClInclude Include="pk\IDamageable.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="Secret.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\Component.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="TeamComponent.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>

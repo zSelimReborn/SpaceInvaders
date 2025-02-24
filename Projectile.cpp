@@ -2,12 +2,15 @@
 
 #include <iostream>
 
+#include "TeamComponent.h"
 #include "pk/Scene.h"
 
 Projectile::Projectile()
-	: CurrentTeam(Team::Human)
 {
 	HasCollision(true);
+
+	TeamPtr = std::make_shared<TeamComponent>(weak_from_this());
+	AddComponent(TeamPtr);
 }
 
 Projectile::Projectile(const Transform& InTransform)
@@ -22,14 +25,14 @@ Projectile::Projectile(const glm::vec3& InLocation, const glm::vec3& InSize)
 {
 }
 
-void Projectile::SetTeam(Team InTeam)
+void Projectile::SetTeam(Team InTeam) const
 {
-	CurrentTeam = InTeam;
+	TeamPtr->SetTeam(InTeam);
 }
 
 Team Projectile::GetTeam() const
 {
-	return CurrentTeam;
+	return TeamPtr->GetTeam();
 }
 
 bool Projectile::TakeDamage(float InDamage)
@@ -92,9 +95,9 @@ void Projectile::CheckCollisions()
 
 void Projectile::OnHit(const Actor::SharedPtr& HitActor)
 {
-	std::shared_ptr<ITeamDefiner> TeamActor = std::dynamic_pointer_cast<ITeamDefiner>(HitActor);
+	const TeamComponentPtr HitTeamComponent = HitActor->GetComponent<TeamComponent>();
 	// Skip same team
-	if (!TeamActor || TeamActor->GetTeam() == GetTeam())
+	if (!HitTeamComponent || GetTeam() == HitTeamComponent->GetTeam())
 	{
 		return;
 	}

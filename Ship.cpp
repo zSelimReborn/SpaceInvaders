@@ -8,15 +8,20 @@
 #include "pk/SettingsReader.h"
 #include "Projectile.h"
 #include "ProjectilePool.h"
+#include "TeamComponent.h"
 
 const float Ship::DEFAULT_SPEED = 450.f;
 const float Ship::DEFAULT_COOLDOWN = 1.f;
 
 Ship::Ship(const Transform& InTransform)
 	: Actor(InTransform), MaxSpeed(DEFAULT_SPEED), Speed(DEFAULT_SPEED),
-		ShootCooldown(DEFAULT_COOLDOWN), CurrentCooldown(0.f), bShouldCooldown(false), CurrentTeam(Team::Human)
+		ShootCooldown(DEFAULT_COOLDOWN), CurrentCooldown(0.f), bShouldCooldown(false)
 {
 	HasCollision(true);
+
+	TeamPtr = std::make_shared<TeamComponent>(weak_from_this());
+	TeamPtr->SetTeam(Team::Human);
+	AddComponent(TeamPtr);
 }
 
 Ship::Ship(const glm::vec3& InLocation, const glm::vec3& InSize)
@@ -45,9 +50,9 @@ float Ship::GetShootCooldown() const
 	return ShootCooldown;
 }
 
-void Ship::SetProjectilePool(const std::shared_ptr<ProjectilePool>& InProjectilePool)
+void Ship::SetProjectilePool(const ProjectilePoolPtr& InProjectilePool)
 {
-	ProjectilePoolPtr = InProjectilePool;
+	CurrentProjectilePool = InProjectilePool;
 }
 
 void Ship::LoadConfig()
@@ -107,16 +112,6 @@ void Ship::Update(const float Delta)
 	ConstraintInViewport(Delta);
 }
 
-void Ship::SetTeam(Team InTeam)
-{
-	CurrentTeam = InTeam;
-}
-
-Team Ship::GetTeam() const
-{
-	return CurrentTeam;
-}
-
 bool Ship::TakeDamage(float InDamage)
 {
 	// TODO Define lives
@@ -159,7 +154,7 @@ void Ship::ConstraintInViewport(const float Delta)
 
 void Ship::Shoot()
 {
-	if (ProjectilePoolPtr == nullptr)
+	if (CurrentProjectilePool == nullptr)
 	{
 		std::cout << "[Ship] - Unable to shoot, no pool obtained.\n";
 		return;
@@ -170,7 +165,7 @@ void Ship::Shoot()
 	glm::vec3 SpawnLocation(GetLocation());
 	SpawnLocation.y -= (GetSize().y + 5.f);
 
-	Projectile::SharedPtr NewProjectile = ProjectilePoolPtr->Create(SpawnLocation, CurrentTeam, GetShader());
+	Projectile::SharedPtr NewProjectile = CurrentProjectilePool->Create(SpawnLocation, TeamPtr->GetTeam(), GetShader());
 	Projectile::OnHitDelegate Callback = [this](const Actor::SharedPtr& HitActor) { OnProjectileHit(HitActor); };
 	NewProjectile->OnHitActor(Callback);
 
@@ -194,5 +189,6 @@ void Ship::UpdateCooldown(const float Delta)
 
 void Ship::OnProjectileHit(const Actor::SharedPtr& HitActor)
 {
+	// TODO Collect score
 }
 

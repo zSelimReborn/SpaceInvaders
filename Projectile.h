@@ -2,23 +2,27 @@
 
 #include "pk/Actor.h"
 #include "pk/IDamageable.h"
-#include "ITeamDefiner.h"
+#include "Types.h"
 
 #include <functional>
 #include <vector>
 
-class Projectile : public Actor, public ITeamDefiner, public IDamageable
+
+class TeamComponent;
+
+class Projectile : public Actor, public IDamageable
 {
 public:
 	typedef std::function<void(const Actor::SharedPtr& HitActor)> OnHitDelegate;
 	typedef std::shared_ptr<Projectile> SharedPtr;
+	typedef std::shared_ptr<TeamComponent> TeamComponentPtr;
 
 	Projectile();
 	Projectile(const Transform& InTransform);
 	Projectile(const glm::vec3& InLocation, const glm::vec3& InSize);
 
-	void SetTeam(Team InTeam) override;
-	Team GetTeam() const override;
+	void SetTeam(Team InTeam) const;
+	Team GetTeam() const;
 
 	bool TakeDamage(float InDamage) override;
 
@@ -35,6 +39,6 @@ private:
 	void OnHit(const Actor::SharedPtr& HitActor);
 	void NotifyHit(const Actor::SharedPtr& HitActor) const;
 
-	Team CurrentTeam;
+	TeamComponentPtr TeamPtr;
 	std::vector<OnHitDelegate> OnHitFunctions;
 };
