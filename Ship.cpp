@@ -83,19 +83,19 @@ float Ship::GetSpeed() const
 	return Speed;
 }
 
-void Ship::Input(const Window& Window, const float Delta)
+void Ship::Input(const InputHandler& Handler, const float Delta)
 {
 	glm::vec3 Direction(0.f, 0.f, 0.f);
-	if (Window.IsPressed(GLFW_KEY_LEFT))
+	if (Handler.IsPressed(GLFW_KEY_LEFT))
 	{
 		Direction.x = -1.f;
 	}
-	else if (Window.IsPressed(GLFW_KEY_RIGHT))
+	else if (Handler.IsPressed(GLFW_KEY_RIGHT))
 	{
 		Direction.x = 1.f;
 	}
 
-	if (Window.IsPressed(GLFW_KEY_SPACE) && CurrentCooldown <= 0.f)
+	if (Handler.IsPressed(GLFW_KEY_SPACE) && CurrentCooldown <= 0.f)
 	{
 		bShouldCooldown = true;
 		Shoot();

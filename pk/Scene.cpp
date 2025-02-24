@@ -1,15 +1,11 @@
 #include "Scene.h"
 
-#include <algorithm>
-
 #include "Window.h"
 #include "Common.h"
 #include "Font.h"
 #include "SoundEngine.h"
 #include "Actor.h"
 
-#include <iostream>
-#include <sstream>
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -17,6 +13,8 @@ Scene::Scene(const Window::WeakPtr& InWindow)
 	: WindowPtr(InWindow), NextId(0)
 {
 	Projection = glm::ortho(0.f, static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight()), 0.f, -1.0f, 1.0f);
+
+	IHandler.HandleKey(GLFW_KEY_ESCAPE, InputType::Press);
 }
 
 int Scene::GetNextId() const
@@ -69,16 +67,20 @@ void Scene::Input(const float Delta)
 		return;
 	}
 
+	IHandler.Update(*GetWindow(), Delta);
+
 	Window::SharedPtr Window = GetWindow();
-	if (Window->IsPressed(GLFW_KEY_ESCAPE))
+	if (IHandler.IsPressed(GLFW_KEY_ESCAPE))
 	{
 		Window->ShouldClose(true);
 	}
 
 	for (const ActorMapPair ActorPair : Actors)
 	{
-		ActorPair.second->Input(*GetWindow(), Delta);
+		ActorPair.second->Input(IHandler, Delta);
 	}
+
+	IHandler.Clean();
 }
 
 void Scene::Render(const float Delta)

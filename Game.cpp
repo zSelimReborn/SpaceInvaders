@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-#include "Alien.h"
 #include "AlienGroup.h"
 #include "Assets.h"
 #include "ProjectilePool.h"
@@ -10,6 +9,8 @@
 #include "Ship.h"
 #include "pk/AssetManager.h"
 #include "pk/SettingsReader.h"
+
+#include <GLFW/glfw3.h>
 
 using namespace Assets;
 
@@ -19,6 +20,11 @@ Game::Game(const Window::WeakPtr& InWindow)
 	: Scene(InWindow), ShipSize(DEFAULT_SHIP_SIZE)
 {
 	LoadConfig();
+
+	IHandler.HandleKey(GLFW_KEY_LEFT, InputType::Hold);
+	IHandler.HandleKey(GLFW_KEY_RIGHT, InputType::Hold);
+	IHandler.HandleKey(GLFW_KEY_SPACE, InputType::Press);
+	IHandler.HandleKey(GLFW_KEY_ENTER, InputType::Press);
 }
 
 void Game::LoadConfig()

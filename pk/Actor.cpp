@@ -238,7 +238,7 @@ void Actor::Update(const float Delta)
 	UpdateComponents(Delta);
 }
 
-void Actor::Input(const Window& Window, const float Delta)
+void Actor::Input(const InputHandler& Handler, const float Delta)
 {
 }
 

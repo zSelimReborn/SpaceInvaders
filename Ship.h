@@ -28,7 +28,7 @@ public:
 	void SetProjectilePool(const ProjectilePoolPtr& InProjectilePool);
 
 	void LoadConfig() override;
-	void Input(const Window& Window, const float Delta) override;
+	void Input(const InputHandler& Handler, const float Delta) override;
 	void Update(const float Delta) override;
 
 	bool TakeDamage(float InDamage) override;

@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "Window.h"
+#include "InputHandler.h"
 
 class Actor;
 
@@ -67,5 +68,7 @@ protected:
 	float Delta;
 
 	int NextId;
+
+	InputHandler IHandler;
 };
 

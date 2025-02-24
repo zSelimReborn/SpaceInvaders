@@ -149,6 +149,7 @@
     <ClCompile Include="pk\Component.cpp" />
     <ClCompile Include="pk\Emitter.cpp" />
     <ClCompile Include="pk\Font.cpp" />
+    <ClCompile Include="pk\InputHandler.cpp" />
     <ClCompile Include="pk\Random.cpp" />
     <ClCompile Include="pk\Renderer.cpp" />
     <ClCompile Include="pk\Scene.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="pk\Emitter.h" />
     <ClInclude Include="pk\Font.h" />
     <ClInclude Include="pk\IDamageable.h" />
+    <ClInclude Include="pk\InputHandler.h" />
     <ClInclude Include="pk\Random.h" />
     <ClInclude Include="pk\Renderer.h" />
     <ClInclude Include="pk\Scene.h" />

@@ -11,6 +11,7 @@
 class Scene;
 class Window;
 class Component;
+class InputHandler;
 
 class Actor : public std::enable_shared_from_this<Actor>
 {
@@ -70,7 +71,7 @@ public:
 	virtual void LoadConfig();
 	virtual void Begin();
 	virtual void Update(const float Delta);
-	virtual void Input(const Window& Window, const float Delta);
+	virtual void Input(const InputHandler& Handler, const float Delta);
 	virtual void Render() const;
 
 	ComponentList GetComponents() const;
