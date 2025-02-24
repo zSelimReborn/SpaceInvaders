@@ -111,7 +111,6 @@ void Secret::Update(const float Delta)
 void Secret::SelectSpawnTime()
 {
 	SelectedSpawnTime = Random::Get(SpawnTimeMin, SpawnTimeMax);
-	std::cout << "SpawnTime: " << SelectedSpawnTime << "\n";
 }
 
 void Secret::UpdateSpawnTime(const float Delta)
@@ -126,7 +125,6 @@ void Secret::UpdateSpawnTime(const float Delta)
 	{
 		SpawnAlien();
 		CurrentSpawnTime = 0.f;
-		SelectSpawnTime();
 	}
 }
 
@@ -137,10 +135,11 @@ void Secret::UpdateAlien()
 		return;
 	}
 
-	if (!CurrentAlien || !CurrentAlien->IsInViewport())
+	if (!CurrentAlien || !CurrentAlien->IsInViewport() || CurrentAlien->IsDestroyed())
 	{
 		CurrentAlien->Destroy();
 		bAlienActive = false;
+		SelectSpawnTime();
 	}
 }
 
@@ -160,13 +159,18 @@ void Secret::SpawnAlien()
 		return;
 	}
 
+	const float WindowWidth = static_cast<float>(CurrentScene->GetScreenWidth());
+
 	bool bRight = Random::Get(0, 1) == 1;
-	const glm::vec3 Direction(0.f, (bRight)? 1.f : -1.f, 0.f);
+	const float LocationX = (bRight) ? 0 : WindowWidth;
+	const float DirectionX = (bRight) ? 1.f : -1.f;
+
+	const glm::vec3 Direction(DirectionX, 0.f, 0.f);
+	const glm::vec3 Location(LocationX, (AlienSize.y / 2) + 10.f, 0.f);
 	const glm::vec3 Velocity = Direction * AlienSpeed;
 
-	const glm::vec2 ScreenCenter(CurrentScene->GetScreenCenter());
 	CurrentAlien->CancelDestroy();
-	CurrentAlien->SetLocation(glm::vec3(-AlienSize.x, (AlienSize.y / 2) + 10.f, 0.f));
+	CurrentAlien->SetLocation(Location);
 	CurrentAlien->SetVelocity(Velocity);
 
 	CurrentScene->Add(CurrentAlien);
