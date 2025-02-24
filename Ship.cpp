@@ -12,10 +12,12 @@
 
 const float Ship::DEFAULT_SPEED = 450.f;
 const float Ship::DEFAULT_COOLDOWN = 1.f;
+const int Ship::DEFAULT_LIFE_POINTS = 3;
 
 Ship::Ship(const Transform& InTransform)
 	: Actor(InTransform), MaxSpeed(DEFAULT_SPEED), Speed(DEFAULT_SPEED),
-		ShootCooldown(DEFAULT_COOLDOWN), CurrentCooldown(0.f), bShouldCooldown(false)
+		ShootCooldown(DEFAULT_COOLDOWN), CurrentCooldown(0.f), bShouldCooldown(false),
+		MaxLifePoints(DEFAULT_LIFE_POINTS), LifePoints(DEFAULT_LIFE_POINTS)
 {
 	HasCollision(true);
 
@@ -28,6 +30,11 @@ Ship::Ship(const glm::vec3& InLocation, const glm::vec3& InSize)
 	: Ship(Transform(InLocation, InSize))
 {
 	
+}
+
+void Ship::SetMaxSpeed(float InSpeed)
+{
+	MaxSpeed = std::abs(InSpeed);
 }
 
 void Ship::SetSpeed(float InSpeed)
@@ -45,9 +52,29 @@ void Ship::SetShootCooldown(float InCooldown)
 	ShootCooldown = std::abs(InCooldown);
 }
 
+void Ship::SetMaxLifePoints(int InLifePoints)
+{
+	MaxLifePoints = std::abs(InLifePoints);
+}
+
 float Ship::GetShootCooldown() const
 {
 	return ShootCooldown;
+}
+
+int Ship::GetMaxLifePoints() const
+{
+	return MaxLifePoints;
+}
+
+void Ship::SetLifePoints(int InLifePoints)
+{
+	LifePoints = std::min(MaxLifePoints, InLifePoints);
+}
+
+int Ship::GetLifePoints() const
+{
+	return LifePoints;
 }
 
 void Ship::SetProjectilePool(const ProjectilePoolPtr& InProjectilePool)
@@ -67,15 +94,20 @@ void Ship::LoadConfig()
 		return;
 	}
 
-	ShipSettings->Get("Speed", DEFAULT_SPEED, MaxSpeed);
-	Speed = MaxSpeed;
-
-	ShipSettings->Get("Cooldown", DEFAULT_COOLDOWN, ShootCooldown);
-	CurrentCooldown = 0.f;
-
+	float InMaxSpeed, InShootCooldown;
+	int InLifePoints;
 	glm::vec4 SettingColor(Colors::White);
+	ShipSettings->Get("Speed", DEFAULT_SPEED, InMaxSpeed);
+	ShipSettings->Get("Cooldown", DEFAULT_COOLDOWN, InShootCooldown);
+	ShipSettings->Get("LifePoints", DEFAULT_LIFE_POINTS, InLifePoints);
 	ShipSettings->Get("Color", SettingColor);
+
+	SetMaxSpeed(InMaxSpeed);
+	SetSpeed(InMaxSpeed);
+	SetMaxLifePoints(InLifePoints);
+	SetLifePoints(InLifePoints);
 	SetColor(SettingColor);
+	CurrentCooldown = 0.f;
 }
 
 float Ship::GetSpeed() const
@@ -114,8 +146,14 @@ void Ship::Update(const float Delta)
 
 bool Ship::TakeDamage(float InDamage)
 {
-	// TODO Define lives
+	LifePoints = std::max(0, LifePoints - 1);
+	NotifyOnTakeDamage();
 	return false;
+}
+
+void Ship::AddOnTakeDamageObserver(const OnTakeDamageCallback& Callback)
+{
+	OnTakeDamageList.push_back(Callback);
 }
 
 void Ship::ConstraintInViewport(const float Delta)
@@ -190,5 +228,13 @@ void Ship::UpdateCooldown(const float Delta)
 void Ship::OnProjectileHit(const Actor::SharedPtr& HitActor)
 {
 	// TODO Collect score
+}
+
+void Ship::NotifyOnTakeDamage() const
+{
+	for (const OnTakeDamageCallback& Callback : OnTakeDamageList)
+	{
+		Callback();
+	}
 }
 

@@ -52,6 +52,7 @@ void Game::SpawnPlayer()
 	PlayerShip->SetConfig(Config::PlayerFile);
 	PlayerShip->SetProjectilePool(PlayerProjectilePool);
 	PlayerShip->SetShader(Shaders::ShapeName);
+	PlayerShip->AddOnTakeDamageObserver([this]() { OnPlayerTakeDamage(); });
 
 	Add(PlayerShip);
 }
@@ -71,6 +72,17 @@ void Game::SpawnSecretAlien()
 	SecretAlien->SetConfig(Config::SecretAlienFile);
 
 	Add(SecretAlien);
+}
+
+void Game::OnPlayerTakeDamage()
+{
+	// TODO Add hit animation
+	// TODO Handle game over
+	std::cout << "Player LP: " << PlayerShip->GetLifePoints() << "\n";
+	if (PlayerShip->GetLifePoints() <= 0)
+	{
+		std::cout << "GAME OVER\n";
+	}
 }
 
 void Game::Begin()

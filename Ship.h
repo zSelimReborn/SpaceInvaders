@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include "pk/Actor.h"
 #include "pk/IDamageable.h"
 
@@ -11,19 +13,26 @@ class Ship : public Actor, public IDamageable
 public:
 	typedef std::shared_ptr<ProjectilePool> ProjectilePoolPtr;
 	typedef std::shared_ptr<TeamComponent> TeamComponentPtr;
+	typedef std::function<void()> OnTakeDamageCallback;
 
 	static const float DEFAULT_SPEED;
 	static const float DEFAULT_COOLDOWN;
+	static const int DEFAULT_LIFE_POINTS;
 
 	Ship(const Transform& InTransform);
 	Ship(const glm::vec3& InLocation, const glm::vec3& InSize);
 
+	void SetMaxSpeed(float InSpeed);
 	void SetSpeed(float InSpeed);
+	void SetShootCooldown(float InCooldown);
+	void SetMaxLifePoints(int InLifePoints);
+	void SetLifePoints(int InLifePoints);
+
 	float GetSpeed() const;
 	float GetMaxSpeed() const;
-
-	void SetShootCooldown(float InCooldown);
 	float GetShootCooldown() const;
+	int GetMaxLifePoints() const;
+	int GetLifePoints() const;
 
 	void SetProjectilePool(const ProjectilePoolPtr& InProjectilePool);
 
@@ -33,6 +42,8 @@ public:
 
 	bool TakeDamage(float InDamage) override;
 
+	void AddOnTakeDamageObserver(const OnTakeDamageCallback& Callback);
+
 private:
 	void ConstraintInViewport(const float Delta);
 	void Shoot();
@@ -40,13 +51,19 @@ private:
 
 	void OnProjectileHit(const Actor::SharedPtr& HitActor);
 
+	void NotifyOnTakeDamage() const;
+
 	float MaxSpeed;
 	float Speed;
 	float ShootCooldown;
 	float CurrentCooldown;
 	bool bShouldCooldown;
+	int MaxLifePoints;
+	int LifePoints;
 
 	TeamComponentPtr TeamPtr;
 
 	ProjectilePoolPtr CurrentProjectilePool;
+
+	std::vector<OnTakeDamageCallback> OnTakeDamageList;
 };

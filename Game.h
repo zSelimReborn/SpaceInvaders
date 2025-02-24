@@ -27,6 +27,7 @@ private:
 	void SpawnPlayer();
 	void SpawnAliens();
 	void SpawnSecretAlien();
+	void OnPlayerTakeDamage();
 
 	glm::vec3 ShipSize;
 
