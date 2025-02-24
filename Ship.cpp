@@ -3,6 +3,7 @@
 #include <iostream>
 #include <GLFW/glfw3.h>
 
+#include "Alien.h"
 #include "pk/Scene.h"
 #include "pk/Window.h"
 #include "pk/SettingsReader.h"
@@ -17,7 +18,8 @@ const int Ship::DEFAULT_LIFE_POINTS = 3;
 Ship::Ship(const Transform& InTransform)
 	: Actor(InTransform), MaxSpeed(DEFAULT_SPEED), Speed(DEFAULT_SPEED),
 		ShootCooldown(DEFAULT_COOLDOWN), CurrentCooldown(0.f), bShouldCooldown(false),
-		MaxLifePoints(DEFAULT_LIFE_POINTS), LifePoints(DEFAULT_LIFE_POINTS)
+		MaxLifePoints(DEFAULT_LIFE_POINTS), LifePoints(DEFAULT_LIFE_POINTS),
+		ScorePoints(0)
 {
 	HasCollision(true);
 
@@ -77,6 +79,11 @@ int Ship::GetLifePoints() const
 	return LifePoints;
 }
 
+int Ship::GetScorePoints() const
+{
+	return ScorePoints;
+}
+
 void Ship::SetProjectilePool(const ProjectilePoolPtr& InProjectilePool)
 {
 	CurrentProjectilePool = InProjectilePool;
@@ -107,6 +114,7 @@ void Ship::LoadConfig()
 	SetMaxLifePoints(InLifePoints);
 	SetLifePoints(InLifePoints);
 	SetColor(SettingColor);
+
 	CurrentCooldown = 0.f;
 }
 
@@ -227,7 +235,13 @@ void Ship::UpdateCooldown(const float Delta)
 
 void Ship::OnProjectileHit(const Actor::SharedPtr& HitActor)
 {
-	// TODO Collect score
+	Alien::SharedPtr HitAlien = std::dynamic_pointer_cast<Alien>(HitActor);
+	if (HitAlien == nullptr)
+	{
+		return;
+	}
+
+	ScorePoints += HitAlien->GetScore();
 }
 
 void Ship::NotifyOnTakeDamage() const

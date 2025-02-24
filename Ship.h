@@ -33,6 +33,7 @@ public:
 	float GetShootCooldown() const;
 	int GetMaxLifePoints() const;
 	int GetLifePoints() const;
+	int GetScorePoints() const;
 
 	void SetProjectilePool(const ProjectilePoolPtr& InProjectilePool);
 
@@ -60,6 +61,7 @@ private:
 	bool bShouldCooldown;
 	int MaxLifePoints;
 	int LifePoints;
+	int ScorePoints;
 
 	TeamComponentPtr TeamPtr;
 
