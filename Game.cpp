@@ -30,7 +30,7 @@ Game::Game(const Window::WeakPtr& InWindow)
 
 	IHandler.HandleKey(GLFW_KEY_LEFT, InputType::Hold);
 	IHandler.HandleKey(GLFW_KEY_RIGHT, InputType::Hold);
-	IHandler.HandleKey(GLFW_KEY_SPACE, InputType::Press);
+	IHandler.HandleKey(GLFW_KEY_SPACE, InputType::Hold);
 	IHandler.HandleKey(GLFW_KEY_ENTER, InputType::Press);
 }
 
@@ -57,12 +57,8 @@ void Game::LoadConfig()
 
 void Game::SpawnPlayer()
 {
-	const float Width = static_cast<float>(GetScreenWidth());
-	const float Height = static_cast<float>(GetScreenHeight());
-
-	const glm::vec3 ShipSizeHalf(ShipSize.x / 2.f, ShipSize.y / 2.f, 1.f);
-	const glm::vec3 ShipBaseLocation(Width / 2, Height - ShipSizeHalf.y, 1.0f);
-	const Transform ShipTransform(ShipBaseLocation, ShipSize);
+	const glm::vec3 StartLocation = GetPlayerStartLocation();
+	const Transform ShipTransform(StartLocation, ShipSize);
 
 	PlayerShip = std::make_shared<Ship>(ShipTransform);
 	PlayerShip->SetConfig(Config::PlayerFile);
@@ -78,6 +74,8 @@ void Game::SpawnAliens()
 	MainAlienGroup = std::make_shared<AlienGroup>();
 	MainAlienGroup->SetConfig(Config::AlienGroupFile);
 	MainAlienGroup->SetProjectilePool(AlienProjectilePool);
+	MainAlienGroup->AddOnReachedPlayerDelegate([this]() { OnInvadersReachedPlayer(); });
+	MainAlienGroup->AddOnDefeatDelegate([this]() { OnInvadersDefeat(); });
 
 	Add(MainAlienGroup);
 }
@@ -112,6 +110,41 @@ void Game::SpawnBunkers()
 	}
 }
 
+glm::vec3 Game::GetPlayerStartLocation() const
+{
+	const float Width = static_cast<float>(GetScreenWidth());
+	const float Height = static_cast<float>(GetScreenHeight());
+
+	const glm::vec3 ShipSizeHalf(ShipSize.x / 2.f, ShipSize.y / 2.f, 1.f);
+	const glm::vec3 StartLocation(Width / 2, Height - ShipSizeHalf.y, 1.0f);
+	return StartLocation;
+}
+
+void Game::BuildBunkers() const
+{
+	for (const Bunker::SharedPtr& Bunker : Bunkers)
+	{
+		Bunker->Build();
+	}
+}
+
+void Game::ResetPlayer() const
+{
+	PlayerShip->SetLocation(GetPlayerStartLocation());
+	PlayerShip->ResetLifePoints();
+	PlayerShip->ResetScorePoints();
+}
+
+void Game::OnInvadersReachedPlayer()
+{
+	GameOver(false);
+}
+
+void Game::OnInvadersDefeat()
+{
+	GameOver(true);
+}
+
 void Game::OnPlayerTakeDamage()
 {
 	// TODO Add hit animation
@@ -119,7 +152,17 @@ void Game::OnPlayerTakeDamage()
 	std::cout << "Player LP: " << PlayerShip->GetLifePoints() << "\n";
 	if (PlayerShip->GetLifePoints() <= 0)
 	{
-		std::cout << "GAME OVER\n";
+		GameOver(false);
+	}
+}
+
+void Game::GameOver(bool bPlayerWon) const
+{
+	MainAlienGroup->StartGroup();
+	if (!bPlayerWon)
+	{
+		BuildBunkers();
+		ResetPlayer();
 	}
 }
 
@@ -149,9 +192,9 @@ void Game::Begin()
 	AlienProjectilePool = std::make_shared<ProjectilePool>(Config::AlienProjectilePool);
 
 	SpawnPlayer();
-	SpawnAliens();
-	SpawnSecretAlien();
 	SpawnBunkers();
+	SpawnSecretAlien();
+	SpawnAliens();
 
 	Scene::Begin();
 }

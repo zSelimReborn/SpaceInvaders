@@ -21,16 +21,22 @@ const glm::vec3 AlienGroup::DEFAULT_ALIEN_SIZE = glm::vec3(10.f, 10.f, 1.f);
 AlienGroup::AlienGroup()
 	: bRightDirection(true), bGoDown(false),
 		NumRowsPerType(DEFAULT_NUM_ROWS_PER_TYPE), NumAlienPerRow(DEFAULT_ALIEN_PER_ROW),
-		OuterLeftCol(0), OuterRightCol(DEFAULT_ALIEN_PER_ROW - 1),
+		OuterLeftCol(0), OuterRightCol(DEFAULT_ALIEN_PER_ROW - 1), LastRow(0),
 		MoveDelay(DEFAULT_MOVE_DELAY), CurrentDelay(0.f),
 		ShootMaxCooldown(DEFAULT_SHOOT_MAX_COOLDOWN), ShootMinCooldown(DEFAULT_SHOOT_MIN_COOLDOWN), SelectedShootCooldown(DEFAULT_SHOOT_MAX_COOLDOWN), CurrentShootCooldown(0.f),
 		HorizontalMoveStep(DEFAULT_H_MOVE_STEP), VerticalMoveStep(DEFAULT_V_MOVE_STEP),
 		HorizontalDistance(DEFAULT_H_DISTANCE), VerticalDistance(DEFAULT_V_DISTANCE),
-		AlienSize(DEFAULT_ALIEN_SIZE)
+		AlienSize(DEFAULT_ALIEN_SIZE),
+		State(GroupState::None)
 {
 	ConfigTypeMapping.insert(ConfigMapPair(AlienType::Squid, Assets::Config::SquidFile));
 	ConfigTypeMapping.insert(ConfigMapPair(AlienType::Crab, Assets::Config::CrabFile));
 	ConfigTypeMapping.insert(ConfigMapPair(AlienType::Octopus, Assets::Config::OctopusFile));
+}
+
+GroupState AlienGroup::GetState() const
+{
+	return State;
 }
 
 int AlienGroup::GetNumRowsPerType() const
@@ -196,24 +202,20 @@ void AlienGroup::Begin()
 void AlienGroup::Update(const float Delta)
 {
 	Actor::Update(Delta);
+	if (State != GroupState::Moving)
+	{
+		return;
+	}
+
+	UpdateShootCooldown(Delta);
+	UpdateMoveDelay(Delta);
+	if (ReachedPlayer())
+	{
+		State = GroupState::Stopped;
+		NotifyReachedPlayer();
+	}
 
 	UpdateAliveAliens();
-
-	CurrentShootCooldown += Delta;
-	if (CurrentShootCooldown >= SelectedShootCooldown)
-	{
-		Shoot();
-		CurrentShootCooldown = 0.f;
-		GenerateShootCooldown();
-	}
-
-	CurrentDelay += Delta;
-	if (CurrentDelay >= MoveDelay)
-	{
-		UpdateOuterCols();
-		MoveAliens(Delta);
-		CurrentDelay = 0.f;
-	}
 }
 
 void AlienGroup::StartGroup()
@@ -229,6 +231,7 @@ void AlienGroup::StartGroup()
 	CurrentDelay = 0.f;
 	OuterLeftCol = 0;
 	OuterRightCol = NumAlienPerRow - 1;
+	LastRow = 0;
 
 	const float Width = static_cast<float>(CurrentScene->GetScreenWidth());
 
@@ -260,6 +263,18 @@ void AlienGroup::StartGroup()
 			CurrentLocation.y += VerticalDistance + (AlienSize.y);
 		}
 	}
+
+	State = GroupState::Moving;
+}
+
+void AlienGroup::AddOnReachedPlayerDelegate(const OnReachedPlayerDelegate& InFunction)
+{
+	OnReachedPlayerFunctions.push_back(InFunction);
+}
+
+void AlienGroup::AddOnDefeatDelegate(const OnDefeatDelegate& InFunction)
+{
+	OnDefeatFunctions.push_back(InFunction);
 }
 
 void AlienGroup::BuildMatrix()
@@ -310,7 +325,31 @@ bool AlienGroup::ReachedEnd() const
 	return false;
 }
 
-void AlienGroup::UpdateOuterCols()
+bool AlienGroup::ReachedPlayer() const
+{
+	const Scene::SharedPtr CurrentScene = GetScene();
+	if (CurrentScene == nullptr)
+	{
+		return false;
+	}
+
+	const float Height = static_cast<float>(CurrentScene->GetScreenHeight());
+	const Alien::SharedPtr LastAlien = AllAliens[LastRow * NumAlienPerRow];
+	if (LastAlien == nullptr)
+	{
+		return false;
+	}
+
+	const glm::vec3 LastLocation = LastAlien->GetLocation();
+	if ((LastLocation.y + AlienSize.y) >= Height)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+void AlienGroup::UpdateOuterColsAndRow()
 {
 	const int RowCount = GetNumRowsTotal();
 
@@ -332,6 +371,11 @@ void AlienGroup::UpdateOuterCols()
 			if (!AllAliens[RightCalcIndex]->IsDestroyed() && RightIndex > OuterRightCol)
 			{
 				OuterRightCol = RightIndex;
+			}
+
+			if (!AllAliens[LeftCalcIndex]->IsDestroyed() && i >= LastRow)
+			{
+				LastRow = i;
 			}
 		}
 	}
@@ -381,10 +425,54 @@ void AlienGroup::Shoot() const
 	AllAliens[AliveAlien]->Shoot();
 }
 
+void AlienGroup::UpdateShootCooldown(const float Delta)
+{
+	CurrentShootCooldown += Delta;
+	if (CurrentShootCooldown >= SelectedShootCooldown)
+	{
+		Shoot();
+		CurrentShootCooldown = 0.f;
+		GenerateShootCooldown();
+	}
+}
+
+void AlienGroup::UpdateMoveDelay(const float Delta)
+{
+	CurrentDelay += Delta;
+	if (CurrentDelay >= MoveDelay)
+	{
+		UpdateOuterColsAndRow();
+		MoveAliens(Delta);
+		CurrentDelay = 0.f;
+	}
+}
+
 void AlienGroup::UpdateAliveAliens()
 {
 	AliveAliensIdx.erase(
 		std::remove_if(AliveAliensIdx.begin(), AliveAliensIdx.end(), [this](int Index) { return AllAliens[Index]->IsDestroyed(); }),
 		AliveAliensIdx.end()
 	);
+
+	if (AliveAliensIdx.empty())
+	{
+		State = GroupState::Stopped;
+;		NotifyDefeat();
+	}
+}
+
+void AlienGroup::NotifyReachedPlayer() const
+{
+	for (const OnReachedPlayerDelegate& Function : OnReachedPlayerFunctions)
+	{
+		Function();
+	}
+}
+
+void AlienGroup::NotifyDefeat() const
+{
+	for (const OnDefeatDelegate& Function : OnDefeatFunctions)
+	{
+		Function();
+	}
 }

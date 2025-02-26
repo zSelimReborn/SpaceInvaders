@@ -13,7 +13,7 @@ class Ship : public Actor, public IDamageable
 public:
 	typedef std::shared_ptr<ProjectilePool> ProjectilePoolPtr;
 	typedef std::shared_ptr<TeamComponent> TeamComponentPtr;
-	typedef std::function<void()> OnTakeDamageCallback;
+	typedef std::function<void()> OnTakeDamageDelegate;
 
 	static const float DEFAULT_SPEED;
 	static const float DEFAULT_COOLDOWN;
@@ -35,6 +35,9 @@ public:
 	int GetLifePoints() const;
 	int GetScorePoints() const;
 
+	void ResetLifePoints();
+	void ResetScorePoints();
+
 	void SetProjectilePool(const ProjectilePoolPtr& InProjectilePool);
 
 	void LoadConfig() override;
@@ -43,7 +46,7 @@ public:
 
 	bool TakeDamage(float InDamage) override;
 
-	void AddOnTakeDamageObserver(const OnTakeDamageCallback& Callback);
+	void AddOnTakeDamageObserver(const OnTakeDamageDelegate& Callback);
 
 private:
 	void ConstraintInViewport(const float Delta);
@@ -67,5 +70,5 @@ private:
 
 	ProjectilePoolPtr CurrentProjectilePool;
 
-	std::vector<OnTakeDamageCallback> OnTakeDamageList;
+	std::vector<OnTakeDamageDelegate> OnTakeDamageFunctions;
 };

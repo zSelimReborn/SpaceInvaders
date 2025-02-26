@@ -1,12 +1,19 @@
 #pragma once
 
+#include <functional>
 #include <vector>
 #include <map>
-#include <set>
 
 #include "Alien.h"
 
 class ProjectilePool;
+
+enum class GroupState : std::uint8_t
+{
+	None,
+	Moving,
+	Stopped
+};
 
 class AlienGroup : public Actor
 {
@@ -15,6 +22,8 @@ public:
 	typedef std::vector<Alien::SharedPtr> AlienList;
 	typedef std::map<AlienType, std::string> ConfigMap;
 	typedef std::pair<AlienType, std::string> ConfigMapPair;
+	typedef std::function<void()> OnReachedPlayerDelegate;
+	typedef std::function<void()> OnDefeatDelegate;
 
 	static const int DEFAULT_NUM_ROWS_PER_TYPE;
 	static const int DEFAULT_ALIEN_PER_ROW;
@@ -29,6 +38,7 @@ public:
 
 	AlienGroup();
 
+	GroupState GetState() const;
 	int GetNumRowsPerType() const;
 	int GetNumRowsTotal() const;
 	int GetNumAlienPerRow() const;
@@ -60,17 +70,26 @@ public:
 
 	void StartGroup();
 
+	void AddOnReachedPlayerDelegate(const OnReachedPlayerDelegate& InFunction);
+	void AddOnDefeatDelegate(const OnDefeatDelegate& InFunction);
+
 private:
 	void BuildMatrix();
 	void BuildMatrixPerType(AlienType Type);
 	bool ReachedEnd() const;
-	void UpdateOuterCols();
+	bool ReachedPlayer() const;
+	void UpdateOuterColsAndRow();
 	void MoveAliens(const float Delta);
 
 	void GenerateShootCooldown();
 	void Shoot() const;
 
+	void UpdateShootCooldown(const float Delta);
+	void UpdateMoveDelay(const float Delta);
 	void UpdateAliveAliens();
+
+	void NotifyReachedPlayer() const;
+	void NotifyDefeat() const;
 
 	bool bRightDirection;
 	bool bGoDown;
@@ -78,6 +97,7 @@ private:
 	int NumAlienPerRow;
 	int OuterLeftCol;
 	int OuterRightCol;
+	int LastRow;
 	float MoveDelay;
 	float CurrentDelay;
 	float ShootMaxCooldown;
@@ -96,4 +116,9 @@ private:
 	std::vector<int> AliveAliensIdx;
 
 	ConfigMap ConfigTypeMapping;
+
+	std::vector<OnReachedPlayerDelegate> OnReachedPlayerFunctions;
+	std::vector<OnDefeatDelegate> OnDefeatFunctions;
+
+	GroupState State;
 };

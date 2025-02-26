@@ -84,6 +84,16 @@ int Ship::GetScorePoints() const
 	return ScorePoints;
 }
 
+void Ship::ResetLifePoints()
+{
+	LifePoints = MaxLifePoints;
+}
+
+void Ship::ResetScorePoints()
+{
+	ScorePoints = 0;
+}
+
 void Ship::SetProjectilePool(const ProjectilePoolPtr& InProjectilePool)
 {
 	CurrentProjectilePool = InProjectilePool;
@@ -111,6 +121,7 @@ void Ship::LoadConfig()
 
 	SetMaxSpeed(InMaxSpeed);
 	SetSpeed(InMaxSpeed);
+	SetShootCooldown(InShootCooldown);
 	SetMaxLifePoints(InLifePoints);
 	SetLifePoints(InLifePoints);
 	SetColor(SettingColor);
@@ -159,9 +170,9 @@ bool Ship::TakeDamage(float InDamage)
 	return false;
 }
 
-void Ship::AddOnTakeDamageObserver(const OnTakeDamageCallback& Callback)
+void Ship::AddOnTakeDamageObserver(const OnTakeDamageDelegate& Callback)
 {
-	OnTakeDamageList.push_back(Callback);
+	OnTakeDamageFunctions.push_back(Callback);
 }
 
 void Ship::ConstraintInViewport(const float Delta)
@@ -246,7 +257,7 @@ void Ship::OnProjectileHit(const Actor::SharedPtr& HitActor)
 
 void Ship::NotifyOnTakeDamage() const
 {
-	for (const OnTakeDamageCallback& Callback : OnTakeDamageList)
+	for (const OnTakeDamageDelegate& Callback : OnTakeDamageFunctions)
 	{
 		Callback();
 	}

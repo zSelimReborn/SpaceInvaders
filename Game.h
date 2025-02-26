@@ -34,7 +34,16 @@ private:
 	void SpawnAliens();
 	void SpawnSecretAlien();
 	void SpawnBunkers();
+
+	glm::vec3 GetPlayerStartLocation() const;
+	void BuildBunkers() const;
+	void ResetPlayer() const;
+
+	void OnInvadersReachedPlayer();
+	void OnInvadersDefeat();
 	void OnPlayerTakeDamage();
+
+	void GameOver(bool bPlayerWon) const;
 
 	void SetNumBunkers(int InNumBunkers);
 	void SetShipSize(const glm::vec3& InSize);
