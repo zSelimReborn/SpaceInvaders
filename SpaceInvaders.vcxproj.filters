@@ -96,6 +96,12 @@
     <ClCompile Include="pk\InputHandler.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
+    <ClCompile Include="Brick.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="Bunker.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pk\AssetManager.h">
@@ -177,6 +183,12 @@
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="pk\InputHandler.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="Brick.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="Bunker.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>

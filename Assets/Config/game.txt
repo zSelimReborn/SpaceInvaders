@@ -1,1 +1,3 @@
 ShipSize=75.0,20.0,1.0
+NumBunkers=4
+BunkersBottomOffset=85.0

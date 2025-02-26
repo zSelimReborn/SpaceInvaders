@@ -29,5 +29,6 @@ enum class Team : std::uint8_t
 {
 	None,
 	Human,
-	Alien
+	Alien,
+	Brick
 };
