@@ -7,6 +7,8 @@
 class TeamComponent : public Component
 {
 public:
+	typedef std::shared_ptr<TeamComponent> SharedPtr;
+
 	TeamComponent(const ActorWeakPtr& InOwner);
 
 	void SetTeam(Team InTeam);

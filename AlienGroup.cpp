@@ -159,7 +159,7 @@ void AlienGroup::LoadConfig()
 
 	int InNumRows, InNumAlien;
 	float InMoveDelay, InShootMaxCooldown, InShootMinCooldown, InHMoveStep, InVMoveStep, InHDistance, InVDistance;
-	glm::vec3 InAlienSize;
+	glm::vec3 InAlienSize(DEFAULT_ALIEN_SIZE);
 	GroupSettings->Get("NumRowsPerType", DEFAULT_NUM_ROWS_PER_TYPE, InNumRows);
 	GroupSettings->Get("NumAlienPerRow", DEFAULT_ALIEN_PER_ROW, InNumAlien);
 	GroupSettings->Get("MoveDelay", DEFAULT_MOVE_DELAY, InMoveDelay);
