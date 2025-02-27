@@ -102,6 +102,12 @@
     <ClCompile Include="Bunker.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
+    <ClCompile Include="pk\Widget.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="Hud.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pk\AssetManager.h">
@@ -191,6 +197,12 @@
     <ClInclude Include="Bunker.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
+    <ClInclude Include="pk\Widget.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="Hud.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\sprite.frag" />
@@ -201,5 +213,21 @@
     <None Include="Assets\Shaders\text.vert" />
     <None Include="Assets\Shaders\shape.frag" />
     <None Include="Assets\Shaders\shape.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Assets\Config\a_secret.txt" />
+    <Text Include="Assets\Config\alien_group.txt" />
+    <Text Include="Assets\Config\alien_projectile.txt" />
+    <Text Include="Assets\Config\bunker.txt" />
+    <Text Include="Assets\Config\crab.txt" />
+    <Text Include="Assets\Config\game.txt" />
+    <Text Include="Assets\Config\octopus.txt" />
+    <Text Include="Assets\Config\player.txt" />
+    <Text Include="Assets\Config\player_projectile.txt" />
+    <Text Include="Assets\Config\squid.txt" />
+    <Text Include="Assets\Config\window.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Assets\Fonts\Jersey10-Regular.ttf" />
   </ItemGroup>
 </Project>

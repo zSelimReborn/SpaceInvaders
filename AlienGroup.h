@@ -27,6 +27,7 @@ public:
 
 	static const int DEFAULT_NUM_ROWS_PER_TYPE;
 	static const int DEFAULT_ALIEN_PER_ROW;
+	static const float DEFAULT_TOP_OFFSET;
 	static const float DEFAULT_MOVE_DELAY;
 	static const float DEFAULT_SHOOT_MAX_COOLDOWN;
 	static const float DEFAULT_SHOOT_MIN_COOLDOWN;
@@ -42,6 +43,7 @@ public:
 	int GetNumRowsPerType() const;
 	int GetNumRowsTotal() const;
 	int GetNumAlienPerRow() const;
+	float GetTopOffset() const;
 	float GetMoveDelay() const;
 	float GetShootMaxCooldown() const;
 	float GetShootMinCooldown() const;
@@ -53,6 +55,7 @@ public:
 
 	void SetNumRowsPerType(int InNum);
 	void SetNumAlienPerRow(int InNum);
+	void SetTopOffset(float InOffset);
 	void SetMoveDelay(float InMoveDelay);
 	void SetShootMaxCooldown(float InShootMaxCooldown);
 	void SetShootMinCooldown(float InShootMinCooldown);
@@ -98,6 +101,7 @@ private:
 	int OuterLeftCol;
 	int OuterRightCol;
 	int LastRow;
+	float TopOffset;
 	float MoveDelay;
 	float CurrentDelay;
 	float ShootMaxCooldown;

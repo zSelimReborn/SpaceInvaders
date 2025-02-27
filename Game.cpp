@@ -13,6 +13,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Bunker.h"
+#include "Hud.h"
 
 using namespace Assets;
 
@@ -20,10 +21,12 @@ const glm::vec3 Game::DEFAULT_SHIP_SIZE = glm::vec3(75.f, 20.f, 1.f);
 const int Game::MAX_NUM_BUNKERS = 6;
 const int Game::DEFAULT_NUM_BUNKERS = 3;
 const float Game::DEFAULT_BUNKERS_BOTTOM_OFFSET = 90.f;
+const int Game::DEFAULT_TEXT_SIZE = 26;
 
 Game::Game(const Window::WeakPtr& InWindow)
 	: Scene(InWindow),
-		NumBunkers(DEFAULT_NUM_BUNKERS), BunkersBottomOffset(DEFAULT_BUNKERS_BOTTOM_OFFSET),
+		NumBunkers(DEFAULT_NUM_BUNKERS), TextSize(DEFAULT_TEXT_SIZE),
+		BunkersBottomOffset(DEFAULT_BUNKERS_BOTTOM_OFFSET),
 		ShipSize(DEFAULT_SHIP_SIZE)
 {
 	LoadConfig();
@@ -43,14 +46,16 @@ void Game::LoadConfig()
 		return;
 	}
 
-	int InNumBunkers;
+	int InNumBunkers, InTextSize;
 	float InBunkersBottomOffset;
 	glm::vec3 InShipSize(DEFAULT_SHIP_SIZE);
 	GameSettings->Get("ShipSize", InShipSize);
 	GameSettings->Get("NumBunkers", DEFAULT_NUM_BUNKERS, InNumBunkers);
+	GameSettings->Get("TextSize", DEFAULT_TEXT_SIZE, InTextSize);
 	GameSettings->Get("BunkersBottomOffset", DEFAULT_BUNKERS_BOTTOM_OFFSET, InBunkersBottomOffset);
 
 	SetNumBunkers(InNumBunkers);
+	SetTextSize(InTextSize);
 	SetBunkersBottomOffset(InBunkersBottomOffset);
 	SetShipSize(InShipSize);
 }
@@ -110,6 +115,12 @@ void Game::SpawnBunkers()
 	}
 }
 
+void Game::ConstructHud()
+{
+	MainHud = std::make_shared<Hud>(Fonts::TextFontName);
+	Add(MainHud);
+}
+
 glm::vec3 Game::GetPlayerStartLocation() const
 {
 	const float Width = static_cast<float>(GetScreenWidth());
@@ -148,8 +159,6 @@ void Game::OnInvadersDefeat()
 void Game::OnPlayerTakeDamage()
 {
 	// TODO Add hit animation
-	// TODO Handle game over
-	std::cout << "Player LP: " << PlayerShip->GetLifePoints() << "\n";
 	if (PlayerShip->GetLifePoints() <= 0)
 	{
 		GameOver(false);
@@ -172,6 +181,11 @@ void Game::SetNumBunkers(int InNumBunkers)
 	NumBunkers = std::min(InNumBunkers, MAX_NUM_BUNKERS);
 }
 
+void Game::SetTextSize(int InSize)
+{
+	TextSize = std::abs(InSize);
+}
+
 void Game::SetShipSize(const glm::vec3& InSize)
 {
 	ShipSize = glm::abs(InSize);
@@ -184,9 +198,7 @@ void Game::SetBunkersBottomOffset(float InOffset)
 
 void Game::Begin()
 {
-	Shader::SharedPtr ShapeShader = AssetManager::Get().LoadShader(Shaders::ShapeName, Shaders::ShapeVertexFile, Shaders::ShapeFragmentFile);
-	ShapeShader->Use();
-	ShapeShader->SetMatrix("projection", GetProjection());
+	LoadAssets();
 
 	PlayerProjectilePool = std::make_shared<ProjectilePool>(Config::PlayerProjectilePool);
 	AlienProjectilePool = std::make_shared<ProjectilePool>(Config::AlienProjectilePool);
@@ -195,7 +207,30 @@ void Game::Begin()
 	SpawnBunkers();
 	SpawnSecretAlien();
 	SpawnAliens();
+	ConstructHud();
 
 	Scene::Begin();
+}
+
+void Game::Update(const float Delta)
+{
+	MainHud->SetLifePoints(PlayerShip->GetLifePoints());
+	MainHud->SetScore(PlayerShip->GetScorePoints());
+
+	Scene::Update(Delta);
+}
+
+void Game::LoadAssets() const
+{
+	Shader::SharedPtr ShapeShader = AssetManager::Get().LoadShader(Shaders::ShapeName, Shaders::ShapeVertexFile, Shaders::ShapeFragmentFile);
+	ShapeShader->Use();
+	ShapeShader->SetMatrix("projection", GetProjection());
+
+	Shader::SharedPtr TextShader = AssetManager::Get().LoadShader(Shaders::TextName, Shaders::TextVertexFile, Shaders::TextFragmentFile);
+	TextShader->Use();
+	TextShader->SetMatrix("projection", GetProjection());
+
+	Font::SharedPtr TextFont = AssetManager::Get().LoadFont(Fonts::TextFontName, Fonts::TextFontPath, Shaders::TextName, GetProjection());
+	TextFont->Load(TextSize);
 }
 

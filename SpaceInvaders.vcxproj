@@ -143,6 +143,7 @@
     <ClCompile Include="Bunker.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="Hud.cpp" />
     <ClCompile Include="image_loader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pk\Actor.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="pk\Shader.cpp" />
     <ClCompile Include="pk\SoundEngine.cpp" />
     <ClCompile Include="pk\Texture.cpp" />
+    <ClCompile Include="pk\Widget.cpp" />
     <ClCompile Include="pk\Window.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ProjectilePool.cpp" />
@@ -174,6 +176,7 @@
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Bunker.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Hud.h" />
     <ClInclude Include="pk\Actor.h" />
     <ClInclude Include="pk\AssetManager.h" />
     <ClInclude Include="pk\Common.h" />
@@ -190,6 +193,7 @@
     <ClInclude Include="pk\Shader.h" />
     <ClInclude Include="pk\SoundEngine.h" />
     <ClInclude Include="pk\Texture.h" />
+    <ClInclude Include="pk\Widget.h" />
     <ClInclude Include="pk\Window.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ProjectilePool.h" />
@@ -207,6 +211,22 @@
     <None Include="Assets\Shaders\particle.vert" />
     <None Include="Assets\Shaders\text.frag" />
     <None Include="Assets\Shaders\text.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Assets\Config\alien_group.txt" />
+    <Text Include="Assets\Config\alien_projectile.txt" />
+    <Text Include="Assets\Config\a_secret.txt" />
+    <Text Include="Assets\Config\bunker.txt" />
+    <Text Include="Assets\Config\crab.txt" />
+    <Text Include="Assets\Config\game.txt" />
+    <Text Include="Assets\Config\octopus.txt" />
+    <Text Include="Assets\Config\player.txt" />
+    <Text Include="Assets\Config\player_projectile.txt" />
+    <Text Include="Assets\Config\squid.txt" />
+    <Text Include="Assets\Config\window.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Assets\Fonts\Jersey10-Regular.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

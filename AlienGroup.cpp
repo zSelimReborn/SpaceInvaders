@@ -9,6 +9,7 @@
 
 const int AlienGroup::DEFAULT_NUM_ROWS_PER_TYPE = 2;
 const int AlienGroup::DEFAULT_ALIEN_PER_ROW = 11;
+const float AlienGroup::DEFAULT_TOP_OFFSET = 60.f;
 const float AlienGroup::DEFAULT_MOVE_DELAY = 2.f;
 const float AlienGroup::DEFAULT_SHOOT_MAX_COOLDOWN = 2.f;
 const float AlienGroup::DEFAULT_SHOOT_MIN_COOLDOWN = 0.5f;
@@ -22,7 +23,7 @@ AlienGroup::AlienGroup()
 	: bRightDirection(true), bGoDown(false),
 		NumRowsPerType(DEFAULT_NUM_ROWS_PER_TYPE), NumAlienPerRow(DEFAULT_ALIEN_PER_ROW),
 		OuterLeftCol(0), OuterRightCol(DEFAULT_ALIEN_PER_ROW - 1), LastRow(0),
-		MoveDelay(DEFAULT_MOVE_DELAY), CurrentDelay(0.f),
+		TopOffset(DEFAULT_TOP_OFFSET), MoveDelay(DEFAULT_MOVE_DELAY), CurrentDelay(0.f),
 		ShootMaxCooldown(DEFAULT_SHOOT_MAX_COOLDOWN), ShootMinCooldown(DEFAULT_SHOOT_MIN_COOLDOWN), SelectedShootCooldown(DEFAULT_SHOOT_MAX_COOLDOWN), CurrentShootCooldown(0.f),
 		HorizontalMoveStep(DEFAULT_H_MOVE_STEP), VerticalMoveStep(DEFAULT_V_MOVE_STEP),
 		HorizontalDistance(DEFAULT_H_DISTANCE), VerticalDistance(DEFAULT_V_DISTANCE),
@@ -52,6 +53,11 @@ int AlienGroup::GetNumRowsTotal() const
 int AlienGroup::GetNumAlienPerRow() const
 {
 	return NumAlienPerRow;
+}
+
+float AlienGroup::GetTopOffset() const
+{
+	return TopOffset;
 }
 
 float AlienGroup::GetMoveDelay() const
@@ -102,6 +108,11 @@ void AlienGroup::SetNumRowsPerType(int InNum)
 void AlienGroup::SetNumAlienPerRow(int InNum)
 {
 	NumAlienPerRow = std::abs(InNum);
+}
+
+void AlienGroup::SetTopOffset(float InOffset)
+{
+	TopOffset = std::abs(InOffset);
 }
 
 void AlienGroup::SetMoveDelay(float InMoveDelay)
@@ -164,10 +175,11 @@ void AlienGroup::LoadConfig()
 	}
 
 	int InNumRows, InNumAlien;
-	float InMoveDelay, InShootMaxCooldown, InShootMinCooldown, InHMoveStep, InVMoveStep, InHDistance, InVDistance;
+	float InTopOffset, InMoveDelay, InShootMaxCooldown, InShootMinCooldown, InHMoveStep, InVMoveStep, InHDistance, InVDistance;
 	glm::vec3 InAlienSize(DEFAULT_ALIEN_SIZE);
 	GroupSettings->Get("NumRowsPerType", DEFAULT_NUM_ROWS_PER_TYPE, InNumRows);
 	GroupSettings->Get("NumAlienPerRow", DEFAULT_ALIEN_PER_ROW, InNumAlien);
+	GroupSettings->Get("TopOffset", DEFAULT_TOP_OFFSET, InTopOffset);
 	GroupSettings->Get("MoveDelay", DEFAULT_MOVE_DELAY, InMoveDelay);
 	GroupSettings->Get("ShootMaxCooldown", DEFAULT_SHOOT_MAX_COOLDOWN, InShootMaxCooldown);
 	GroupSettings->Get("ShootMinCooldown", DEFAULT_SHOOT_MIN_COOLDOWN, InShootMinCooldown);
@@ -179,6 +191,7 @@ void AlienGroup::LoadConfig()
 
 	SetNumRowsPerType(InNumRows);
 	SetNumAlienPerRow(InNumAlien);
+	SetTopOffset(InTopOffset);
 	SetMoveDelay(InMoveDelay);
 	SetShootMinCooldown(InShootMinCooldown);
 	SetShootMaxCooldown(InShootMaxCooldown);
@@ -241,7 +254,7 @@ void AlienGroup::StartGroup()
 	const float StartX = (Width - GroupRectangleWidth) / 2;
 
 	glm::vec3 CurrentLocation(0.f);
-	CurrentLocation.y = (AlienSize.y * static_cast<float>(NumRowsPerType));
+	CurrentLocation.y = TopOffset;
 	CurrentLocation.x = StartX + (AlienSize.x / 2);
 
 	AliveAliensIdx.clear();

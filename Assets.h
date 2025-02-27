@@ -32,5 +32,17 @@ namespace Assets
 		const std::string ShapeName			= "shader_shape";
 		const std::string ShapeVertexFile	= BasePath + InnerPath + "shape.vert";
 		const std::string ShapeFragmentFile = BasePath + InnerPath + "shape.frag";
+
+		const std::string TextName = "shader_text";
+		const std::string TextVertexFile = BasePath + InnerPath + "text.vert";
+		const std::string TextFragmentFile = BasePath + InnerPath + "text.frag";
+	}
+
+	namespace Fonts
+	{
+		const std::string InnerPath = "Fonts/";
+
+		const std::string TextFontName = "Jersey";
+		const std::string TextFontPath = BasePath + InnerPath + "Jersey10-Regular.ttf";
 	}
 }

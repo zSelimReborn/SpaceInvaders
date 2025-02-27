@@ -1,3 +1,3 @@
 Width=800
-Height=600
+Height=720
 Title=Space Invaders!
