@@ -13,6 +13,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Bunker.h"
+#include "GameOver.h"
 #include "Hud.h"
 #include "MainMenu.h"
 
@@ -132,6 +133,13 @@ void Game::ConstructHud()
 	Add(MainHud);
 }
 
+void Game::ConstructGameOver()
+{
+	const std::weak_ptr<Game> GameWeak = std::dynamic_pointer_cast<Game>(shared_from_this());
+	GameOverW = std::make_shared<GameOver>(GameWeak);
+	Add(GameOverW);
+}
+
 glm::vec3 Game::GetPlayerStartLocation() const
 {
 	const float Width = static_cast<float>(GetScreenWidth());
@@ -159,12 +167,12 @@ void Game::ResetPlayer() const
 
 void Game::OnInvadersReachedPlayer()
 {
-	GameOver(false);
+	OnGameOver(false);
 }
 
 void Game::OnInvadersDefeat()
 {
-	GameOver(true);
+	OnGameOver(true);
 }
 
 void Game::OnPlayerTakeDamage()
@@ -172,18 +180,22 @@ void Game::OnPlayerTakeDamage()
 	// TODO Add hit animation
 	if (PlayerShip->GetLifePoints() <= 0)
 	{
-		GameOver(false);
+		OnGameOver(false);
 	}
 }
 
-void Game::GameOver(bool bPlayerWon) const
+void Game::OnGameOver(bool bPlayerWon)
 {
-	MainAlienGroup->StartGroup();
 	if (!bPlayerWon)
 	{
-		SecretAlien->Reset();
-		BuildBunkers();
-		ResetPlayer();
+		State = GameState::GameOver;
+		MainAlienGroup->HideBoard();
+		MainMenuW->Deactivate();
+		GameOverW->Activate();
+	}
+	else
+	{
+		MainAlienGroup->StartGroup();
 	}
 }
 
@@ -221,6 +233,7 @@ void Game::Begin()
 	SpawnAliens();
 	ConstructMainMenu();
 	ConstructHud();
+	ConstructGameOver();
 
 	Scene::Begin();
 
@@ -232,6 +245,7 @@ void Game::Play()
 	State = GameState::Play;
 
 	MainMenuW->Deactivate();
+	GameOverW->Deactivate();
 	MainHud->Activate();
 
 	MainAlienGroup->StartGroup();
@@ -245,6 +259,7 @@ void Game::Menu()
 	State = GameState::Menu;
 
 	MainHud->Deactivate();
+	GameOverW->Deactivate();
 	MainMenuW->Activate();
 }
 

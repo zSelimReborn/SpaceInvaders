@@ -166,7 +166,7 @@ void Secret::UpdateAlien()
 void Secret::CreateAlien()
 {
 	CurrentAlien = std::make_shared<Alien>(AlienType::Secret);
-	CurrentAlien->SetConfig(Assets::Config::SecretAlienFile);
+	CurrentAlien->SetConfig(Assets::Config::BonusAlienFile);
 	CurrentAlien->SetShader(Assets::Shaders::ShapeName);
 	CurrentAlien->SetSize(AlienSize);
 }

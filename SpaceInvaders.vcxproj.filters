@@ -111,6 +111,9 @@
     <ClCompile Include="MainMenu.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
+    <ClCompile Include="GameOver.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pk\AssetManager.h">
@@ -209,6 +212,9 @@
     <ClInclude Include="MainMenu.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
+    <ClInclude Include="GameOver.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\sprite.frag" />
@@ -232,6 +238,7 @@
     <Text Include="Assets\Config\player_projectile.txt" />
     <Text Include="Assets\Config\squid.txt" />
     <Text Include="Assets\Config\window.txt" />
+    <Text Include="Assets\Config\bonus.txt" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Assets\Fonts\Jersey10-Regular.ttf" />

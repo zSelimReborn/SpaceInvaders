@@ -9,6 +9,7 @@ class Secret;
 class Bunker;
 class Hud;
 class MainMenu;
+class GameOver;
 
 enum class GameState : std::uint8_t
 {
@@ -28,6 +29,7 @@ public:
 	typedef std::shared_ptr<Bunker> BunkerPtr;
 	typedef std::shared_ptr<Hud> HudPtr;
 	typedef std::shared_ptr<MainMenu> MainMenuPtr;
+	typedef std::shared_ptr<GameOver> GameOverPtr;
 	typedef std::vector<BunkerPtr> BunkerList;
 
 	static const glm::vec3 DEFAULT_SHIP_SIZE;
@@ -59,6 +61,7 @@ private:
 	void SpawnBunkers();
 	void ConstructMainMenu();
 	void ConstructHud();
+	void ConstructGameOver();
 
 	glm::vec3 GetPlayerStartLocation() const;
 	void BuildBunkers() const;
@@ -68,7 +71,7 @@ private:
 	void OnInvadersDefeat();
 	void OnPlayerTakeDamage();
 
-	void GameOver(bool bPlayerWon) const;
+	void OnGameOver(bool bPlayerWon);
 
 	void SetNumBunkers(int InNumBunkers);
 	void SetTextSize(int InSize);
@@ -87,6 +90,7 @@ private:
 
 	HudPtr MainHud;
 	MainMenuPtr MainMenuW;
+	GameOverPtr GameOverW;
 
 	ProjectilePoolPtr PlayerProjectilePool;
 	ProjectilePoolPtr AlienProjectilePool;

@@ -142,6 +142,7 @@
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Bunker.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="image_loader.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Bunker.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameOver.h" />
     <ClInclude Include="Hud.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="pk\Actor.h" />
@@ -218,6 +220,7 @@
     <Text Include="Assets\Config\alien_group.txt" />
     <Text Include="Assets\Config\alien_projectile.txt" />
     <Text Include="Assets\Config\a_secret.txt" />
+    <Text Include="Assets\Config\bonus.txt" />
     <Text Include="Assets\Config\bunker.txt" />
     <Text Include="Assets\Config\crab.txt" />
     <Text Include="Assets\Config\game.txt" />

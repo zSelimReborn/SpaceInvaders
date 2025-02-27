@@ -291,6 +291,14 @@ void AlienGroup::AddOnDefeatDelegate(const OnDefeatDelegate& InFunction)
 	OnDefeatFunctions.push_back(InFunction);
 }
 
+void AlienGroup::HideBoard() const
+{
+	for (const Alien::SharedPtr& Alien : AllAliens)
+	{
+		Alien->Destroy();
+	}
+}
+
 void AlienGroup::BuildMatrix()
 {
 	BuildMatrixPerType(AlienType::Octopus);

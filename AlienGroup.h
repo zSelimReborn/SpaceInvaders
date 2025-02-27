@@ -76,6 +76,8 @@ public:
 	void AddOnReachedPlayerDelegate(const OnReachedPlayerDelegate& InFunction);
 	void AddOnDefeatDelegate(const OnDefeatDelegate& InFunction);
 
+	void HideBoard() const;
+
 private:
 	void BuildMatrix();
 	void BuildMatrixPerType(AlienType Type);

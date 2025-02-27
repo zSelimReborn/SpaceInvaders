@@ -1,6 +1,6 @@
 AlienSize=30.0,30.0,1.0
-NumRowsPerType=2
-NumAlienPerRow=11
+NumRowsPerType=1
+NumAlienPerRow=1
 TopOffset=110.0
 MoveDelay=1.0
 ShootMaxCooldown=3.0
