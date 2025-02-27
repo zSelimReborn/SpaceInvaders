@@ -121,6 +121,13 @@ void Secret::Update(const float Delta)
 	UpdateSpawnTime(Delta);
 }
 
+void Secret::Reset()
+{
+	bAlienActive = false;
+	CurrentAlien->Destroy();
+	SelectSpawnTime();
+}
+
 void Secret::SelectSpawnTime()
 {
 	SelectedSpawnTime = Random::Get(SpawnTimeMin, SpawnTimeMax);

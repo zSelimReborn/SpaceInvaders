@@ -22,6 +22,10 @@ void Widget::Render()
 {
 }
 
+void Widget::Input(const InputHandler& Handler, const float Delta)
+{
+}
+
 void Widget::Activate()
 {
 	bActive = true;
@@ -49,7 +53,8 @@ Widget::SceneSharedPtr Widget::GetScene() const
 
 void Widget::RenderText(const std::string& InFontName, 
 	const glm::vec2& StartLocation, const std::string& InText, 
-	TextOrient Orient, float Scale, const glm::vec4& InColor
+	TextOrient Orient, float Scale, const glm::vec4& InColor,
+	float& OutWidth, float& OutHeight
 ) {
 	Font::SharedPtr Font = AssetManager::Get().GetFont(InFontName);
 	if (Font == nullptr)
@@ -58,16 +63,16 @@ void Widget::RenderText(const std::string& InFontName,
 		return;
 	}
 
-	float OutHSize, OutVSize;
-	Font->GetTextSize(InText, Scale, OutHSize, OutVSize);
+
+	Font->GetTextSize(InText, Scale, OutWidth, OutHeight);
 	glm::vec2 TextLocation = StartLocation;
 	if (Orient == TextOrient::Center)
 	{
-		TextLocation.x -= (OutHSize / 2);
+		TextLocation.x -= (OutWidth / 2);
 	}
 	else if (Orient == TextOrient::Right)
 	{
-		TextLocation.x -= OutHSize;
+		TextLocation.x -= OutWidth;
 	}
 
 	Font->Render(InText, TextLocation, Scale, InColor);

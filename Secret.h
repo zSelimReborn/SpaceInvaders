@@ -31,6 +31,8 @@ public:
 	void Begin() override;
 	void Update(const float Delta) override;
 
+	void Reset();
+
 private:
 	void SelectSpawnTime();
 	void UpdateSpawnTime(const float Delta);

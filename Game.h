@@ -8,6 +8,14 @@ class AlienGroup;
 class Secret;
 class Bunker;
 class Hud;
+class MainMenu;
+
+enum class GameState : std::uint8_t
+{
+	Play,
+	Menu,
+	GameOver
+};
 
 class Game : public Scene
 {
@@ -19,6 +27,7 @@ public:
 	typedef std::shared_ptr<Secret> SecretAlienPtr;
 	typedef std::shared_ptr<Bunker> BunkerPtr;
 	typedef std::shared_ptr<Hud> HudPtr;
+	typedef std::shared_ptr<MainMenu> MainMenuPtr;
 	typedef std::vector<BunkerPtr> BunkerList;
 
 	static const glm::vec3 DEFAULT_SHIP_SIZE;
@@ -31,8 +40,14 @@ public:
 
 	void Begin() override;
 
+	void Play();
+	void Menu();
+	void Quit() const;
+
 protected:
+	void HandleInput(const float Delta) override;
 	void Update(const float Delta) override;
+	void Render(const float Delta) override;
 
 private:
 	void LoadAssets() const;
@@ -42,6 +57,7 @@ private:
 	void SpawnAliens();
 	void SpawnSecretAlien();
 	void SpawnBunkers();
+	void ConstructMainMenu();
 	void ConstructHud();
 
 	glm::vec3 GetPlayerStartLocation() const;
@@ -70,7 +86,10 @@ private:
 	BunkerList Bunkers;
 
 	HudPtr MainHud;
+	MainMenuPtr MainMenuW;
 
 	ProjectilePoolPtr PlayerProjectilePool;
 	ProjectilePoolPtr AlienProjectilePool;
+
+	GameState State;
 };

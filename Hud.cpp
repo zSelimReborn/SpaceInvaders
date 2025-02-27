@@ -51,6 +51,7 @@ void Hud::Render()
 	const glm::vec2 LifePointPos = glm::vec2(15.f, 15.f);
 	const glm::vec2 ScorePos = glm::vec2(Center.x, 15.f);
 
-	RenderText(FontName, LifePointPos, LifePointsText.str(), TextOrient::Left, 1.0f, Colors::White);
-	RenderText(FontName, ScorePos, ScoreText.str(), TextOrient::Center, 1.0f, Colors::White);
+	float OutWidth, OutHeight;
+	RenderText(FontName, LifePointPos, LifePointsText.str(), TextOrient::Left, 1.0f, Colors::White, OutWidth, OutHeight);
+	RenderText(FontName, ScorePos, ScoreText.str(), TextOrient::Center, 1.0f, Colors::White, OutWidth, OutHeight);
 }

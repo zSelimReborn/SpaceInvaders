@@ -42,7 +42,10 @@ namespace Assets
 	{
 		const std::string InnerPath = "Fonts/";
 
-		const std::string TextFontName = "Jersey";
+		const std::string TextFontName = "JerseyText";
 		const std::string TextFontPath = BasePath + InnerPath + "Jersey10-Regular.ttf";
+
+		const std::string HeadingFontName = "JerseyHeading";
+		const std::string HeadingFontPath = BasePath + InnerPath + "Jersey10-Regular.ttf";
 	}
 }

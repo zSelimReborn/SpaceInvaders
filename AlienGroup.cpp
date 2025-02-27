@@ -241,6 +241,7 @@ void AlienGroup::StartGroup()
 
 	bRightDirection = true;
 	bGoDown = false;
+	CurrentShootCooldown = 0.f;
 	CurrentDelay = 0.f;
 	OuterLeftCol = 0;
 	OuterRightCol = NumAlienPerRow - 1;

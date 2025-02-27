@@ -146,6 +146,7 @@
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="image_loader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="pk\Actor.cpp" />
     <ClCompile Include="pk\AssetManager.cpp" />
     <ClCompile Include="pk\Common.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="Bunker.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Hud.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="pk\Actor.h" />
     <ClInclude Include="pk\AssetManager.h" />
     <ClInclude Include="pk\Common.h" />

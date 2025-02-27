@@ -5,6 +5,7 @@
 #include <glm/detail/type_vec.hpp>
 
 class Scene;
+class InputHandler;
 
 enum class TextOrient
 {
@@ -26,6 +27,7 @@ public:
 
 	virtual void Construct();
 	virtual void Render();
+	virtual void Input(const InputHandler& Handler, const float Delta);
 
 	void Activate();
 	void Deactivate();
@@ -36,7 +38,11 @@ public:
 
 	virtual ~Widget() = default;
 protected:
-	static void RenderText(const std::string& InFontName, const glm::vec2& StartLocation, const std::string& InText, TextOrient Orient, float Scale, const glm::vec4& InColor);
+	static void RenderText(const std::string& InFontName, 
+		const glm::vec2& StartLocation, 
+		const std::string& InText, TextOrient Orient, 
+		float Scale, const glm::vec4& InColor,
+		float& OutWidth, float& OutHeight);
 
 private:
 	bool bActive;

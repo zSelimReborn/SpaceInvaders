@@ -117,15 +117,22 @@ void Font::GetTextSize(const std::string& Text, float Scale, float& OutHSize, fl
     OutHSize = 0;
     OutVSize = 0;
 
+    int LastW = 0;
     for (const char c : Text)
     {
         Character Glyph = Characters[c];
 
         float w = Glyph.Size.x * Scale + Glyph.Bearing.x * Scale;
+        if (isblank(c))
+        {
+            w = LastW;
+        }
+
         float h = Glyph.Size.y * Scale;
 
         OutHSize += w;
         OutVSize = std::max(OutVSize, h);
+        LastW = w;
     }
 }
 

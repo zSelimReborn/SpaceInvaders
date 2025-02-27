@@ -71,20 +71,18 @@ void Scene::Input(const float Delta)
 		return;
 	}
 
-	IHandler.Update(*GetWindow(), Delta);
-
 	Window::SharedPtr Window = GetWindow();
-	if (IHandler.IsPressed(GLFW_KEY_ESCAPE))
-	{
-		Window->ShouldClose(true);
-	}
+	IHandler.Update(*Window, Delta);
 
-	for (const ActorMapPair ActorPair : Actors)
-	{
-		ActorPair.second->Input(IHandler, Delta);
-	}
+	HandleInput(Delta);
 
 	IHandler.Clean();
+}
+
+void Scene::HandleInput(const float Delta)
+{
+	HandleActorsInput(Delta);
+	HandleWidgetInput(Delta);
 }
 
 void Scene::Render(const float Delta)
@@ -170,7 +168,6 @@ void Scene::Add(const WidgetSharedPtr& InWidget)
 
 	InWidget->Id = NextWidgetId++;
 	InWidget->SetScene(weak_from_this());
-	InWidget->Activate();
 	InWidget->Construct();
 	InactiveWidgets.push_back(InWidget);
 }
@@ -301,5 +298,21 @@ void Scene::RenderWidgets() const
 	for (const WidgetMapPair WidgetPair : ActiveWidgets)
 	{
 		WidgetPair.second->Render();
+	}
+}
+
+void Scene::HandleActorsInput(const float Delta) const
+{
+	for (const ActorMapPair ActorPair : Actors)
+	{
+		ActorPair.second->Input(IHandler, Delta);
+	}
+}
+
+void Scene::HandleWidgetInput(const float Delta) const
+{
+	for (const WidgetMapPair WidgetMap : ActiveWidgets)
+	{
+		WidgetMap.second->Input(IHandler, Delta);
 	}
 }

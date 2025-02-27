@@ -14,6 +14,7 @@
 
 #include "Bunker.h"
 #include "Hud.h"
+#include "MainMenu.h"
 
 using namespace Assets;
 
@@ -27,13 +28,16 @@ Game::Game(const Window::WeakPtr& InWindow)
 	: Scene(InWindow),
 		NumBunkers(DEFAULT_NUM_BUNKERS), TextSize(DEFAULT_TEXT_SIZE),
 		BunkersBottomOffset(DEFAULT_BUNKERS_BOTTOM_OFFSET),
-		ShipSize(DEFAULT_SHIP_SIZE)
+		ShipSize(DEFAULT_SHIP_SIZE), State(GameState::Menu)
 {
 	LoadConfig();
 
 	IHandler.HandleKey(GLFW_KEY_LEFT, InputType::Hold);
 	IHandler.HandleKey(GLFW_KEY_RIGHT, InputType::Hold);
 	IHandler.HandleKey(GLFW_KEY_SPACE, InputType::Hold);
+
+	IHandler.HandleKey(GLFW_KEY_UP, InputType::Press);
+	IHandler.HandleKey(GLFW_KEY_DOWN, InputType::Press);
 	IHandler.HandleKey(GLFW_KEY_ENTER, InputType::Press);
 }
 
@@ -115,6 +119,13 @@ void Game::SpawnBunkers()
 	}
 }
 
+void Game::ConstructMainMenu()
+{
+	const std::weak_ptr<Game> GameWeak = std::dynamic_pointer_cast<Game>(shared_from_this());
+	MainMenuW = std::make_shared<MainMenu>(GameWeak);
+	Add(MainMenuW);
+}
+
 void Game::ConstructHud()
 {
 	MainHud = std::make_shared<Hud>(Fonts::TextFontName);
@@ -170,6 +181,7 @@ void Game::GameOver(bool bPlayerWon) const
 	MainAlienGroup->StartGroup();
 	if (!bPlayerWon)
 	{
+		SecretAlien->Reset();
 		BuildBunkers();
 		ResetPlayer();
 	}
@@ -207,17 +219,92 @@ void Game::Begin()
 	SpawnBunkers();
 	SpawnSecretAlien();
 	SpawnAliens();
+	ConstructMainMenu();
 	ConstructHud();
 
 	Scene::Begin();
+
+	Menu();
+}
+
+void Game::Play()
+{
+	State = GameState::Play;
+
+	MainMenuW->Deactivate();
+	MainHud->Activate();
+
+	MainAlienGroup->StartGroup();
+	SecretAlien->Reset();
+	BuildBunkers();
+	ResetPlayer();
+}
+
+void Game::Menu()
+{
+	State = GameState::Menu;
+
+	MainHud->Deactivate();
+	MainMenuW->Activate();
+}
+
+void Game::Quit() const
+{
+	const Window::SharedPtr CurrentWindow = GetWindow();
+	if (CurrentWindow == nullptr)
+	{
+		std::cout << "Unable to quit, empty window\n";
+		return;
+	}
+
+	CurrentWindow->ShouldClose(true);
+}
+
+void Game::HandleInput(const float Delta)
+{
+	if (IHandler.IsPressed(GLFW_KEY_ESCAPE))
+	{
+		if (State == GameState::Menu)
+		{
+			Quit();
+		}
+		else
+		{
+			Menu();
+		}
+	}
+
+	if (State == GameState::Play)
+	{
+		HandleActorsInput(Delta);
+	}
+	else
+	{
+		HandleWidgetInput(Delta);
+	}
 }
 
 void Game::Update(const float Delta)
 {
+	if (State != GameState::Play)
+	{
+		return;
+	}
+
 	MainHud->SetLifePoints(PlayerShip->GetLifePoints());
 	MainHud->SetScore(PlayerShip->GetScorePoints());
 
 	Scene::Update(Delta);
+}
+
+void Game::Render(const float Delta)
+{
+	if (State != GameState::Menu)
+	{
+		RenderActors();
+	}
+
+	RenderWidgets();
 }
 
 void Game::LoadAssets() const
@@ -232,5 +319,8 @@ void Game::LoadAssets() const
 
 	Font::SharedPtr TextFont = AssetManager::Get().LoadFont(Fonts::TextFontName, Fonts::TextFontPath, Shaders::TextName, GetProjection());
 	TextFont->Load(TextSize);
+
+	Font::SharedPtr HeadingFont = AssetManager::Get().LoadFont(Fonts::HeadingFontName, Fonts::HeadingFontPath, Shaders::TextName, GetProjection());
+	HeadingFont->Load(50);
 }
 

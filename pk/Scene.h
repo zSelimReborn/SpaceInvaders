@@ -62,12 +62,15 @@ protected:
 	void UpdateDelta();
 	void RenderActors() const;
 	void RenderWidgets() const;
+	void HandleActorsInput(const float Delta) const;
+	void HandleWidgetInput(const float Delta) const;
 	void Destroyer();
 	void AddPendingActors();
 	void UpdateCollisionActorsVector();
 	void UpdateActiveWidgets();
 
 	virtual void Input(const float Delta);
+	virtual void HandleInput(const float Delta);
 	virtual void Update(const float Delta);
 	virtual void Render(const float Delta);
 
