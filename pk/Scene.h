@@ -9,6 +9,7 @@
 #include "InputHandler.h"
 
 class Actor;
+class Widget;
 
 class Scene : public std::enable_shared_from_this<Scene>
 {
@@ -17,13 +18,19 @@ public:
 	typedef std::weak_ptr<Scene> WeakPtr;
 
 	typedef std::shared_ptr<Actor> ActorSharedPtr;
+	typedef std::shared_ptr<Widget> WidgetSharedPtr;
+	typedef std::vector<ActorSharedPtr> ActorList;
+	typedef std::vector<WidgetSharedPtr> WidgetList;
 	typedef std::vector<ActorSharedPtr>::iterator ActorIterator;
 	typedef std::map<int, ActorSharedPtr> ActorMap;
 	typedef std::pair<int, ActorSharedPtr> ActorMapPair;
+	typedef std::map<int, WidgetSharedPtr> WidgetMap;
+	typedef std::pair<int, WidgetSharedPtr> WidgetMapPair;
 
 	Scene(const Window::WeakPtr& InWindow);
 
-	int GetNextId() const;
+	int GetNextActorId() const;
+	int GetNextWidgetId() const;
 
 	virtual void Begin();
 	virtual void Frame();
@@ -37,37 +44,52 @@ public:
 
 	float GetDelta() const;
 	float GetCurrentTime() const;
+	float GetFps() const;
 
 	Window::SharedPtr GetWindow() const;
 
 	void Add(const ActorSharedPtr& InActor);
 	std::vector<ActorSharedPtr> GetCollisionActors() const;
 
+	void Add(const WidgetSharedPtr& InWidget);
+
 	virtual ~Scene();
 
 protected:
+	void ClearWindow() const;
+	void Clean();
+
 	void UpdateDelta();
+	void RenderActors() const;
+	void RenderWidgets() const;
 	void Destroyer();
 	void AddPendingActors();
 	void UpdateCollisionActorsVector();
+	void UpdateActiveWidgets();
 
 	virtual void Input(const float Delta);
 	virtual void Update(const float Delta);
 	virtual void Render(const float Delta);
 
 	Window::WeakPtr WindowPtr;
+
 	ActorMap Actors;
 	ActorMap CollisionActors;
-	std::vector<ActorSharedPtr> PendingActors;
-	std::vector<ActorSharedPtr> CollisionActorsVector;
+	ActorList PendingActors;
+	ActorList CollisionActorsVector;
+
+	WidgetMap ActiveWidgets;
+	WidgetList InactiveWidgets;
 
 	glm::mat4 Projection;
 
 	float CurrentTime;
 	float OldTime;
 	float Delta;
+	int Fps;
 
-	int NextId;
+	int NextActorId;
+	int NextWidgetId;
 
 	InputHandler IHandler;
 };

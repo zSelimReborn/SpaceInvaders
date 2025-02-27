@@ -9,17 +9,24 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Widget.h"
+
 Scene::Scene(const Window::WeakPtr& InWindow)
-	: WindowPtr(InWindow), NextId(0)
+	: WindowPtr(InWindow), NextActorId(0), NextWidgetId(0), Fps(0)
 {
 	Projection = glm::ortho(0.f, static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight()), 0.f, -1.0f, 1.0f);
 
 	IHandler.HandleKey(GLFW_KEY_ESCAPE, InputType::Press);
 }
 
-int Scene::GetNextId() const
+int Scene::GetNextActorId() const
 {
-	return NextId;
+	return NextActorId;
+}
+
+int Scene::GetNextWidgetId() const
+{
+	return NextWidgetId;
 }
 
 void Scene::Begin()
@@ -32,17 +39,14 @@ void Scene::Frame()
 {
 	UpdateDelta();
 
-	GetWindow()->ClearColor(Colors::LightBlack);
-	GetWindow()->ClearFlags(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	ClearWindow();
 
 	Input(Delta);
 	SoundEngine::Get().Update(Delta);
 	Update(Delta);
 	Render(Delta);
 
-	AddPendingActors();
-	Destroyer();
-	GetWindow()->CloseFrame();
+	Clean();
 }
 
 bool Scene::ShouldClose() const
@@ -85,10 +89,8 @@ void Scene::Input(const float Delta)
 
 void Scene::Render(const float Delta)
 {
-	for (const ActorMapPair ActorPair : Actors)
-	{
-		ActorPair.second->Render();
-	}
+	RenderActors();
+	RenderWidgets();
 }
 
 int Scene::GetScreenWidth() const
@@ -121,6 +123,11 @@ float Scene::GetCurrentTime() const
 	return CurrentTime;
 }
 
+float Scene::GetFps() const
+{
+	return Fps;
+}
+
 Window::SharedPtr Scene::GetWindow() const
 {
 	return WindowPtr.lock();
@@ -128,23 +135,44 @@ Window::SharedPtr Scene::GetWindow() const
 
 void Scene::Add(const Actor::SharedPtr& InActor)
 {
+	if (InActor == nullptr)
+	{
+		return;
+	}
+
 	if (Actors.count(InActor->GetId()) > 0)
 	{
 		return;
 	}
 
-	if (InActor != nullptr)
-	{
-		InActor->Id = NextId++;
-		InActor->SetScene(weak_from_this());
-		InActor->Begin();
-		PendingActors.push_back(InActor);
-	}
+	InActor->Id = NextActorId++;
+	InActor->SetScene(weak_from_this());
+	InActor->Begin();
+	PendingActors.push_back(InActor);
 }
 
 std::vector<Scene::ActorSharedPtr> Scene::GetCollisionActors() const
 {
 	return CollisionActorsVector;
+}
+
+void Scene::Add(const WidgetSharedPtr& InWidget)
+{
+	if (InWidget == nullptr)
+	{
+		return;
+	}
+
+	if (ActiveWidgets.count(InWidget->GetId()) > 0)
+	{
+		return;
+	}
+
+	InWidget->Id = NextWidgetId++;
+	InWidget->SetScene(weak_from_this());
+	InWidget->Activate();
+	InWidget->Construct();
+	InactiveWidgets.push_back(InWidget);
 }
 
 void Scene::Destroyer()
@@ -155,8 +183,11 @@ void Scene::Destroyer()
 		const ActorSharedPtr Actor = ActorPair.second;
 		if (Actor == nullptr || Actor->IsDestroyed())
 		{
-			RemovingIds.push_back(Actor->GetId());
-			Actor->Id = -1;
+			RemovingIds.push_back(ActorPair.first);
+			if (Actor != nullptr)
+			{
+				Actor->Id = -1;
+			}
 		}
 	}
 
@@ -197,11 +228,78 @@ void Scene::UpdateCollisionActorsVector()
 	}
 }
 
+void Scene::UpdateActiveWidgets()
+{
+	for (const WidgetSharedPtr& Widget : InactiveWidgets)
+	{
+		if (Widget == nullptr)
+		{
+			continue;
+		}
+
+		ActiveWidgets.insert(WidgetMapPair(Widget->GetId(), Widget));
+	}
+
+	InactiveWidgets.clear();
+
+	std::vector<int> RemovingIds;
+	for (const WidgetMapPair WidgetPair : ActiveWidgets)
+	{
+		const WidgetSharedPtr Widget = WidgetPair.second;
+		if (Widget == nullptr || !Widget->IsActive())
+		{
+			RemovingIds.push_back(WidgetPair.first);
+		}
+	}
+
+	for (int& Id : RemovingIds)
+	{
+		const WidgetSharedPtr Widget = ActiveWidgets[Id];
+		if (Widget != nullptr)
+		{
+			InactiveWidgets.push_back(Widget);
+		}
+
+		ActiveWidgets.erase(Id);
+	}
+}
+
 Scene::~Scene() = default;
+
+void Scene::ClearWindow() const
+{
+	GetWindow()->ClearColor(Colors::LightBlack);
+	GetWindow()->ClearFlags(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Scene::Clean()
+{
+	AddPendingActors();
+	Destroyer();
+	UpdateActiveWidgets();
+	GetWindow()->CloseFrame();
+}
 
 void Scene::UpdateDelta()
 {
 	CurrentTime = static_cast<float>(glfwGetTime());
 	Delta = CurrentTime - OldTime;
 	OldTime = CurrentTime;
+	Fps = 1 / Delta;
+}
+
+void Scene::RenderActors() const
+{
+	for (const ActorMapPair ActorPair : Actors)
+	{
+		ActorPair.second->Render();
+	}
+}
+
+void Scene::RenderWidgets() const
+{
+	for (const WidgetMapPair WidgetPair : ActiveWidgets)
+	{
+		WidgetPair.second->Render();
+	}
 }
