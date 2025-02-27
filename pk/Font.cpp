@@ -58,7 +58,7 @@ void Font::Load(unsigned int _Size)
     bLoaded = true;
 }
 
-void Font::Render(const std::string& Text, const glm::vec2& Position, float Scale, const float Color[])
+void Font::Render(const std::string& Text, const glm::vec2& Position, float Scale, const glm::vec4& Color)
 {
     if (!bLoaded)
     {
@@ -110,6 +110,23 @@ void Font::Render(const std::string& Text, const glm::vec2& Position, float Scal
 
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Font::GetTextSize(const std::string& Text, float Scale, float& OutHSize, float& OutVSize)
+{
+    OutHSize = 0;
+    OutVSize = 0;
+
+    for (const char c : Text)
+    {
+        Character Glyph = Characters[c];
+
+        float w = Glyph.Size.x * Scale + Glyph.Bearing.x * Scale;
+        float h = Glyph.Size.y * Scale;
+
+        OutHSize += w;
+        OutVSize = std::max(OutVSize, h);
+    }
 }
 
 void Font::LoadCharacters(FT_Face& Face)

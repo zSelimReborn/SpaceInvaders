@@ -30,7 +30,8 @@ public:
 	unsigned int GetSize() const;
 
 	void Load(unsigned int _Size);
-	void Render(const std::string& Text, const glm::vec2& Position, float Scale, const float Color[]);
+	void Render(const std::string& Text, const glm::vec2& Position, float Scale, const glm::vec4& Color);
+	void GetTextSize(const std::string& Text, float Scale, float& OutHSize, float& OutVSize);
 
 	class LoadError : public std::runtime_error
 	{
