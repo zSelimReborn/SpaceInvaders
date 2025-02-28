@@ -336,10 +336,10 @@ void Game::LoadAssets() const
 	TextShader->Use();
 	TextShader->SetMatrix("projection", GetProjection());
 
-	Font::SharedPtr TextFont = AssetManager::Get().LoadFont(Fonts::TextFontName, Fonts::TextFontPath, Shaders::TextName, GetProjection());
+	Font::SharedPtr TextFont = AssetManager::Get().LoadFont(Fonts::TextFontName, Fonts::TextFontPath, Shaders::TextName);
 	TextFont->Load(TextSize);
 
-	Font::SharedPtr HeadingFont = AssetManager::Get().LoadFont(Fonts::HeadingFontName, Fonts::HeadingFontPath, Shaders::TextName, GetProjection());
+	Font::SharedPtr HeadingFont = AssetManager::Get().LoadFont(Fonts::HeadingFontName, Fonts::HeadingFontPath, Shaders::TextName);
 	HeadingFont->Load(50);
 }
 

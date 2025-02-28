@@ -9,19 +9,21 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "AssetManager.h"
 #include "Common.h"
+#include "Renderer.h"
 
-void Particle::Set(const glm::vec3& _Position, const glm::vec3& _Direction, const glm::vec4& _Color, const float _Life, const float _Speed)
+void Particle::Set(const glm::vec3& InPosition, const glm::vec3& InDirection, const glm::vec4& InColor, float InLife, float InSpeed)
 {
-	Position = _Position;
-	Direction = _Direction;
-	Color = _Color;
-	Life = _Life;
-	Speed = _Speed;
+	Position = InPosition;
+	Direction = InDirection;
+	Color = InColor;
+	Life = InLife;
+	Speed = InSpeed;
 }
 
-ParticlePattern::Base::Base(bool _bLoop, const float _Speed, const float _Life, const int _SpawnAmount)
-	: bLoop(_bLoop), Speed(_Speed), Life(_Life), SpawnAmount(_SpawnAmount)
+ParticlePattern::Base::Base(bool bInLoop, float InSpeed, float InLife, int InSpawnAmount, const glm::vec4& InColor)
+	: bLoop(bInLoop), SpawnAmount(InSpawnAmount), Speed(InSpeed), Life(InLife), Color(InColor)
 {
 }
 
@@ -40,16 +42,21 @@ float ParticlePattern::Base::GetLife() const
 	return Life;
 }
 
+glm::vec4 ParticlePattern::Base::GetColor() const
+{
+	return Color;
+}
+
 int ParticlePattern::Base::GetSpawnAmount() const
 {
 	return SpawnAmount;
 }
 
-void ParticlePattern::Base::Spawn(std::vector<Particle*>& Pool, int& LastInactive, const glm::vec3& Position, const glm::vec3& Direction)
+void ParticlePattern::Base::Spawn(ParticleList& Pool, int& LastInactive, const glm::vec3& Position, const glm::vec3& Direction)
 {
 }
 
-int ParticlePattern::Base::NextInactive(std::vector<Particle*>& Pool, const int LastInactive)
+int ParticlePattern::Base::NextInactive(ParticleList& Pool, const int LastInactive)
 {
 	for (int i = LastInactive; i < Pool.size(); ++i)
 	{
@@ -70,28 +77,28 @@ int ParticlePattern::Base::NextInactive(std::vector<Particle*>& Pool, const int 
 	return 0;
 }
 
-void ParticlePattern::Base::SpawnParticle(Particle* NewParticle, const glm::vec3& Position, const glm::vec3& Direction) const
+void ParticlePattern::Base::SpawnParticle(const Particle::SharedPtr& NewParticle, const glm::vec3& Position, const glm::vec3& Direction) const
 {
-	if (!NewParticle)
+	if (NewParticle == nullptr)
 	{
 		return;
 	}
 
-	float RandomOffsetFactor = 0.f; //((rand() % 100) - 50) / 10.0f;
+	/* float RandomOffsetFactor = 0.f; //((rand() % 100) - 50) / 10.0f;
 	float RandomColor = 0.5f + ((rand() % 100) / 100.0f);
 
 	const glm::vec3 CalcPosition(Position.x + RandomOffsetFactor, Position.y + RandomOffsetFactor, 0.f);
-	const glm::vec4 Color(RandomColor, RandomColor, RandomColor, 1.0f);
+	const glm::vec4 Color(RandomColor, RandomColor, RandomColor, 1.0f); */
 
-	NewParticle->Set(CalcPosition, Direction, Color, Life, Speed);
+	NewParticle->Set(Position, Direction, Color, Life, Speed);
 }
 
-ParticlePattern::Linear::Linear(const float _Speed, const float _Life, int _SpawnAmount)
-	: Base(true, _Speed, _Life, _SpawnAmount)
+ParticlePattern::Linear::Linear(float InSpeed, float InLife, int InSpawnAmount, const glm::vec4& InColor)
+	: Base(true, InSpeed, InLife, InSpawnAmount, InColor)
 {
 }
 
-void ParticlePattern::Linear::Spawn(std::vector<Particle*>& Pool, int& LastInactive, const glm::vec3& Position,
+void ParticlePattern::Linear::Spawn(ParticleList& Pool, int& LastInactive, const glm::vec3& Position,
 	const glm::vec3& Direction)
 {
 	for (int i = 0; i < GetSpawnAmount(); ++i)
@@ -101,13 +108,13 @@ void ParticlePattern::Linear::Spawn(std::vector<Particle*>& Pool, int& LastInact
 	}
 }
 
-ParticlePattern::Bounce::Bounce(const float _Speed, const float _Life, int _SpawnAmount)
-	: Base(false, _Speed, _Life, _SpawnAmount)
+ParticlePattern::Bounce::Bounce(float InSpeed, float InLife, int InSpawnAmount, const glm::vec4& InColor)
+	: Base(false, InSpeed, InLife, InSpawnAmount, InColor)
 {
 
 }
 
-void ParticlePattern::Bounce::Spawn(std::vector<Particle*>& Pool, int& LastInactive, const glm::vec3& Position,
+void ParticlePattern::Bounce::Spawn(ParticleList& Pool, int& LastInactive, const glm::vec3& Position,
 	const glm::vec3& Direction)
 {
 	const std::vector<glm::vec3> Compass = {
@@ -138,7 +145,7 @@ void ParticlePattern::Bounce::Spawn(std::vector<Particle*>& Pool, int& LastInact
 	DirectionsToSpawn.push_back(MainDirection + ToAdd);
 	DirectionsToSpawn.push_back(MainDirection - ToAdd);
 
-	const int DirectionsCount = DirectionsToSpawn.size();
+	const int DirectionsCount = static_cast<int>(DirectionsToSpawn.size());
 
 	for (int i = 0; i < GetSpawnAmount(); ++i)
 	{
@@ -147,24 +154,13 @@ void ParticlePattern::Bounce::Spawn(std::vector<Particle*>& Pool, int& LastInact
 	}
 }
 
-Emitter::Emitter(const Shader::SharedPtr& _ParticleShader, const Texture::SharedPtr& _ParticleTexture,
-	int _PoolCapacity, const ParticlePattern::Base::SharedPtr& _ParticlePattern,
-	const glm::mat4& _Projection
-)
-	: QuadId(0), ParticleScale(5.0f),
-		RenderProjection(_Projection), LastInactive(0), PoolCapacity(_PoolCapacity),
-		ParticleShader(_ParticleShader), ParticleTexture(_ParticleTexture), ParticlePattern(_ParticlePattern)
+Emitter::Emitter(int InPoolCapacity, float InParticleScale, std::string InShaderName, std::string InTextureName, ParticlePattern::Base::SharedPtr InParticlePattern)
+	: ParticleScale(InParticleScale),
+		LastInactive(0), PoolCapacity(InPoolCapacity),
+		ParticleShaderName(std::move(InShaderName)), ParticleTextureName(std::move(InTextureName)),
+		ParticlePattern(std::move(InParticlePattern))
 {
-	if (ParticleShader != nullptr)
-	{
-		ParticleShader->Use();
-		ParticleShader->SetMatrix("projection", RenderProjection);
-	}
-
-	PrepareRenderQuad();
 	InitializePool();
-
-	srand(time(nullptr));
 }
 
 void Emitter::Spawn(const glm::vec3& Position, const glm::vec3& Direction)
@@ -177,7 +173,7 @@ void Emitter::Spawn(const glm::vec3& Position, const glm::vec3& Direction)
 	ParticlePattern->Spawn(Pool, LastInactive, Position, Direction);
 }
 
-void Emitter::Update(const float Delta, const glm::vec3& Position, const glm::vec3& Direction)
+void Emitter::Update(float Delta, const glm::vec3& Position, const glm::vec3& Direction)
 {
 	if (!ParticlePattern)
 	{
@@ -190,7 +186,7 @@ void Emitter::Update(const float Delta, const glm::vec3& Position, const glm::ve
 	}
 
 	const float ColorDecayFactor = 2.f / ParticlePattern->GetLife();
-	for (Particle* CurrentParticle : Pool)
+	for (const Particle::SharedPtr& CurrentParticle : Pool)
 	{
 		CurrentParticle->Life -= Delta;
 		if (CurrentParticle->Life <= 0.f)
@@ -206,44 +202,30 @@ void Emitter::Update(const float Delta, const glm::vec3& Position, const glm::ve
 
 void Emitter::Render() const
 {
-	ParticleShader->Use();
+	const Shader::SharedPtr Shader = AssetManager::Get().GetShader(ParticleShaderName);
+	const Texture::SharedPtr Texture = AssetManager::Get().GetTexture(ParticleTextureName);
 
-	ParticleShader->SetFloat("scale", ParticleScale);
-	for (const Particle* CurrentParticle : Pool)
-	{
-		if (CurrentParticle->Life <= 0.f)
-		{
-			continue;
-		}
-
-		ParticleShader->SetFloat("position", CurrentParticle->Position);
-		ParticleShader->SetFloat("color", CurrentParticle->Color);
-
-		glBindVertexArray(QuadId);
-
-		glActiveTexture(GL_TEXTURE0);
-		ParticleTexture->Bind();
-
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		glBindVertexArray(0);
-	}
-
-	ParticleTexture->UnBind();
+	Renderer::Get().RenderParticleVfx(
+		Pool,
+		Shader,
+		Texture,
+		ParticleScale
+	);
 }
 
 void Emitter::Reset()
 {
-	for (Particle* mParticle : Pool)
+	for (const Particle::SharedPtr& CurrentParticle : Pool)
 	{
-		mParticle->Life = 0.f;
+		CurrentParticle->Life = 0.f;
 	}
 
 	LastInactive = 0;
 }
 
-void Emitter::SetParticleScale(const float NewScale)
+void Emitter::SetParticleScale(float InScale)
 {
-	ParticleScale = NewScale;
+	ParticleScale = InScale;
 }
 
 float Emitter::GetParticleScale() const
@@ -253,38 +235,7 @@ float Emitter::GetParticleScale() const
 
 Emitter::~Emitter()
 {
-	for (int i = 0; i < PoolCapacity; ++i)
-	{
-		delete Pool[i];
-	}
-
 	Pool.clear();
-}
-
-void Emitter::PrepareRenderQuad()
-{
-	float VertexData[] = {
-		-0.5f, 0.5f, 0.f, 1.f,
-		-0.5f, -0.5f, 0.f, 0.f,
-		0.5f, -0.5f, 1.f, 0.f,
-		-0.5f, 0.5f, 0.f, 1.f,
-		0.5f, 0.5f, 1.f, 1.f,
-		0.5f, -0.5f, 1.f, 0.f
-	};
-
-	unsigned int VAO = 0;
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-	unsigned int VBO;
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(VertexData), VertexData, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	QuadId = VAO;
 }
 
 void Emitter::InitializePool()
@@ -293,7 +244,7 @@ void Emitter::InitializePool()
 
 	for (int i = 0; i < PoolCapacity; ++i)
 	{
-		Pool.push_back(new Particle());
+		Pool.push_back(std::make_shared<Particle>());
 	}
 }
 

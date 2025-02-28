@@ -31,8 +31,7 @@ Texture::SharedPtr AssetManager::LoadTexture(const std::string& Name, const std:
 	return NewTexture;
 }
 
-Font::SharedPtr AssetManager::LoadFont(const std::string& Name, const std::string& Path, const std::string& ShaderName,
-	const glm::mat4& _Projection)
+Font::SharedPtr AssetManager::LoadFont(const std::string& Name, const std::string& Path, const std::string& ShaderName)
 {
 	Font::SharedPtr FoundFont = GetFont(Name);
 	if (FoundFont != nullptr)
@@ -41,7 +40,7 @@ Font::SharedPtr AssetManager::LoadFont(const std::string& Name, const std::strin
 	}
 
 	Shader::SharedPtr FoundShader = GetShader(ShaderName);
-	Font::SharedPtr NewFont = std::make_shared<Font>(Path, Name, _Projection, FoundShader);
+	Font::SharedPtr NewFont = std::make_shared<Font>(Path, Name, ShaderName);
 	Fonts.insert(FontPair(Name, NewFont));
 
 	return NewFont;

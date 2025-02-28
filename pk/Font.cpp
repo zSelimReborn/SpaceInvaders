@@ -3,18 +3,12 @@
 
 #include <glad/glad.h>
 
-Font::Font(const std::string& _Path, const std::string& _Name, const glm::mat4& _Projection, const Shader::SharedPtr& _TextShader)
-	: Path(_Path), Name(_Name), Size(14), Projection(_Projection), TextShader(_TextShader)
+#include "AssetManager.h"
+#include "Renderer.h"
+
+Font::Font(std::string InPath, std::string InName, std::string InTextShader)
+	: Path(std::move(InPath)), Name(std::move(InName)), TextShader(std::move(InTextShader)), Size(14)
 {
-    if (TextShader == nullptr)
-    {
-        throw LoadError("ERROR::FONT TextShader empty");
-    }
-
-    TextShader->Use();
-    TextShader->SetMatrix("projection", Projection);
-
-    PrepareRenderQuad();
 }
 
 std::string Font::GetName() const
@@ -27,12 +21,22 @@ std::string Font::GetPath() const
 	return Path;
 }
 
+std::string Font::GetShaderName() const
+{
+    return TextShader;
+}
+
+Shader::SharedPtr Font::GetShader() const
+{
+    return AssetManager::Get().GetShader(TextShader);
+}
+
 unsigned int Font::GetSize() const
 {
     return Size;
 }
 
-void Font::Load(unsigned int _Size)
+void Font::Load(unsigned int InSize)
 {
     Characters.clear();
 
@@ -48,7 +52,7 @@ void Font::Load(unsigned int _Size)
         throw LoadError("ERROR::FREETYPE: Failed to load font");
     }
 
-    Size = _Size;
+    Size = InSize;
     FT_Set_Pixel_Sizes(FontFace, 0, Size);
     LoadCharacters(FontFace);
 
@@ -58,58 +62,9 @@ void Font::Load(unsigned int _Size)
     bLoaded = true;
 }
 
-void Font::Render(const std::string& Text, const glm::vec2& Position, float Scale, const glm::vec4& Color)
+void Font::Render(const std::string& Text, const glm::vec2& Position, float Scale, const glm::vec4& Color) const
 {
-    if (!bLoaded)
-    {
-        return;
-    }
-
-    TextShader->Use();
-    TextShader->SetColor("textColor", Color);
-
-    glActiveTexture(GL_TEXTURE0);
-    glBindVertexArray(QuadId);
-
-    // iterate through all characters
-    float x = Position.x;
-    float y = Position.y;
-
-    Character MaxChar = Characters['H'];
-
-    for (const char c : Text)
-    {
-        Character Glyph = Characters[c];
-
-        float xpos = x + Glyph.Bearing.x * Scale;
-        float ypos = y + (MaxChar.Bearing.y - Glyph.Bearing.y) * Scale;
-
-        float w = Glyph.Size.x * Scale;
-        float h = Glyph.Size.y * Scale;
-        // update VBO for each character
-        float vertices[6][4] = {
-            { xpos,     ypos + h,   0.0f, 1.0f },
-            { xpos + w, ypos,       1.0f, 0.0f },
-            { xpos,     ypos,       0.0f, 0.0f },
-
-            { xpos,     ypos + h,   0.0f, 1.0f },
-            { xpos + w, ypos + h,   1.0f, 1.0f },
-            { xpos + w, ypos,       1.0f, 0.0f }
-        };
-        // render glyph texture over quad
-        glBindTexture(GL_TEXTURE_2D, Glyph.TextureID);
-        // update content of VBO memory
-        glBindBuffer(GL_ARRAY_BUFFER, BufferId);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        // render quad
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-
-        x += (Glyph.Advance >> 6) * Scale;
-    }
-
-    glBindVertexArray(0);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    Renderer::Get().RenderText(Text, GetShader(), Characters, Position, Scale, Color);
 }
 
 void Font::GetTextSize(const std::string& Text, float Scale, float& OutHSize, float& OutVSize)
@@ -134,6 +89,11 @@ void Font::GetTextSize(const std::string& Text, float Scale, float& OutHSize, fl
         OutVSize = std::max(OutVSize, h);
         LastW = w;
     }
+}
+
+Font::CharacterMap Font::GetCharacterMap() const
+{
+    return Characters;
 }
 
 void Font::LoadCharacters(FT_Face& Face)
@@ -178,22 +138,5 @@ void Font::LoadCharacters(FT_Face& Face)
 
         Characters.insert(std::pair<char, Character>(c, character));
     }
-}
-
-void Font::PrepareRenderQuad()
-{
-    unsigned int VAO, VBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, nullptr, GL_DYNAMIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-
-    QuadId = VAO;
-    BufferId = VBO;
 }
 

@@ -22,16 +22,21 @@ class Font
 {
 public:
 	typedef std::shared_ptr<Font> SharedPtr;
+	typedef std::map<char, Character> CharacterMap;
 
-	Font(const std::string& _Path, const std::string& _Name, const glm::mat4& _Projection, const Shader::SharedPtr& _TextShader);
+	Font(std::string InPath, std::string InName, std::string InTextShader);
 
 	std::string GetName() const;
 	std::string GetPath() const;
+	std::string GetShaderName() const;
+	Shader::SharedPtr GetShader() const;
 	unsigned int GetSize() const;
 
-	void Load(unsigned int _Size);
-	void Render(const std::string& Text, const glm::vec2& Position, float Scale, const glm::vec4& Color);
+	void Load(unsigned int InSize);
+	void Render(const std::string& Text, const glm::vec2& Position, float Scale, const glm::vec4& Color) const;
 	void GetTextSize(const std::string& Text, float Scale, float& OutHSize, float& OutVSize);
+
+	CharacterMap GetCharacterMap() const;
 
 	class LoadError : public std::runtime_error
 	{
@@ -40,17 +45,13 @@ public:
 
 private:
 	void LoadCharacters(FT_Face& Face);
-	void PrepareRenderQuad();
 
 	std::string Path;
 	std::string Name;
+	std::string TextShader;
 	unsigned int Size;
 
-	std::map<char, Character> Characters;
-
-	Shader::SharedPtr TextShader;
-	unsigned int QuadId;
-	unsigned int BufferId;
+	CharacterMap Characters;
 
 	glm::mat4 Projection;
 
