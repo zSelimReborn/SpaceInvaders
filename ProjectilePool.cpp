@@ -80,6 +80,14 @@ void ProjectilePool::SetDirection(const glm::vec3& InDirection)
 	ProjectileInfo.Direction = glm::normalize(InDirection);
 }
 
+void ProjectilePool::ResetPool() const
+{
+	for (const Projectile::SharedPtr& Projectile : Pool)
+	{
+		Projectile->Destroy();
+	}
+}
+
 void ProjectilePool::SetPoolSize(int InPoolSize)
 {
 	PoolSize = std::max(DEFAULT_POOL_SIZE, InPoolSize);

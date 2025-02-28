@@ -30,6 +30,8 @@ public:
 	void SetSize(const glm::vec3& InSize);
 	void SetDirection(const glm::vec3& InDirection);
 
+	void ResetPool() const;
+
 private:
 	void SetPoolSize(int InPoolSize);
 	void SetDefaults();

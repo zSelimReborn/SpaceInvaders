@@ -190,6 +190,8 @@ void Game::OnGameOver(bool bPlayerWon)
 	{
 		State = GameState::GameOver;
 		MainAlienGroup->HideBoard();
+		AlienProjectilePool->ResetPool();
+		PlayerProjectilePool->ResetPool();
 		MainMenuW->Deactivate();
 		GameOverW->Activate();
 	}
@@ -249,6 +251,8 @@ void Game::Play()
 	MainHud->Activate();
 
 	MainAlienGroup->StartGroup();
+	AlienProjectilePool->ResetPool();
+	PlayerProjectilePool->ResetPool();
 	SecretAlien->Reset();
 	BuildBunkers();
 	ResetPlayer();
