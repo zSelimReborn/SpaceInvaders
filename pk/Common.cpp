@@ -12,6 +12,11 @@ float Math::Clamp(const float Value, const float Min, const float Max)
 	return std::min(Max, std::max(Min, Value));
 }
 
+float Math::Lerp(const float Min, const float Max, const float Ratio)
+{
+	return Min * (1.0 - Ratio) + (Max * Ratio);
+}
+
 Transform::Transform()
 	: Location(0.f), Size(0.f)
 {

@@ -27,8 +27,10 @@ public:
 
 	static const int DEFAULT_NUM_ROWS_PER_TYPE;
 	static const int DEFAULT_ALIEN_PER_ROW;
+	static const int DEFAULT_MAX_SHOOTING_ALIEN;
 	static const float DEFAULT_TOP_OFFSET;
-	static const float DEFAULT_MOVE_DELAY;
+	static const float DEFAULT_MIN_MOVE_DELAY;
+	static const float DEFAULT_MAX_MOVE_DELAY;
 	static const float DEFAULT_SHOOT_MAX_COOLDOWN;
 	static const float DEFAULT_SHOOT_MIN_COOLDOWN;
 	static const float DEFAULT_H_MOVE_STEP;
@@ -43,20 +45,25 @@ public:
 	int GetNumRowsPerType() const;
 	int GetNumRowsTotal() const;
 	int GetNumAlienPerRow() const;
+	int GetMaxShootingAlien() const;
 	float GetTopOffset() const;
-	float GetMoveDelay() const;
+	float GetMinMoveDelay() const;
+	float GetMaxMoveDelay() const;
 	float GetShootMaxCooldown() const;
 	float GetShootMinCooldown() const;
 	float GetHorizontalMoveStep() const;
 	float GetVerticalMoveStep() const;
 	float GetHorizontalDistance() const;
 	float GetVerticalDistance() const;
+	float GetAliveRatio() const;
 	glm::vec3 GetAlienSize() const;
 
 	void SetNumRowsPerType(int InNum);
 	void SetNumAlienPerRow(int InNum);
+	void SetMaxShootingAlien(int InNum);
 	void SetTopOffset(float InOffset);
-	void SetMoveDelay(float InMoveDelay);
+	void SetMinMoveDelay(float InMoveDelay);
+	void SetMaxMoveDelay(float InMoveDelay);
 	void SetShootMaxCooldown(float InShootMaxCooldown);
 	void SetShootMinCooldown(float InShootMinCooldown);
 	void SetHorizontalMoveStep(float InMoveStep);
@@ -91,6 +98,7 @@ private:
 
 	void UpdateShootCooldown(const float Delta);
 	void UpdateMoveDelay(const float Delta);
+	void GenerateMoveDelay();
 	void UpdateAliveAliens();
 
 	void NotifyReachedPlayer() const;
@@ -103,8 +111,11 @@ private:
 	int OuterLeftCol;
 	int OuterRightCol;
 	int LastRow;
+	int MaxShootingAlien;
 	float TopOffset;
-	float MoveDelay;
+	float MinMoveDelay;
+	float MaxMoveDelay;
+	float SelectedMoveDelay;
 	float CurrentDelay;
 	float ShootMaxCooldown;
 	float ShootMinCooldown;

@@ -10,6 +10,7 @@ namespace Console
 namespace Math
 {
 	float Clamp(const float Value, const float Min, const float Max);
+	float Lerp(const float Min, const float Max, const float Ratio);
 }
 
 namespace Colors
