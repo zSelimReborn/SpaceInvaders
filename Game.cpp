@@ -314,6 +314,9 @@ void Game::Update(const float Delta)
 	MainHud->SetScore(PlayerShip->GetScorePoints());
 
 	Scene::Update(Delta);
+
+	PlayerProjectilePool->UpdateEffects(Delta);
+	AlienProjectilePool->UpdateEffects(Delta);
 }
 
 void Game::Render(const float Delta)
@@ -321,6 +324,8 @@ void Game::Render(const float Delta)
 	if (State != GameState::Menu)
 	{
 		RenderActors();
+		PlayerProjectilePool->RenderEffects();
+		AlienProjectilePool->RenderEffects();
 	}
 
 	RenderWidgets();
@@ -335,6 +340,10 @@ void Game::LoadAssets() const
 	Shader::SharedPtr TextShader = AssetManager::Get().LoadShader(Shaders::TextName, Shaders::TextVertexFile, Shaders::TextFragmentFile);
 	TextShader->Use();
 	TextShader->SetMatrix("projection", GetProjection());
+
+	Shader::SharedPtr ParticleShapeShader = AssetManager::Get().LoadShader(Shaders::ParticleShapeName, Shaders::ParticleVertexFile, Shaders::ParticleShapeFragmentFile);
+	ParticleShapeShader->Use();
+	ParticleShapeShader->SetMatrix("projection", GetProjection());
 
 	Font::SharedPtr TextFont = AssetManager::Get().LoadFont(Fonts::TextFontName, Fonts::TextFontPath, Shaders::TextName);
 	TextFont->Load(TextSize);

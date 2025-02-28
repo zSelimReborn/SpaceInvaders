@@ -2,3 +2,7 @@ PoolSize=5
 ProjectileSize=5,20,1
 ProjectileSpeed=400
 ProjectileDirection=0,-1,0
+ParticleSpeed=150
+ParticleLife=0.3
+ParticleScale=7.0
+ParticleColor=1,0,0,1

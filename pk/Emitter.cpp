@@ -173,6 +173,11 @@ void Emitter::Spawn(const glm::vec3& Position, const glm::vec3& Direction)
 	ParticlePattern->Spawn(Pool, LastInactive, Position, Direction);
 }
 
+void Emitter::Spawn(const glm::vec3& Position)
+{
+	Spawn(Position, glm::vec3(0.f));
+}
+
 void Emitter::Update(float Delta, const glm::vec3& Position, const glm::vec3& Direction)
 {
 	if (!ParticlePattern)
@@ -198,6 +203,11 @@ void Emitter::Update(float Delta, const glm::vec3& Position, const glm::vec3& Di
 		CurrentParticle->Position += Velocity * Delta;
 		CurrentParticle->Color.a -= ColorDecayFactor * Delta;
 	}
+}
+
+void Emitter::Update(float Delta)
+{
+	Update(Delta, glm::vec3(0.f), glm::vec3(0.f));
 }
 
 void Emitter::Render() const

@@ -124,7 +124,6 @@ void Renderer::RenderParticleVfx(const ParticleList& Particles,
 		Shader->SetFloat("position", CurrentParticle->Position);
 		Shader->SetFloat("color", CurrentParticle->Color);
 
-
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 

@@ -37,6 +37,13 @@ namespace Assets
 		const std::string TextName = "shader_text";
 		const std::string TextVertexFile = BasePath + InnerPath + "text.vert";
 		const std::string TextFragmentFile = BasePath + InnerPath + "text.frag";
+
+		const std::string ParticleShapeName = "shader_particle_shape";
+		const std::string ParticleTextureName = "shader_particle_shape";
+		const std::string ParticleVertexFile = BasePath + InnerPath + "particle.vert";
+
+		const std::string ParticleShapeFragmentFile = BasePath + InnerPath + "particle_shape.frag";
+		const std::string ParticleTextureFragmentFile = BasePath + InnerPath + "particle_texture.frag";
 	}
 
 	namespace Fonts

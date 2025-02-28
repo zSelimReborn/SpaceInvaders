@@ -82,7 +82,11 @@ public:
 	Emitter(int InPoolCapacity, float InParticleScale, std::string InShaderName, std::string InTextureName, ParticlePattern::Base::SharedPtr InParticlePattern);
 
 	void Spawn(const glm::vec3& Position, const glm::vec3& Direction);
+	void Spawn(const glm::vec3& Position);
+
 	void Update(float Delta, const glm::vec3& Position, const glm::vec3& Direction);
+	void Update(float Delta);
+
 	void Render() const;
 	void Reset();
 
