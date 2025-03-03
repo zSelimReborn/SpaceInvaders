@@ -366,9 +366,9 @@ void Game::LoadAssets() const
 	ParticleTextureShader->SetMatrix("projection", GetProjection());
 
 	Font::SharedPtr TextFont = AssetManager::Get().LoadFont(Fonts::TextFontName, Fonts::TextFontPath, Shaders::TextName);
-	TextFont->Load(TextSize);
+	TextFont->Load(TextSize, GL_CLAMP_TO_BORDER, GL_NEAREST);
 
 	Font::SharedPtr HeadingFont = AssetManager::Get().LoadFont(Fonts::HeadingFontName, Fonts::HeadingFontPath, Shaders::TextName);
-	HeadingFont->Load(50);
+	HeadingFont->Load(50, GL_CLAMP_TO_BORDER, GL_NEAREST);
 }
 

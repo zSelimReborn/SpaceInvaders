@@ -36,7 +36,7 @@ unsigned int Font::GetSize() const
     return Size;
 }
 
-void Font::Load(unsigned int InSize)
+void Font::Load(unsigned int InSize, int InWrapMode, int InFilterMode)
 {
     Characters.clear();
 
@@ -54,7 +54,7 @@ void Font::Load(unsigned int InSize)
 
     Size = InSize;
     FT_Set_Pixel_Sizes(FontFace, 0, Size);
-    LoadCharacters(FontFace);
+    LoadCharacters(FontFace, InWrapMode, InFilterMode);
 
     FT_Done_Face(FontFace);
     FT_Done_FreeType(FontLibrary);
@@ -96,7 +96,7 @@ Font::CharacterMap Font::GetCharacterMap() const
     return Characters;
 }
 
-void Font::LoadCharacters(FT_Face& Face)
+void Font::LoadCharacters(FT_Face& Face, int InWrapMode, int InFilterMode)
 {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // disable byte-alignment restriction
 
@@ -124,10 +124,10 @@ void Font::LoadCharacters(FT_Face& Face)
             Face->glyph->bitmap.buffer
         );
         // set texture options
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, InWrapMode);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, InWrapMode);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, InFilterMode);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, InFilterMode);
         // now store character for later use
         Character character = {
             texture,

@@ -32,7 +32,7 @@ public:
 	Shader::SharedPtr GetShader() const;
 	unsigned int GetSize() const;
 
-	void Load(unsigned int InSize);
+	void Load(unsigned int InSize, int InWrapMode, int InFilterMode);
 	void Render(const std::string& Text, const glm::vec2& Position, float Scale, const glm::vec4& Color) const;
 	void GetTextSize(const std::string& Text, float Scale, float& OutHSize, float& OutVSize);
 
@@ -44,7 +44,7 @@ public:
 	};
 
 private:
-	void LoadCharacters(FT_Face& Face);
+	void LoadCharacters(FT_Face& Face, int InWrapMode, int InFilterMode);
 
 	std::string Path;
 	std::string Name;
