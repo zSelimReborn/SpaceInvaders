@@ -14,6 +14,7 @@ class Projectile : public Actor, public IDamageable
 {
 public:
 	typedef std::function<void(const Actor::SharedPtr& HitActor, const CollisionResult& Result)> OnHitDelegate;
+	typedef std::function<void()> OnDestroyDelegate;
 	typedef std::shared_ptr<Projectile> SharedPtr;
 	typedef std::shared_ptr<TeamComponent> TeamComponentPtr;
 
@@ -26,7 +27,8 @@ public:
 
 	bool TakeDamage(float InDamage) override;
 
-	void OnHitActor(OnHitDelegate InDelegate);
+	void AddOnHitDelegate(const OnHitDelegate& InDelegate);
+	void AddOnDestroyDelegate(const OnDestroyDelegate& InDelegate);
 
 	void Update(const float Delta) override;
 
@@ -38,7 +40,9 @@ private:
 	void CheckCollisions();
 	void OnHit(const Actor::SharedPtr& HitActor, const CollisionResult& Result);
 	void NotifyHit(const Actor::SharedPtr& HitActor, const CollisionResult& Result) const;
+	void NotifyDestroy() const;
 
 	TeamComponentPtr TeamPtr;
 	std::vector<OnHitDelegate> OnHitFunctions;
+	std::vector<OnDestroyDelegate> OnDestroyFunctions;
 };

@@ -54,9 +54,11 @@ private:
 	void UpdateCooldown(const float Delta);
 
 	void OnProjectileHit(const Actor::SharedPtr& HitActor);
+	void OnProjectileDestroy();
 
 	void NotifyOnTakeDamage() const;
 
+	bool bCanShoot;
 	float MaxSpeed;
 	float Speed;
 	float ShootCooldown;

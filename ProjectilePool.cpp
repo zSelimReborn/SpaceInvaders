@@ -42,7 +42,7 @@ Projectile::SharedPtr ProjectilePool::Create(const glm::vec3& InLocation, Team I
 	const glm::vec3 Velocity = ProjectileInfo.Direction * ProjectileInfo.Speed;
 	OutProjectile->SetVelocity(Velocity);
 
-	OutProjectile->OnHitActor([this](const Actor::SharedPtr& HitActor, const CollisionResult& Result)
+	OutProjectile->AddOnHitDelegate([this](const Actor::SharedPtr& HitActor, const CollisionResult& Result)
 		{
 			OnProjectileHit(HitActor, Result);
 		}

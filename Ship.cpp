@@ -11,13 +11,14 @@
 #include "Projectile.h"
 #include "ProjectilePool.h"
 #include "TeamComponent.h"
+#include "pk/SoundEngine.h"
 
 const float Ship::DEFAULT_SPEED = 450.f;
 const float Ship::DEFAULT_COOLDOWN = 1.f;
 const int Ship::DEFAULT_LIFE_POINTS = 3;
 
 Ship::Ship(const Transform& InTransform)
-	: Actor(InTransform), MaxSpeed(DEFAULT_SPEED), Speed(DEFAULT_SPEED),
+	: Actor(InTransform), bCanShoot(true), MaxSpeed(DEFAULT_SPEED), Speed(DEFAULT_SPEED),
 		ShootCooldown(DEFAULT_COOLDOWN), CurrentCooldown(0.f), bShouldCooldown(false),
 		MaxLifePoints(DEFAULT_LIFE_POINTS), LifePoints(DEFAULT_LIFE_POINTS),
 		ScorePoints(0)
@@ -167,6 +168,7 @@ void Ship::Update(const float Delta)
 bool Ship::TakeDamage(float InDamage)
 {
 	LifePoints = std::max(0, LifePoints - 1);
+	SoundEngine::Get().Play(Assets::Sounds::PlayerExplosion, 1.f );
 	NotifyOnTakeDamage();
 	return false;
 }
@@ -212,6 +214,11 @@ void Ship::ConstraintInViewport(const float Delta)
 
 void Ship::Shoot()
 {
+	if (!bCanShoot)
+	{
+		return;
+	}
+
 	if (CurrentProjectilePool == nullptr)
 	{
 		std::cout << "[Ship] - Unable to shoot, no pool obtained.\n";
@@ -224,14 +231,21 @@ void Ship::Shoot()
 	SpawnLocation.y -= (GetSize().y + 5.f);
 
 	Projectile::SharedPtr NewProjectile = CurrentProjectilePool->Create(SpawnLocation, TeamPtr->GetTeam());
-	Projectile::OnHitDelegate Callback = [this](const Actor::SharedPtr& HitActor, const CollisionResult& Result)
-	{
-		OnProjectileHit(HitActor);
-	};
-
-	NewProjectile->OnHitActor(Callback);
+	NewProjectile->AddOnHitDelegate([this](const Actor::SharedPtr& HitActor, const CollisionResult& Result)
+		{
+			OnProjectileHit(HitActor);
+		}
+	);
+	NewProjectile->AddOnDestroyDelegate([this]()
+		{
+			OnProjectileDestroy();
+		}
+	);
 
 	CurrentScene->Add(NewProjectile);
+
+	SoundEngine::Get().Play(Assets::Sounds::Shoot, 1.f);
+	bCanShoot = false;
 }
 
 void Ship::UpdateCooldown(const float Delta)
@@ -258,6 +272,11 @@ void Ship::OnProjectileHit(const Actor::SharedPtr& HitActor)
 	}
 
 	ScorePoints += HitAlien->GetScore();
+}
+
+void Ship::OnProjectileDestroy()
+{
+	bCanShoot = true;
 }
 
 void Ship::NotifyOnTakeDamage() const

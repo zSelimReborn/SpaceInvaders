@@ -41,9 +41,14 @@ bool Projectile::TakeDamage(float InDamage)
 	return true;
 }
 
-void Projectile::OnHitActor(OnHitDelegate InDelegate)
+void Projectile::AddOnHitDelegate(const OnHitDelegate& InDelegate)
 {
 	OnHitFunctions.push_back(InDelegate);
+}
+
+void Projectile::AddOnDestroyDelegate(const OnDestroyDelegate& InDelegate)
+{
+	OnDestroyFunctions.push_back(InDelegate);
 }
 
 void Projectile::Update(const float Delta)
@@ -59,8 +64,11 @@ void Projectile::Update(const float Delta)
 
 void Projectile::Destroy()
 {
+	NotifyDestroy();
+
 	Actor::Destroy();
 	OnHitFunctions.clear();
+	OnDestroyFunctions.clear();
 }
 
 Projectile::~Projectile()
@@ -119,5 +127,13 @@ void Projectile::NotifyHit(const Actor::SharedPtr& HitActor, const CollisionResu
 	for (const OnHitDelegate& Delegate : OnHitFunctions)
 	{
 		Delegate(HitActor, Result);
+	}
+}
+
+void Projectile::NotifyDestroy() const
+{
+	for (const OnDestroyDelegate& Delegate : OnDestroyFunctions)
+	{
+		Delegate();
 	}
 }
