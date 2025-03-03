@@ -67,6 +67,10 @@ void Game::LoadConfig()
 
 void Game::SpawnPlayer()
 {
+	PlayerProjectilePool = std::make_shared<ProjectilePool>(Config::PlayerProjectilePool);
+	PlayerProjectilePool->SetShaderName(Shaders::SpriteNoColorName);
+	PlayerProjectilePool->SetTextureName(Textures::BlueLaserName);
+
 	const glm::vec3 StartLocation = GetPlayerStartLocation();
 	const Transform ShipTransform(StartLocation, ShipSize);
 
@@ -82,6 +86,10 @@ void Game::SpawnPlayer()
 
 void Game::SpawnAliens()
 {
+	AlienProjectilePool = std::make_shared<ProjectilePool>(Config::AlienProjectilePool);
+	AlienProjectilePool->SetShaderName(Shaders::SpriteNoColorName);
+	AlienProjectilePool->SetTextureName(Textures::RedLaserName);
+
 	MainAlienGroup = std::make_shared<AlienGroup>();
 	MainAlienGroup->SetConfig(Config::AlienGroupFile);
 	MainAlienGroup->SetProjectilePool(AlienProjectilePool);
@@ -227,9 +235,6 @@ void Game::Begin()
 {
 	LoadAssets();
 
-	PlayerProjectilePool = std::make_shared<ProjectilePool>(Config::PlayerProjectilePool);
-	AlienProjectilePool = std::make_shared<ProjectilePool>(Config::AlienProjectilePool);
-
 	SpawnPlayer();
 	SpawnBunkers();
 	SpawnSecretAlien();
@@ -340,6 +345,8 @@ void Game::LoadAssets() const
 	AssetManager::Get().LoadTexture(Textures::OctopusName, Textures::OctopusPath, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST);
 	AssetManager::Get().LoadTexture(Textures::SecretName, Textures::SecretPath, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST);
 	AssetManager::Get().LoadTexture(Textures::ExplosionName, Textures::ExplosionPath, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST);
+	AssetManager::Get().LoadTexture(Textures::BlueLaserName, Textures::BlueLaserPath, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST);
+	AssetManager::Get().LoadTexture(Textures::RedLaserName, Textures::RedLaserPath, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST);
 
 	Shader::SharedPtr ShapeShader = AssetManager::Get().LoadShader(Shaders::ShapeName, Shaders::ShapeVertexFile, Shaders::ShapeFragmentFile);
 	ShapeShader->Use();

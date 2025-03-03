@@ -24,7 +24,7 @@ public:
 	typedef std::shared_ptr<Emitter> EmitterPtr;
 
 	ProjectilePool(std::string InConfigFile);
-	Projectile::SharedPtr Create(const glm::vec3& InLocation, Team InTeam, const std::string& InShaderName);
+	Projectile::SharedPtr Create(const glm::vec3& InLocation, Team InTeam);
 
 	int GetPoolSize() const;
 	float GetLifeSpan() const;
@@ -35,11 +35,15 @@ public:
 	glm::vec3 GetSize() const;
 	glm::vec3 GetDirection() const;
 	glm::vec4 GetParticleColor() const;
+	std::string GetShaderName() const;
+	std::string GetTextureName() const;
 
 	void SetLifeSpan(float InLifeSpan);
 	void SetSpeed(float InSpeed);
 	void SetSize(const glm::vec3& InSize);
 	void SetDirection(const glm::vec3& InDirection);
+	void SetShaderName(const std::string& InShaderName);
+	void SetTextureName(const std::string& InTextureName);
 
 	void ResetPool() const;
 
@@ -61,6 +65,9 @@ private:
 	void SetParticleColor(const glm::vec4& InColor);
 
 	std::string ConfigFile;
+	std::string ShaderName;
+	std::string TextureName;
+
 	ProjectileList Pool;
 	int PoolSize;
 	int NextIndex;

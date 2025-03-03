@@ -84,5 +84,11 @@ namespace Assets
 
 		const std::string ExplosionName = "explosion";
 		const std::string ExplosionPath = BasePath + InnerPath + "explode.png";
+
+		const std::string BlueLaserName = "blue_laser";
+		const std::string BlueLaserPath = BasePath + InnerPath + "blue_laser.png";
+
+		const std::string RedLaserName = "red_laser";
+		const std::string RedLaserPath = BasePath + InnerPath + "red_laser.png";
 	}
 }

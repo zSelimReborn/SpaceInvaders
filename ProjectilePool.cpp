@@ -28,7 +28,7 @@ ProjectilePool::ProjectilePool(std::string InConfigFile)
 	PrepareEmitter();
 }
 
-Projectile::SharedPtr ProjectilePool::Create(const glm::vec3& InLocation, Team InTeam, const std::string& InShaderName)
+Projectile::SharedPtr ProjectilePool::Create(const glm::vec3& InLocation, Team InTeam)
 {
 	Projectile::SharedPtr OutProjectile = Pool[NextIndex];
 	OutProjectile->CancelDestroy();
@@ -36,11 +36,11 @@ Projectile::SharedPtr ProjectilePool::Create(const glm::vec3& InLocation, Team I
 	OutProjectile->SetTeam(InTeam);
 	OutProjectile->SetSize(ProjectileInfo.Size);
 	OutProjectile->SetInitialLifeSpan(ProjectileInfo.InitialLifeSpan);
+	OutProjectile->SetShader(ShaderName);
+	OutProjectile->SetTexture(TextureName);
 
 	const glm::vec3 Velocity = ProjectileInfo.Direction * ProjectileInfo.Speed;
 	OutProjectile->SetVelocity(Velocity);
-
-	OutProjectile->SetShader(InShaderName);
 
 	OutProjectile->OnHitActor([this](const Actor::SharedPtr& HitActor, const CollisionResult& Result)
 		{
@@ -97,6 +97,16 @@ glm::vec4 ProjectilePool::GetParticleColor() const
 	return ParticleColor;
 }
 
+std::string ProjectilePool::GetShaderName() const
+{
+	return ShaderName;
+}
+
+std::string ProjectilePool::GetTextureName() const
+{
+	return TextureName;
+}
+
 void ProjectilePool::SetLifeSpan(float InLifeSpan)
 {
 	ProjectileInfo.InitialLifeSpan = std::max(0.f, InLifeSpan);
@@ -115,6 +125,16 @@ void ProjectilePool::SetSize(const glm::vec3& InSize)
 void ProjectilePool::SetDirection(const glm::vec3& InDirection)
 {
 	ProjectileInfo.Direction = glm::normalize(InDirection);
+}
+
+void ProjectilePool::SetShaderName(const std::string& InShaderName)
+{
+	ShaderName = InShaderName;
+}
+
+void ProjectilePool::SetTextureName(const std::string& InTextureName)
+{
+	TextureName = InTextureName;
 }
 
 void ProjectilePool::ResetPool() const

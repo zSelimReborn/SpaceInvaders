@@ -81,6 +81,6 @@ void Alien::Shoot() const
 	glm::vec3 SpawnLocation(GetLocation());
 	SpawnLocation.y += (GetSize().y + 5.f);
 
-	Projectile::SharedPtr NewProjectile = CurrentProjectilePool->Create(SpawnLocation, TeamPtr->GetTeam(), Assets::Shaders::ShapeName);
+	Projectile::SharedPtr NewProjectile = CurrentProjectilePool->Create(SpawnLocation, TeamPtr->GetTeam());
 	CurrentScene->Add(NewProjectile);
 }
