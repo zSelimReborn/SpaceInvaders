@@ -27,7 +27,7 @@ public:
 	}
 
 	Shader::SharedPtr LoadShader(const std::string& Name, const std::string& Vertex, const std::string& Fragment);
-	Texture::SharedPtr LoadTexture(const std::string& Name, const std::string& Path, int _Format, int _WrapS, int _WrapT, int _MinFilter, int _MaxFilter);
+	Texture::SharedPtr LoadTexture(const std::string& Name, const std::string& Path, int InFormat, int InWrapS, int InWrapT, int InMinFilter, int InMaxFilter);
 	Font::SharedPtr LoadFont(const std::string& Name, const std::string& Path, const std::string& ShaderName);
 
 	Shader::SharedPtr GetShader(const std::string& Name);

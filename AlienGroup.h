@@ -15,13 +15,23 @@ enum class GroupState : std::uint8_t
 	Stopped
 };
 
+struct AlienTypeData
+{
+	std::string ConfigFile;
+	std::string TextureName;
+
+	AlienTypeData() = default;
+	AlienTypeData(std::string InConfigFile, std::string InTextureName)
+		: ConfigFile(std::move(InConfigFile)), TextureName(std::move(InTextureName)) {}
+};
+
 class AlienGroup : public Actor
 {
 public:
 	typedef std::shared_ptr<AlienGroup> SharedPtr;
 	typedef std::vector<Alien::SharedPtr> AlienList;
-	typedef std::map<AlienType, std::string> ConfigMap;
-	typedef std::pair<AlienType, std::string> ConfigMapPair;
+	typedef std::map<AlienType, AlienTypeData> ConfigMap;
+	typedef std::pair<AlienType, AlienTypeData> ConfigMapPair;
 	typedef std::function<void()> OnReachedPlayerDelegate;
 	typedef std::function<void()> OnDefeatDelegate;
 

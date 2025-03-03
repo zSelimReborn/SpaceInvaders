@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Alien.h"
+#include "Assets.h"
 #include "pk/Scene.h"
 #include "pk/Window.h"
 #include "pk/SettingsReader.h"
@@ -222,7 +223,7 @@ void Ship::Shoot()
 	glm::vec3 SpawnLocation(GetLocation());
 	SpawnLocation.y -= (GetSize().y + 5.f);
 
-	Projectile::SharedPtr NewProjectile = CurrentProjectilePool->Create(SpawnLocation, TeamPtr->GetTeam(), GetShader());
+	Projectile::SharedPtr NewProjectile = CurrentProjectilePool->Create(SpawnLocation, TeamPtr->GetTeam(), Assets::Shaders::ShapeName);
 	Projectile::OnHitDelegate Callback = [this](const Actor::SharedPtr& HitActor, const CollisionResult& Result)
 	{
 		OnProjectileHit(HitActor);

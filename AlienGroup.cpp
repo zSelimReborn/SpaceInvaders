@@ -21,6 +21,8 @@ const float AlienGroup::DEFAULT_H_DISTANCE = 20.f;
 const float AlienGroup::DEFAULT_V_DISTANCE = 20.f;
 const glm::vec3 AlienGroup::DEFAULT_ALIEN_SIZE = glm::vec3(10.f, 10.f, 1.f);
 
+using namespace Assets;
+
 AlienGroup::AlienGroup()
 	: bRightDirection(true), bGoDown(false),
 		NumRowsPerType(DEFAULT_NUM_ROWS_PER_TYPE), NumAlienPerRow(DEFAULT_ALIEN_PER_ROW),
@@ -32,9 +34,13 @@ AlienGroup::AlienGroup()
 		AlienSize(DEFAULT_ALIEN_SIZE),
 		State(GroupState::None)
 {
-	ConfigTypeMapping.insert(ConfigMapPair(AlienType::Squid, Assets::Config::SquidFile));
-	ConfigTypeMapping.insert(ConfigMapPair(AlienType::Crab, Assets::Config::CrabFile));
-	ConfigTypeMapping.insert(ConfigMapPair(AlienType::Octopus, Assets::Config::OctopusFile));
+	AlienTypeData SquidData(Config::SquidFile, Textures::SquidName);
+	AlienTypeData CrabData(Config::CrabFile, Textures::CrabName);
+	AlienTypeData OctopusData(Config::OctopusFile, Textures::OctopusName);
+
+	ConfigTypeMapping.insert(ConfigMapPair(AlienType::Squid, SquidData));
+	ConfigTypeMapping.insert(ConfigMapPair(AlienType::Crab, CrabData));
+	ConfigTypeMapping.insert(ConfigMapPair(AlienType::Octopus, OctopusData));
 }
 
 GroupState AlienGroup::GetState() const
@@ -352,8 +358,9 @@ void AlienGroup::BuildMatrixPerType(AlienType Type)
 	for (int i = 0; i < AlienToSpawn; ++i)
 	{
 		Alien::SharedPtr NewAlien = std::make_shared<Alien>(Type);
-		NewAlien->SetConfig(ConfigTypeMapping[Type]);
-		NewAlien->SetShader(Assets::Shaders::ShapeName);
+		NewAlien->SetConfig(ConfigTypeMapping[Type].ConfigFile);
+		NewAlien->SetShader(Shaders::SpriteNoColorName);
+		NewAlien->SetTexture(ConfigTypeMapping[Type].TextureName);
 		NewAlien->SetProjectilePool(ProjectilePoolPtr);
 
 		AllAliens.push_back(NewAlien);

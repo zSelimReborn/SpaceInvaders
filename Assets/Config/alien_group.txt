@@ -1,4 +1,4 @@
-AlienSize=30.0,30.0,1.0
+AlienSize=40.0,40.0,1.0
 NumRowsPerType=2
 NumAlienPerRow=11
 MaxShootingAlien=3

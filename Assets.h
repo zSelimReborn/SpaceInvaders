@@ -34,6 +34,12 @@ namespace Assets
 		const std::string ShapeVertexFile	= BasePath + InnerPath + "shape.vert";
 		const std::string ShapeFragmentFile = BasePath + InnerPath + "shape.frag";
 
+		const std::string SpriteName = "shader_sprite";
+		const std::string SpriteNoColorName = "shader_sprite_no_color";
+		const std::string SpriteVertexFile = BasePath + InnerPath + "sprite.vert";
+		const std::string SpriteFragmentFile = BasePath + InnerPath + "sprite.frag";
+		const std::string SpriteNoColorFragmentFile = BasePath + InnerPath + "sprite_no_color.frag";
+
 		const std::string TextName = "shader_text";
 		const std::string TextVertexFile = BasePath + InnerPath + "text.vert";
 		const std::string TextFragmentFile = BasePath + InnerPath + "text.frag";
@@ -55,5 +61,25 @@ namespace Assets
 
 		const std::string HeadingFontName = "JerseyHeading";
 		const std::string HeadingFontPath = BasePath + InnerPath + "Jersey10-Regular.ttf";
+	}
+
+	namespace Textures
+	{
+		const std::string InnerPath = "Sprites/";
+
+		const std::string PlayerName = "player";
+		const std::string PlayerPath = BasePath + InnerPath + "player.png";
+
+		const std::string SquidName = "squid";
+		const std::string SquidPath = BasePath + InnerPath + "squid.png";
+
+		const std::string CrabName = "crab";
+		const std::string CrabPath = BasePath + InnerPath + "crab.png";
+
+		const std::string OctopusName = "octopus";
+		const std::string OctopusPath = BasePath + InnerPath + "octopus.png";
+
+		const std::string SecretName = "secret";
+		const std::string SecretPath = BasePath + InnerPath + "secret.png";
 	}
 }

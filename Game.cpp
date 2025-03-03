@@ -73,7 +73,8 @@ void Game::SpawnPlayer()
 	PlayerShip = std::make_shared<Ship>(ShipTransform);
 	PlayerShip->SetConfig(Config::PlayerFile);
 	PlayerShip->SetProjectilePool(PlayerProjectilePool);
-	PlayerShip->SetShader(Shaders::ShapeName);
+	PlayerShip->SetShader(Shaders::SpriteName);
+	PlayerShip->SetTexture(Textures::PlayerName);
 	PlayerShip->AddOnTakeDamageObserver([this]() { OnPlayerTakeDamage(); });
 
 	Add(PlayerShip);
@@ -333,9 +334,23 @@ void Game::Render(const float Delta)
 
 void Game::LoadAssets() const
 {
+	AssetManager::Get().LoadTexture(Textures::PlayerName, Textures::PlayerPath, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST);
+	AssetManager::Get().LoadTexture(Textures::SquidName, Textures::SquidPath, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST);
+	AssetManager::Get().LoadTexture(Textures::CrabName, Textures::CrabPath, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST);
+	AssetManager::Get().LoadTexture(Textures::OctopusName, Textures::OctopusPath, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST);
+	AssetManager::Get().LoadTexture(Textures::SecretName, Textures::SecretPath, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST);
+
 	Shader::SharedPtr ShapeShader = AssetManager::Get().LoadShader(Shaders::ShapeName, Shaders::ShapeVertexFile, Shaders::ShapeFragmentFile);
 	ShapeShader->Use();
 	ShapeShader->SetMatrix("projection", GetProjection());
+
+	Shader::SharedPtr SpriteShader = AssetManager::Get().LoadShader(Shaders::SpriteName, Shaders::SpriteVertexFile, Shaders::SpriteFragmentFile);
+	SpriteShader->Use();
+	SpriteShader->SetMatrix("projection", GetProjection());
+
+	Shader::SharedPtr SpriteNoColorShader = AssetManager::Get().LoadShader(Shaders::SpriteNoColorName, Shaders::SpriteVertexFile, Shaders::SpriteNoColorFragmentFile);
+	SpriteNoColorShader->Use();
+	SpriteNoColorShader->SetMatrix("projection", GetProjection());
 
 	Shader::SharedPtr TextShader = AssetManager::Get().LoadShader(Shaders::TextName, Shaders::TextVertexFile, Shaders::TextFragmentFile);
 	TextShader->Use();

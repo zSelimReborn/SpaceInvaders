@@ -191,6 +191,7 @@ void ProjectilePool::CreatePool()
 	for (int i = 0; i < PoolSize; ++i)
 	{
 		Projectile::SharedPtr NewProjectile = std::make_shared<Projectile>();
+		NewProjectile->SetColor(Colors::White);
 		Pool.push_back(NewProjectile);
 	}
 }

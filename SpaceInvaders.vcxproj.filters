@@ -232,6 +232,7 @@
     <None Include="Assets\Shaders\shape.frag" />
     <None Include="Assets\Shaders\shape.vert" />
     <None Include="Assets\Shaders\particle_shape.frag" />
+    <None Include="Assets\Shaders\sprite_no_color.frag" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Assets\Config\a_secret.txt" />

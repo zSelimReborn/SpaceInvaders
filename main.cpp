@@ -27,6 +27,7 @@ int main(int argc, char** argv)
 	catch (const std::runtime_error& Error)
 	{
 		std::cout << "[ERROR]: " << Error.what() << "\n";
+		return -1;
 	}
 
 	while (!GamePtr->ShouldClose())

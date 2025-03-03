@@ -216,6 +216,7 @@
     <None Include="Assets\Shaders\sprite.vert" />
     <None Include="Assets\Shaders\particle_texture.frag" />
     <None Include="Assets\Shaders\particle.vert" />
+    <None Include="Assets\Shaders\sprite_no_color.frag" />
     <None Include="Assets\Shaders\text.frag" />
     <None Include="Assets\Shaders\text.vert" />
   </ItemGroup>

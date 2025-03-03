@@ -34,7 +34,7 @@ public:
 
 	bool TakeDamage(float InDamage) override;
 
-	void Shoot();
+	void Shoot() const;
 
 private:
 	int Score;

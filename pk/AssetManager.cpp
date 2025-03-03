@@ -16,8 +16,7 @@ Shader::SharedPtr AssetManager::LoadShader(const std::string& Name, const std::s
 	return NewShader;
 }
 
-Texture::SharedPtr AssetManager::LoadTexture(const std::string& Name, const std::string& Path, int _Format, int _WrapS,
-	int _WrapT, int _MinFilter, int _MaxFilter)
+Texture::SharedPtr AssetManager::LoadTexture(const std::string& Name, const std::string& Path, int InFormat, int InWrapS, int InWrapT, int InMinFilter, int InMaxFilter)
 {
 	Texture::SharedPtr FoundTexture = GetTexture(Name);
 	if (FoundTexture != nullptr)
@@ -25,7 +24,7 @@ Texture::SharedPtr AssetManager::LoadTexture(const std::string& Name, const std:
 		return FoundTexture;
 	}
 
-	Texture::SharedPtr NewTexture = std::make_shared<Texture>(Path, _Format, _WrapS, _WrapT, _MinFilter, _MaxFilter);
+	Texture::SharedPtr NewTexture = std::make_shared<Texture>(Path, InFormat, InWrapS, InWrapT, InMinFilter, InMaxFilter);
 	Textures.insert(TexturePair(Name, NewTexture));
 
 	return NewTexture;

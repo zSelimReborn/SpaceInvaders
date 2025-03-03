@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "Assets.h"
 #include "Projectile.h"
 #include "ProjectilePool.h"
 #include "TeamComponent.h"
@@ -67,7 +68,7 @@ bool Alien::TakeDamage(float InDamage)
 	return true;
 }
 
-void Alien::Shoot()
+void Alien::Shoot() const
 {
 	if (CurrentProjectilePool == nullptr)
 	{
@@ -80,6 +81,6 @@ void Alien::Shoot()
 	glm::vec3 SpawnLocation(GetLocation());
 	SpawnLocation.y += (GetSize().y + 5.f);
 
-	Projectile::SharedPtr NewProjectile = CurrentProjectilePool->Create(SpawnLocation, TeamPtr->GetTeam(), GetShader());
+	Projectile::SharedPtr NewProjectile = CurrentProjectilePool->Create(SpawnLocation, TeamPtr->GetTeam(), Assets::Shaders::ShapeName);
 	CurrentScene->Add(NewProjectile);
 }
