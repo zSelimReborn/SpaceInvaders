@@ -66,7 +66,7 @@ public:
 	void BindTexture() const;
 	void UnBindTexture() const;
 
-	bool Collide(const Actor& Other) const;
+	bool Collide(const Actor& Other, CollisionResult& OutResult) const;
 
 	virtual void LoadConfig();
 	virtual void Begin();

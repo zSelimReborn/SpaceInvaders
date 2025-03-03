@@ -223,7 +223,11 @@ void Ship::Shoot()
 	SpawnLocation.y -= (GetSize().y + 5.f);
 
 	Projectile::SharedPtr NewProjectile = CurrentProjectilePool->Create(SpawnLocation, TeamPtr->GetTeam(), GetShader());
-	Projectile::OnHitDelegate Callback = [this](const Actor::SharedPtr& HitActor) { OnProjectileHit(HitActor); };
+	Projectile::OnHitDelegate Callback = [this](const Actor::SharedPtr& HitActor, const CollisionResult& Result)
+	{
+		OnProjectileHit(HitActor);
+	};
+
 	NewProjectile->OnHitActor(Callback);
 
 	CurrentScene->Add(NewProjectile);

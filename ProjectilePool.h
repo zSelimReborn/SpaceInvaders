@@ -47,7 +47,7 @@ public:
 	void RenderEffects() const;
 
 private:
-	void OnProjectileHit(const Actor::SharedPtr& HitActor);
+	void OnProjectileHit(const Actor::SharedPtr& HitActor, const CollisionResult& Result);
 
 	void SetPoolSize(int InPoolSize);
 	void SetDefaults();

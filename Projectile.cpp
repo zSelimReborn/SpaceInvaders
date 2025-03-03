@@ -86,14 +86,15 @@ void Projectile::CheckCollisions()
 			continue;
 		}
 
-		if (Collide(*CheckingActor))
+		CollisionResult Result;
+		if (Collide(*CheckingActor, Result))
 		{
-			OnHit(CheckingActor);
+			OnHit(CheckingActor, Result);
 		}
 	}
 }
 
-void Projectile::OnHit(const Actor::SharedPtr& HitActor)
+void Projectile::OnHit(const Actor::SharedPtr& HitActor, const CollisionResult& Result)
 {
 	const TeamComponentPtr HitTeamComponent = HitActor->GetComponent<TeamComponent>();
 	// Skip same team
@@ -108,15 +109,15 @@ void Projectile::OnHit(const Actor::SharedPtr& HitActor)
 		return;
 	}
 
-	NotifyHit(HitActor);
+	NotifyHit(HitActor, Result);
 	DamageableActor->TakeDamage(0.f);
 	Destroy();
 }
 
-void Projectile::NotifyHit(const Actor::SharedPtr& HitActor) const
+void Projectile::NotifyHit(const Actor::SharedPtr& HitActor, const CollisionResult& Result) const
 {
 	for (const OnHitDelegate& Delegate : OnHitFunctions)
 	{
-		Delegate(HitActor);
+		Delegate(HitActor, Result);
 	}
 }

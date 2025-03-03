@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <glm/glm.hpp>
 
 namespace Console
@@ -41,4 +42,10 @@ struct BoundingBox
 	float Bottom() const;
 	float Right() const;
 	float Left() const;
+};
+
+struct CollisionResult
+{
+	bool bHit;
+	glm::vec3 ImpactLocation;
 };

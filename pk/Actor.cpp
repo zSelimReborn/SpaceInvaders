@@ -210,7 +210,7 @@ void Actor::UnBindTexture() const
 	}
 }
 
-bool Actor::Collide(const Actor& Other) const
+bool Actor::Collide(const Actor& Other, CollisionResult& OutResult) const
 {
 	const BoundingBox Me(GetBoundingBox());
 	const BoundingBox OtherBox(Other.GetBoundingBox());
@@ -218,7 +218,19 @@ bool Actor::Collide(const Actor& Other) const
 	bool bCollidedX = (Me.Right() >= OtherBox.Left()  && OtherBox.Right() >= Me.Left());
 	bool bCollidedY = (Me.Bottom() <= OtherBox.Top()  && OtherBox.Bottom() <= Me.Top());
 
-	return bCollidedX && bCollidedY;
+	float IntersectLeft = std::max(Me.Left(), OtherBox.Left());
+	float IntersectRight = std::min(Me.Right(), OtherBox.Right());
+	float IntersectTop = std::max(Me.Top(), OtherBox.Top());
+	float IntersectBottom = std::min(Me.Bottom(), OtherBox.Bottom());
+
+	OutResult.bHit = false;
+	if (bCollidedX && bCollidedY)
+	{
+		OutResult.bHit = true;
+		OutResult.ImpactLocation = glm::vec3((IntersectLeft + IntersectRight) / 2, (IntersectBottom + IntersectTop) / 2, 1.f);
+	}
+
+	return OutResult.bHit;
 }
 
 void Actor::LoadConfig()

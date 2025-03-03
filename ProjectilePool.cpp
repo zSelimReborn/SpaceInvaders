@@ -41,7 +41,11 @@ Projectile::SharedPtr ProjectilePool::Create(const glm::vec3& InLocation, Team I
 
 	OutProjectile->SetShader(InShaderName);
 
-	OutProjectile->OnHitActor([this](const Actor::SharedPtr& HitActor) { OnProjectileHit(HitActor); });
+	OutProjectile->OnHitActor([this](const Actor::SharedPtr& HitActor, const CollisionResult& Result)
+		{
+			OnProjectileHit(HitActor, Result);
+		}
+	);
 
 	NextIndex = (NextIndex + 1) % PoolSize;
 	return OutProjectile;
@@ -132,9 +136,9 @@ void ProjectilePool::RenderEffects() const
 	ExplosionEmitter->Render();
 }
 
-void ProjectilePool::OnProjectileHit(const Actor::SharedPtr& HitActor)
+void ProjectilePool::OnProjectileHit(const Actor::SharedPtr& HitActor, const CollisionResult& Result)
 {
-	ExplosionEmitter->Spawn(HitActor->GetLocation());
+	ExplosionEmitter->Spawn(Result.ImpactLocation);
 }
 
 void ProjectilePool::SetPoolSize(int InPoolSize)
