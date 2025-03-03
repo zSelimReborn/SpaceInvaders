@@ -6,6 +6,7 @@
 #include "Assets.h"
 #include "Game.h"
 #include "pk/Common.h"
+#include "pk/SoundEngine.h"
 
 MainMenu::MainMenu(const GameWeakPtr& InGame)
 	: CurrentChoice(0), MaxChoice(1), GamePtr(InGame)
@@ -23,11 +24,21 @@ void MainMenu::Input(const InputHandler& Handler, const float Delta)
 	}
 	else if (Handler.IsPressed(GLFW_KEY_UP))
 	{
+		int OldChoice = CurrentChoice;
 		CurrentChoice = std::max(0, CurrentChoice - 1);
+		if (OldChoice != CurrentChoice)
+		{
+			OnChangeChoice();
+		}
 	}
 	else if (Handler.IsPressed(GLFW_KEY_DOWN))
 	{
+		int OldChoice = CurrentChoice;
 		CurrentChoice = std::min(MaxChoice, CurrentChoice + 1);
+		if (OldChoice != CurrentChoice)
+		{
+			OnChangeChoice();
+		}
 	}
 }
 
@@ -64,6 +75,11 @@ void MainMenu::Render()
 MainMenu::GameSharedPtr MainMenu::GetGame() const
 {
 	return GamePtr.lock();
+}
+
+void MainMenu::OnChangeChoice()
+{
+	SoundEngine::Get().Play(Assets::Sounds::MenuNavigation, 1.f);
 }
 
 void MainMenu::HandleChoice()

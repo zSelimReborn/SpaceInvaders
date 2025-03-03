@@ -16,6 +16,7 @@
 #include "GameOver.h"
 #include "Hud.h"
 #include "MainMenu.h"
+#include "pk/SoundEngine.h"
 
 using namespace Assets;
 
@@ -377,5 +378,10 @@ void Game::LoadAssets() const
 
 	Font::SharedPtr HeadingFont = AssetManager::Get().LoadFont(Fonts::HeadingFontName, Fonts::HeadingFontPath, Shaders::TextName);
 	HeadingFont->Load(50, GL_CLAMP_TO_BORDER, GL_NEAREST);
+
+	SoundEngine::Get().Load(Sounds::MenuNavigation);
+	SoundEngine::Get().Load(Sounds::Shoot);
+	SoundEngine::Get().Load(Sounds::AlienExplosion);
+	SoundEngine::Get().Load(Sounds::PlayerExplosion);
 }
 

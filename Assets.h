@@ -91,4 +91,15 @@ namespace Assets
 		const std::string RedLaserName = "red_laser";
 		const std::string RedLaserPath = BasePath + InnerPath + "red_laser.png";
 	}
+
+	namespace Sounds
+	{
+		const std::string InnerPath = "Sounds/";
+
+		const std::string AlienMove = BasePath + InnerPath + "fastinvader%d.wav";
+		const std::string AlienExplosion = BasePath + InnerPath + "kill.wav";
+		const std::string PlayerExplosion = BasePath + InnerPath + "player_explosion.wav";
+		const std::string MenuNavigation = BasePath + InnerPath + "menu_nav.wav";
+		const std::string Shoot = BasePath + InnerPath + "shoot.wav";
+	}
 }

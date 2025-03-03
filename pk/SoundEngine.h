@@ -23,6 +23,7 @@ public:
 	int Play(const std::string& SoundPath, const float Volume);
 	void SetChannelVolume(const int ChannelId, const float NewVolume);
 	void SetChannelPitch(const int ChannelId, const float Pitch);
+	bool IsPlaying(const int ChannelId) const;
 
 	FMOD_RESULT GetLastResult() const;
 
@@ -34,6 +35,7 @@ public:
 	~SoundEngine();
 
 private:
+	bool IsActive(const int ChannelId) const;
 	SoundEngine();
 	void Initialize();
 

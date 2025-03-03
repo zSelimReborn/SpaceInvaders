@@ -55,7 +55,7 @@ int SoundEngine::Play(const std::string& SoundPath, const float Volume)
 
 void SoundEngine::SetChannelVolume(const int ChannelId, const float NewVolume)
 {
-	if (ActiveChannels.count(ChannelId) <= 0)
+	if (!IsActive(ChannelId))
 	{
 		return;
 	}
@@ -66,12 +66,24 @@ void SoundEngine::SetChannelVolume(const int ChannelId, const float NewVolume)
 
 void SoundEngine::SetChannelPitch(const int ChannelId, const float Pitch)
 {
-	if (ActiveChannels.count(ChannelId) <= 0)
+	if (!IsActive(ChannelId))
 	{
 		return;
 	}
 
 	ActiveChannels[ChannelId]->setPitch(Pitch);
+}
+
+bool SoundEngine::IsPlaying(const int ChannelId) const
+{
+	if (!IsActive(ChannelId))
+	{
+		return false;
+	}
+
+	bool bPlaying = false;
+	ActiveChannels.at(ChannelId)->isPlaying(&bPlaying);
+	return bPlaying;
 }
 
 FMOD_RESULT SoundEngine::GetLastResult() const
@@ -104,6 +116,11 @@ void SoundEngine::Update(const float Delta)
 SoundEngine::~SoundEngine()
 {
 	System->release();
+}
+
+bool SoundEngine::IsActive(const int ChannelId) const
+{
+	return ActiveChannels.count(ChannelId) > 0;
 }
 
 SoundEngine::SoundEngine()

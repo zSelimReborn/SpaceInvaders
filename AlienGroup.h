@@ -38,6 +38,7 @@ public:
 	static const int DEFAULT_NUM_ROWS_PER_TYPE;
 	static const int DEFAULT_ALIEN_PER_ROW;
 	static const int DEFAULT_MAX_SHOOTING_ALIEN;
+	static const int NUM_AUDIO_TRACKS;
 	static const float DEFAULT_TOP_OFFSET;
 	static const float DEFAULT_MIN_MOVE_DELAY;
 	static const float DEFAULT_MAX_MOVE_DELAY;
@@ -96,6 +97,8 @@ public:
 	void HideBoard() const;
 
 private:
+	void PrepareTracks();
+	void PlayNextTrack();
 	void BuildMatrix();
 	void BuildMatrixPerType(AlienType Type);
 	bool ReachedEnd() const;
@@ -146,6 +149,9 @@ private:
 
 	std::vector<OnReachedPlayerDelegate> OnReachedPlayerFunctions;
 	std::vector<OnDefeatDelegate> OnDefeatFunctions;
+
+	std::vector<std::string> Tracks;
+	int CurrentTrack;
 
 	GroupState State;
 };

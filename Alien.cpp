@@ -8,6 +8,7 @@
 #include "TeamComponent.h"
 #include "pk/Scene.h"
 #include "pk/SettingsReader.h"
+#include "pk/SoundEngine.h"
 
 Alien::Alien(AlienType InType)
 	: Score(0), Type(InType)
@@ -64,6 +65,7 @@ void Alien::LoadConfig()
 
 bool Alien::TakeDamage(float InDamage)
 {
+	SoundEngine::Get().Play(Assets::Sounds::AlienExplosion, 1.f);
 	Destroy();
 	return true;
 }

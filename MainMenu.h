@@ -18,6 +18,7 @@ public:
 private:
 	GameSharedPtr GetGame() const;
 
+	void OnChangeChoice();
 	void HandleChoice();
 	void StartGame();
 	void QuitGame();

@@ -1,4 +1,4 @@
 Speed=450
-Cooldown=0.5
+Cooldown=0.3
 Color=1,1,1,1
 LifePoints=3
