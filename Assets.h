@@ -45,7 +45,7 @@ namespace Assets
 		const std::string TextFragmentFile = BasePath + InnerPath + "text.frag";
 
 		const std::string ParticleShapeName = "shader_particle_shape";
-		const std::string ParticleTextureName = "shader_particle_shape";
+		const std::string ParticleTextureName = "shader_particle_texture";
 		const std::string ParticleVertexFile = BasePath + InnerPath + "particle.vert";
 
 		const std::string ParticleShapeFragmentFile = BasePath + InnerPath + "particle_shape.frag";
@@ -81,5 +81,8 @@ namespace Assets
 
 		const std::string SecretName = "secret";
 		const std::string SecretPath = BasePath + InnerPath + "secret.png";
+
+		const std::string ExplosionName = "explosion";
+		const std::string ExplosionPath = BasePath + InnerPath + "explode.png";
 	}
 }

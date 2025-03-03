@@ -28,3 +28,14 @@ void Explosion::BuildCompass()
 		glm::vec3(-1.f, 0.f, 0.f), // Left
 	};
 }
+
+SpawnTexture::SpawnTexture(float InSpeed, float InLife, int InSpawnAmount, const glm::vec4& InColor)
+	: Base(false, InSpeed, InLife, InSpawnAmount, InColor)
+{
+}
+
+void SpawnTexture::Spawn(ParticleList& Pool, int& LastInactive, const glm::vec3& Position, const glm::vec3& Direction)
+{
+	LastInactive = NextInactive(Pool, LastInactive);
+	SpawnParticle(Pool[LastInactive], Position, glm::vec3(0.f));
+}

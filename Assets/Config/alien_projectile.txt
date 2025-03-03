@@ -4,5 +4,5 @@ ProjectileSpeed=350
 ProjectileDirection=0,1,0
 ParticleSpeed=150
 ParticleLife=0.3
-ParticleScale=7.0
+ParticleScale=32.0
 ParticleColor=0,1,0,1

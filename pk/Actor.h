@@ -85,6 +85,13 @@ public:
 
 	bool IsInViewport() const;
 
+	template<class Dest>
+	bool IsA()
+	{
+		const Dest* ObjDest = dynamic_cast<Dest*>(this);
+		return ObjDest != nullptr;
+	}
+
 	virtual ~Actor() = default;
 
 protected:

@@ -339,6 +339,7 @@ void Game::LoadAssets() const
 	AssetManager::Get().LoadTexture(Textures::CrabName, Textures::CrabPath, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST);
 	AssetManager::Get().LoadTexture(Textures::OctopusName, Textures::OctopusPath, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST);
 	AssetManager::Get().LoadTexture(Textures::SecretName, Textures::SecretPath, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST);
+	AssetManager::Get().LoadTexture(Textures::ExplosionName, Textures::ExplosionPath, GL_RGBA, GL_REPEAT, GL_REPEAT, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST);
 
 	Shader::SharedPtr ShapeShader = AssetManager::Get().LoadShader(Shaders::ShapeName, Shaders::ShapeVertexFile, Shaders::ShapeFragmentFile);
 	ShapeShader->Use();
@@ -359,6 +360,10 @@ void Game::LoadAssets() const
 	Shader::SharedPtr ParticleShapeShader = AssetManager::Get().LoadShader(Shaders::ParticleShapeName, Shaders::ParticleVertexFile, Shaders::ParticleShapeFragmentFile);
 	ParticleShapeShader->Use();
 	ParticleShapeShader->SetMatrix("projection", GetProjection());
+
+	Shader::SharedPtr ParticleTextureShader = AssetManager::Get().LoadShader(Shaders::ParticleTextureName, Shaders::ParticleVertexFile, Shaders::ParticleTextureFragmentFile);
+	ParticleTextureShader->Use();
+	ParticleTextureShader->SetMatrix("projection", GetProjection());
 
 	Font::SharedPtr TextFont = AssetManager::Get().LoadFont(Fonts::TextFontName, Fonts::TextFontPath, Shaders::TextName);
 	TextFont->Load(TextSize);

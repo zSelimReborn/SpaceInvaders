@@ -2,6 +2,7 @@
 
 #include "Assets.h"
 #include "Effects.h"
+#include "Ship.h"
 #include "pk/Emitter.h"
 #include "pk/SettingsReader.h"
 
@@ -138,7 +139,14 @@ void ProjectilePool::RenderEffects() const
 
 void ProjectilePool::OnProjectileHit(const Actor::SharedPtr& HitActor, const CollisionResult& Result)
 {
-	ExplosionEmitter->Spawn(Result.ImpactLocation);
+	if (HitActor->IsA<Ship>())
+	{
+		ExplosionEmitter->Spawn(Result.ImpactLocation);
+	}
+	else
+	{
+		ExplosionEmitter->Spawn(HitActor->GetLocation());
+	}
 }
 
 void ProjectilePool::SetPoolSize(int InPoolSize)
@@ -198,12 +206,11 @@ void ProjectilePool::CreatePool()
 
 void ProjectilePool::PrepareEmitter()
 {
-	constexpr int SpawnAmount = 8;
-	constexpr int ParticlePoolCapacity = SpawnAmount * 4;
+	constexpr int SpawnAmount = 1;
+	constexpr int ParticlePoolCapacity = SpawnAmount * 5;
 
-	ParticlePattern::Base::SharedPtr ExplosionPattern = std::make_shared<Explosion>(ParticleSpeed, ParticleLife, SpawnAmount, ParticleColor);
-	const std::string EmptyTexture;
-	ExplosionEmitter = std::make_shared<Emitter>(ParticlePoolCapacity, ParticleScale, Assets::Shaders::ParticleShapeName, EmptyTexture, ExplosionPattern);
+	ParticlePattern::Base::SharedPtr FirePattern = std::make_shared<SpawnTexture>(ParticleSpeed, ParticleLife, SpawnAmount, Colors::White);
+	ExplosionEmitter = std::make_shared<Emitter>(ParticlePoolCapacity, ParticleScale, Assets::Shaders::ParticleTextureName, Assets::Textures::ExplosionName, FirePattern);
 }
 
 void ProjectilePool::SetParticleSpeed(float InSpeed)
