@@ -29,9 +29,14 @@ void SoundEngine::Load(const std::string& SoundPath)
 
 int SoundEngine::Play(const std::string& SoundPath, const float Volume)
 {
+	return Play(SoundPath, Volume, false, false);
+}
+
+int SoundEngine::Play(const std::string& SoundPath, const float Volume, bool bMuted, bool bLoop)
+{
 	if (!System)
 	{
-		return false;
+		return -1;
 	}
 
 	if (LoadedSounds.count(SoundPath) <= 0)
@@ -42,15 +47,42 @@ int SoundEngine::Play(const std::string& SoundPath, const float Volume)
 	const float ActualVolume = Math::Clamp(Volume, 0.f, 1.f);
 	FMOD::Sound* SoundObject = LoadedSounds[SoundPath];
 	FMOD::Channel* Channel = nullptr;
-	LastResult = System->playSound(SoundObject, nullptr, false, &Channel);
+	LastResult = System->playSound(SoundObject, nullptr, true, &Channel);
 	if (LastResult == FMOD_OK)
 	{
 		Channel->setVolume(ActualVolume);
-		ActiveChannels.insert(ChannelPair(NextChannelId++, Channel));
-		return true;
+		Channel->setMute(bMuted);
+		if (bLoop)
+		{
+			Channel->setLoopCount(0);
+		}
+		Channel->setPaused(false);
+		int ChannelId = NextChannelId++;
+		ActiveChannels.insert(ChannelPair(ChannelId, Channel));
+		return ChannelId;
 	}
 
-	return false;
+	return -1;
+}
+
+void SoundEngine::Mute(int ChannelId, bool bMute)
+{
+	if (!IsActive(ChannelId))
+	{
+		return;
+	}
+
+	ActiveChannels[ChannelId]->setMute(bMute);
+}
+
+void SoundEngine::Stop(int ChannelId)
+{
+	if (!IsActive(ChannelId))
+	{
+		return;
+	}
+
+	ActiveChannels[ChannelId]->stop();
 }
 
 void SoundEngine::SetChannelVolume(const int ChannelId, const float NewVolume)

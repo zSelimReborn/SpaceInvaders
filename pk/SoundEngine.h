@@ -21,6 +21,9 @@ public:
 
 	void Load(const std::string& SoundPath);
 	int Play(const std::string& SoundPath, const float Volume);
+	int Play(const std::string& SoundPath, const float Volume, bool bMuted, bool bLoop);
+	void Mute(int ChannelId, bool bMute);
+	void Stop(int ChannelId);
 	void SetChannelVolume(const int ChannelId, const float NewVolume);
 	void SetChannelPitch(const int ChannelId, const float Pitch);
 	bool IsPlaying(const int ChannelId) const;
