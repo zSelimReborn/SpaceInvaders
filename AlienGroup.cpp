@@ -277,6 +277,7 @@ void AlienGroup::Update(const float Delta)
 	{
 		State = GroupState::Stopped;
 		NotifyReachedPlayer();
+		return;
 	}
 
 	UpdateAliveAliens();
@@ -463,6 +464,7 @@ void AlienGroup::UpdateOuterColsAndRow()
 
 	OuterLeftCol = NumAlienPerRow - 1;
 	OuterRightCol = 0;
+	LastRow = 0;
 
 	for (int j = 0; j < NumAlienPerRow; ++j)
 	{
