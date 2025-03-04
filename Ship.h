@@ -7,12 +7,15 @@
 
 class ProjectilePool;
 class TeamComponent;
+class Game;
 
 class Ship : public Actor, public IDamageable
 {
 public:
 	typedef std::shared_ptr<ProjectilePool> ProjectilePoolPtr;
 	typedef std::shared_ptr<TeamComponent> TeamComponentPtr;
+	typedef std::shared_ptr<Game> GameSharedPtr;
+	typedef std::weak_ptr<Game> GameWeakPtr;
 	typedef std::function<void()> OnTakeDamageDelegate;
 
 	static const float DEFAULT_SPEED;
@@ -41,6 +44,7 @@ public:
 	void SetProjectilePool(const ProjectilePoolPtr& InProjectilePool);
 
 	void LoadConfig() override;
+	void Begin() override;
 	void Input(const InputHandler& Handler, const float Delta) override;
 	void Update(const float Delta) override;
 
@@ -58,6 +62,10 @@ private:
 
 	void NotifyOnTakeDamage() const;
 
+	void PlayAudio(const std::string& FilePath, float Volume) const;
+
+	GameSharedPtr GetGame() const;
+
 	bool bCanShoot;
 	float MaxSpeed;
 	float Speed;
@@ -73,4 +81,6 @@ private:
 	ProjectilePoolPtr CurrentProjectilePool;
 
 	std::vector<OnTakeDamageDelegate> OnTakeDamageFunctions;
+
+	GameWeakPtr GamePtr;
 };

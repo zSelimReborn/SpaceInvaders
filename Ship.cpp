@@ -5,6 +5,7 @@
 
 #include "Alien.h"
 #include "Assets.h"
+#include "Game.h"
 #include "pk/Scene.h"
 #include "pk/Window.h"
 #include "pk/ClassSettingsReader.h"
@@ -131,6 +132,13 @@ void Ship::LoadConfig()
 	CurrentCooldown = 0.f;
 }
 
+void Ship::Begin()
+{
+	Actor::Begin();
+
+	GamePtr = std::dynamic_pointer_cast<Game>(GetScene());
+}
+
 float Ship::GetSpeed() const
 {
 	return Speed;
@@ -168,7 +176,8 @@ void Ship::Update(const float Delta)
 bool Ship::TakeDamage(float InDamage)
 {
 	LifePoints = std::max(0, LifePoints - 1);
-	SoundEngine::Get().Play(Assets::Sounds::PlayerExplosion, 1.f );
+
+	PlayAudio(Assets::Sounds::PlayerExplosion, 1.f);
 	NotifyOnTakeDamage();
 	return false;
 }
@@ -244,7 +253,7 @@ void Ship::Shoot()
 
 	CurrentScene->Add(NewProjectile);
 
-	SoundEngine::Get().Play(Assets::Sounds::Shoot, 1.f);
+	PlayAudio(Assets::Sounds::Shoot, 1.f);
 	bCanShoot = false;
 }
 
@@ -285,5 +294,23 @@ void Ship::NotifyOnTakeDamage() const
 	{
 		Callback();
 	}
+}
+
+void Ship::PlayAudio(const std::string& FilePath, float Volume) const
+{
+	const GameSharedPtr CurrentGame = GetGame();
+	if (CurrentGame == nullptr)
+	{
+		SoundEngine::Get().Play(FilePath, Volume);
+	}
+	else
+	{
+		CurrentGame->PlayAudio(FilePath, Volume);
+	}
+}
+
+Ship::GameSharedPtr Ship::GetGame() const
+{
+	return GamePtr.lock();
 }
 

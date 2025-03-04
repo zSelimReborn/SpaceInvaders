@@ -144,6 +144,7 @@
     <ClCompile Include="Effects.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameOver.cpp" />
+    <ClCompile Include="GameSave.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="image_loader.cpp" />
@@ -158,6 +159,7 @@
     <ClCompile Include="pk\InputHandler.cpp" />
     <ClCompile Include="pk\Random.cpp" />
     <ClCompile Include="pk\Renderer.cpp" />
+    <ClCompile Include="pk\SaveSystem.cpp" />
     <ClCompile Include="pk\Scene.cpp" />
     <ClCompile Include="pk\ClassSettings.cpp" />
     <ClCompile Include="pk\ClassSettingsReader.cpp" />
@@ -181,6 +183,7 @@
     <ClInclude Include="Effects.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameOver.h" />
+    <ClInclude Include="GameSave.h" />
     <ClInclude Include="Hud.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="pk\Actor.h" />
@@ -191,8 +194,10 @@
     <ClInclude Include="pk\Font.h" />
     <ClInclude Include="pk\IDamageable.h" />
     <ClInclude Include="pk\InputHandler.h" />
+    <ClInclude Include="pk\ISaveFile.h" />
     <ClInclude Include="pk\Random.h" />
     <ClInclude Include="pk\Renderer.h" />
+    <ClInclude Include="pk\SaveSystem.h" />
     <ClInclude Include="pk\Scene.h" />
     <ClInclude Include="pk\ClassSettings.h" />
     <ClInclude Include="pk\ClassSettingsReader.h" />

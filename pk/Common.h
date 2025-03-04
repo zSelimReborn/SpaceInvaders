@@ -1,6 +1,7 @@
 #pragma once
 
-#include <memory>
+#include <ios>
+#include <string>
 #include <glm/glm.hpp>
 
 namespace Console
@@ -23,13 +24,21 @@ namespace Colors
 	const glm::vec4 LightBlack(0.14f, 0.15f, 0.15f, 1.f);
 }
 
+namespace File
+{
+	bool Exists(const std::string& FilePath);
+	void Create(const std::string& FilePath, std::ios_base::openmode Mode);
+	void WriteAll(const std::string& FilePath, const std::string& FileContent);
+	std::string ReadAll(const std::string& FilePath);
+}
+
 struct Transform
 {
 	glm::vec3 Location;
 	glm::vec3 Size;
 
 	Transform();
-	Transform(const glm::vec3& _Location, const glm::vec3& _Size);
+	Transform(const glm::vec3& InLocation, const glm::vec3& InSize);
 };
 
 struct BoundingBox
@@ -37,7 +46,7 @@ struct BoundingBox
 	Transform mTransform;
 	glm::vec2 ScaleOffset;
 
-	BoundingBox(const Transform& _Transform);
+	BoundingBox(const Transform& InTransform);
 	float Top() const;
 	float Bottom() const;
 	float Right() const;
