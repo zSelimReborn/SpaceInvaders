@@ -8,6 +8,7 @@
 Window::Window(const int _Width, const int _Height, const std::string& _Title)
 	: Width(_Width), Height(_Height), Title(_Title), WindowPtr(nullptr)
 {
+    Initialize();
 }
 
 void Window::Initialize()
@@ -111,6 +112,20 @@ void Window::SetBlendFunction(int Key, int Value) const
 void Window::SetInputMode(const int Mode, const int Value) const
 {
 	glfwSetInputMode(WindowPtr, Mode, Value);
+}
+
+void Window::SetIcon(unsigned char* IconBytes, int IconWidth, int IconHeight) const
+{
+    if (IconBytes == nullptr || WindowPtr == nullptr)
+    {
+        return;
+    }
+
+    GLFWimage Icon[1];
+    Icon[0].pixels = IconBytes;
+    Icon[0].width = IconWidth;
+    Icon[0].height = IconHeight;
+    glfwSetWindowIcon(WindowPtr, 1, Icon);
 }
 
 Window::~Window()

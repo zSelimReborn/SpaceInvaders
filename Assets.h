@@ -90,6 +90,8 @@ namespace Assets
 
 		const std::string RedLaserName = "red_laser";
 		const std::string RedLaserPath = BasePath + InnerPath + "red_laser.png";
+
+		const std::string WindowIcon = BasePath + InnerPath + "icon.png";
 	}
 
 	namespace Sounds

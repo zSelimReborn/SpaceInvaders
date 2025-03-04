@@ -4,6 +4,8 @@
 #include <fstream>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Common.h"
+
 Shader::Shader() : shaderId(0), bIsCompiled(false)
 {
 }
@@ -126,17 +128,8 @@ void Shader::Initialize(const std::string& vertexShaderPath, const std::string& 
 
 std::string Shader::GetShaderContent(const std::string& shaderFile) const
 {
-    std::ifstream handler;
-    handler.exceptions(std::ifstream::badbit | std::ifstream::failbit);
-
     try {
-        handler.open(shaderFile);
-        std::stringstream content;
-
-        content << handler.rdbuf();
-        handler.close();
-
-        return content.str();
+        return File::ReadAll(shaderFile);
     }
     catch (const std::ifstream::failure& e) {
         std::string error = "[Shader] - Error reading content: ";

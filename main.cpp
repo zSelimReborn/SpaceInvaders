@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "glad/glad.h"
+#include <stb_image.h>
 
 #include "pk/Window.h"
 #include "Assets.h"
@@ -16,12 +17,13 @@ const std::string DEFAULT_WINDOW_TITLE = "Space Invaders";
 
 int main(int argc, char** argv)
 {
-	Window::SharedPtr WindowPtr = CreateWindow();
-	Game::SharedPtr GamePtr = std::make_shared<Game>(WindowPtr);
+	Window::SharedPtr WindowPtr;
+	Game::SharedPtr GamePtr;
 
 	try
 	{
-		WindowPtr->Initialize();
+		WindowPtr = CreateWindow();
+		GamePtr = std::make_shared<Game>(WindowPtr);
 		GamePtr->Begin();
 	}
 	catch (const std::runtime_error& Error)
@@ -55,6 +57,12 @@ Window::SharedPtr CreateWindow()
 		std::cout << "Unable to read Window configuration. Back to defaults\n";
 	}
 
+	int IconWidth, IconHeight, IconChannels;
+	unsigned char* IconData = stbi_load(Assets::Textures::WindowIcon.c_str(), &IconWidth, &IconHeight, &IconChannels, 0);
+
 	Window::SharedPtr WindowPtr = std::make_shared<Window>(WindowWidth, WindowHeight, WindowTitle);
+	WindowPtr->SetIcon(IconData, IconWidth, IconHeight);
+
+	stbi_image_free(IconData);
 	return WindowPtr;
 }

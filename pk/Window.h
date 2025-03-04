@@ -42,6 +42,8 @@ public:
 
 	void SetInputMode(const int Mode, const int Value) const;
 
+	void SetIcon(unsigned char* IconBytes, int IconWidth, int IconHeight) const;
+
 	virtual ~Window();
 
 	class Error : public std::runtime_error
