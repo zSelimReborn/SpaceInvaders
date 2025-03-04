@@ -6,11 +6,11 @@
 #include <vector>
 #include <glm/detail/type_vec.hpp>
 
-class Settings
+class ClassSettings
 {
 public:
-	typedef std::shared_ptr<Settings> SharedPtr;
-	typedef std::shared_ptr<const Settings> SharedConstPtr;
+	typedef std::shared_ptr<ClassSettings> SharedPtr;
+	typedef std::shared_ptr<const ClassSettings> SharedConstPtr;
 
 	typedef std::string Key;
 	typedef std::string Value;
@@ -22,8 +22,8 @@ public:
 	typedef glm::vec4 Vec4;
 	typedef std::map<Key, Value> SettingsMap;
 
-	Settings();
-	Settings(const SettingsMap& InMap);
+	ClassSettings();
+	ClassSettings(const SettingsMap& InMap);
 
 	void SetMap(const SettingsMap& InMap);
 

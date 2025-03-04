@@ -4,7 +4,7 @@
 #include "Effects.h"
 #include "Ship.h"
 #include "pk/Emitter.h"
-#include "pk/SettingsReader.h"
+#include "pk/ClassSettingsReader.h"
 
 const int ProjectilePool::DEFAULT_POOL_SIZE = 10;
 const float ProjectilePool::DEFAULT_LIFE_SPAN = 0.f;
@@ -182,7 +182,7 @@ void ProjectilePool::SetDefaults()
 
 void ProjectilePool::LoadConfig()
 {
-	Settings::SharedConstPtr PoolSettings = SettingsReader::Load(ConfigFile);
+	ClassSettings::SharedConstPtr PoolSettings = ClassSettingsReader::Load(ConfigFile);
 	if (!PoolSettings)
 	{
 		return;

@@ -1,19 +1,19 @@
-#include "SettingsReader.h"
+#include "ClassSettingsReader.h"
 
 #include <fstream>
 #include <iostream>
 #include <sstream>
 
-SettingsReader::Map SettingsReader::AllSettings{};
+ClassSettingsReader::Map ClassSettingsReader::AllSettings{};
 
-Settings::SharedConstPtr SettingsReader::Load(const Map::key_type& InPath)
+ClassSettings::SharedConstPtr ClassSettingsReader::Load(const Map::key_type& InPath)
 {
 	if (Exists(InPath))
 	{
 		return Get(InPath);
 	}
 
-	Settings::SharedConstPtr NewSettings = ReadFile(InPath);
+	ClassSettings::SharedConstPtr NewSettings = ReadFile(InPath);
     if (NewSettings == nullptr)
     {
         return nullptr;
@@ -23,7 +23,7 @@ Settings::SharedConstPtr SettingsReader::Load(const Map::key_type& InPath)
 	return NewSettings;
 }
 
-Settings::SharedConstPtr SettingsReader::Get(const Map::key_type& InPath)
+ClassSettings::SharedConstPtr ClassSettingsReader::Get(const Map::key_type& InPath)
 {
     if (!Exists(InPath))
     {
@@ -33,15 +33,15 @@ Settings::SharedConstPtr SettingsReader::Get(const Map::key_type& InPath)
 	return AllSettings[InPath];
 }
 
-bool SettingsReader::Exists(const Map::key_type& InPath)
+bool ClassSettingsReader::Exists(const Map::key_type& InPath)
 {
     return AllSettings.count(InPath) > 0;
 }
 
-Settings::SharedConstPtr SettingsReader::ReadFile(const std::string& InPath)
+ClassSettings::SharedConstPtr ClassSettingsReader::ReadFile(const std::string& InPath)
 {
-	Settings::SharedPtr NewSettings = std::make_shared<Settings>();
-    Settings::SettingsMap NewSettingsMap;
+	ClassSettings::SharedPtr NewSettings = std::make_shared<ClassSettings>();
+    ClassSettings::SettingsMap NewSettingsMap;
 
     std::ifstream Handler;
     Handler.exceptions(std::ifstream::badbit);
@@ -61,7 +61,7 @@ Settings::SharedConstPtr SettingsReader::ReadFile(const std::string& InPath)
         }
     }
     catch (const std::ifstream::failure& e) {
-        std::cout << "[SettingsReader] - Error reading setting file: " << InPath << " " << e.what() << "\n";
+        std::cout << "[ClassSettingsReader] - Error reading setting file: " << InPath << " " << e.what() << "\n";
         return nullptr;
     }
 
@@ -69,7 +69,7 @@ Settings::SharedConstPtr SettingsReader::ReadFile(const std::string& InPath)
 	return NewSettings;
 }
 
-SettingsReader::SettingPair SettingsReader::Split(const std::string& Line)
+ClassSettingsReader::SettingPair ClassSettingsReader::Split(const std::string& Line)
 {
     SettingPair Pair;
     std::stringstream Stream(Line);

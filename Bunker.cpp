@@ -5,7 +5,7 @@
 #include "Assets.h"
 #include "Brick.h"
 #include "pk/Scene.h"
-#include "pk/SettingsReader.h"
+#include "pk/ClassSettingsReader.h"
 
 const glm::vec3 Bunker::DEFAULT_BRICK_SIZE = glm::vec3(15.f, 15.f, 1.f);
 const glm::vec4 Bunker::DEFAULT_BRICK_COLOR = Colors::White;
@@ -46,7 +46,7 @@ void Bunker::LoadConfig()
 {
 	Actor::LoadConfig();
 
-	Settings::SharedConstPtr BunkerSettings = SettingsReader::Load(GetConfigFile());
+	ClassSettings::SharedConstPtr BunkerSettings = ClassSettingsReader::Load(GetConfigFile());
 	if (BunkerSettings == nullptr)
 	{
 		return;

@@ -7,7 +7,7 @@
 #include "Assets.h"
 #include "pk/Scene.h"
 #include "pk/Window.h"
-#include "pk/SettingsReader.h"
+#include "pk/ClassSettingsReader.h"
 #include "Projectile.h"
 #include "ProjectilePool.h"
 #include "TeamComponent.h"
@@ -105,7 +105,7 @@ void Ship::LoadConfig()
 {
 	Actor::LoadConfig();
 
-	Settings::SharedConstPtr ShipSettings = SettingsReader::Load(GetConfigFile());
+	ClassSettings::SharedConstPtr ShipSettings = ClassSettingsReader::Load(GetConfigFile());
 
 	if (ShipSettings == nullptr)
 	{

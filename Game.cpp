@@ -8,7 +8,7 @@
 #include "Secret.h"
 #include "Ship.h"
 #include "pk/AssetManager.h"
-#include "pk/SettingsReader.h"
+#include "pk/ClassSettingsReader.h"
 
 #include <GLFW/glfw3.h>
 
@@ -45,7 +45,7 @@ Game::Game(const Window::WeakPtr& InWindow)
 
 void Game::LoadConfig()
 {
-	Settings::SharedConstPtr GameSettings = SettingsReader::Load(Config::GameFile);
+	ClassSettings::SharedConstPtr GameSettings = ClassSettingsReader::Load(Config::GameFile);
 	if (GameSettings == nullptr)
 	{
 		std::cout << "[Game] - Unable to read config file.\n";

@@ -159,8 +159,8 @@
     <ClCompile Include="pk\Random.cpp" />
     <ClCompile Include="pk\Renderer.cpp" />
     <ClCompile Include="pk\Scene.cpp" />
-    <ClCompile Include="pk\Settings.cpp" />
-    <ClCompile Include="pk\SettingsReader.cpp" />
+    <ClCompile Include="pk\ClassSettings.cpp" />
+    <ClCompile Include="pk\ClassSettingsReader.cpp" />
     <ClCompile Include="pk\Shader.cpp" />
     <ClCompile Include="pk\SoundEngine.cpp" />
     <ClCompile Include="pk\Texture.cpp" />
@@ -194,8 +194,8 @@
     <ClInclude Include="pk\Random.h" />
     <ClInclude Include="pk\Renderer.h" />
     <ClInclude Include="pk\Scene.h" />
-    <ClInclude Include="pk\Settings.h" />
-    <ClInclude Include="pk\SettingsReader.h" />
+    <ClInclude Include="pk\ClassSettings.h" />
+    <ClInclude Include="pk\ClassSettingsReader.h" />
     <ClInclude Include="pk\Shader.h" />
     <ClInclude Include="pk\SoundEngine.h" />
     <ClInclude Include="pk\Texture.h" />

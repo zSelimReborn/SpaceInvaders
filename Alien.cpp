@@ -7,7 +7,7 @@
 #include "ProjectilePool.h"
 #include "TeamComponent.h"
 #include "pk/Scene.h"
-#include "pk/SettingsReader.h"
+#include "pk/ClassSettingsReader.h"
 #include "pk/SoundEngine.h"
 
 Alien::Alien(AlienType InType)
@@ -51,7 +51,7 @@ void Alien::LoadConfig()
 {
 	Actor::LoadConfig();
 
-	Settings::SharedConstPtr AlienSettings = SettingsReader::Load(GetConfigFile());
+	ClassSettings::SharedConstPtr AlienSettings = ClassSettingsReader::Load(GetConfigFile());
 	if (AlienSettings == nullptr)
 	{
 		return;

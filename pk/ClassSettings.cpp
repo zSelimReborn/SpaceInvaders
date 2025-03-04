@@ -1,29 +1,29 @@
-#include "Settings.h"
+#include "ClassSettings.h"
 
 #include <sstream>
 #include <glm/gtc/matrix_transform.hpp>
 
-Settings::Settings()
+ClassSettings::ClassSettings()
 	: Map()
 {
 }
 
-Settings::Settings(const SettingsMap& InMap)
+ClassSettings::ClassSettings(const SettingsMap& InMap)
 	: Map(InMap)
 {
 }
 
-void Settings::SetMap(const SettingsMap& InMap)
+void ClassSettings::SetMap(const SettingsMap& InMap)
 {
 	Map = InMap;
 }
 
-bool Settings::Exists(const Key& InKey) const
+bool ClassSettings::Exists(const Key& InKey) const
 {
 	return Map.count(InKey) > 0;
 }
 
-bool Settings::Get(const Key& InKey, const int Default, int& OutValue) const
+bool ClassSettings::Get(const Key& InKey, const int Default, int& OutValue) const
 {
 	if (!Exists(InKey))
 	{
@@ -36,7 +36,7 @@ bool Settings::Get(const Key& InKey, const int Default, int& OutValue) const
 	return true;
 }
 
-bool Settings::Get(const Key& InKey, const float Default, float& OutValue) const
+bool ClassSettings::Get(const Key& InKey, const float Default, float& OutValue) const
 {
 	if (!Exists(InKey))
 	{
@@ -49,7 +49,7 @@ bool Settings::Get(const Key& InKey, const float Default, float& OutValue) const
 	return true;
 }
 
-bool Settings::Get(const Key& InKey, const std::string& Default, Value& OutValue) const
+bool ClassSettings::Get(const Key& InKey, const std::string& Default, Value& OutValue) const
 {
 	if (!Exists(InKey))
 	{
@@ -61,7 +61,7 @@ bool Settings::Get(const Key& InKey, const std::string& Default, Value& OutValue
 	return true;
 }
 
-bool Settings::Get(const Key& InKey, IntList& OutList) const
+bool ClassSettings::Get(const Key& InKey, IntList& OutList) const
 {
 	if (!Exists(InKey))
 	{
@@ -80,7 +80,7 @@ bool Settings::Get(const Key& InKey, IntList& OutList) const
 	return true;
 }
 
-bool Settings::Get(const Key& InKey, FloatList& OutList) const
+bool ClassSettings::Get(const Key& InKey, FloatList& OutList) const
 {
 	if (!Exists(InKey))
 	{
@@ -99,7 +99,7 @@ bool Settings::Get(const Key& InKey, FloatList& OutList) const
 	return true;
 }
 
-bool Settings::Get(const Key& InKey, StringList& OutList) const
+bool ClassSettings::Get(const Key& InKey, StringList& OutList) const
 {
 	if (!Exists(InKey))
 	{
@@ -112,7 +112,7 @@ bool Settings::Get(const Key& InKey, StringList& OutList) const
 	return true;
 }
 
-bool Settings::Get(const Key& InKey, Vec2& OutVec) const
+bool ClassSettings::Get(const Key& InKey, Vec2& OutVec) const
 {
 	if (!Exists(InKey))
 	{
@@ -133,7 +133,7 @@ bool Settings::Get(const Key& InKey, Vec2& OutVec) const
 	return true;
 }
 
-bool Settings::Get(const Key& InKey, Vec3& OutVec) const
+bool ClassSettings::Get(const Key& InKey, Vec3& OutVec) const
 {
 	if (!Exists(InKey))
 	{
@@ -155,7 +155,7 @@ bool Settings::Get(const Key& InKey, Vec3& OutVec) const
 	return true;
 }
 
-bool Settings::Get(const Key& InKey, Vec4& OutVec) const
+bool ClassSettings::Get(const Key& InKey, Vec4& OutVec) const
 {
 	if (!Exists(InKey))
 	{
@@ -178,7 +178,7 @@ bool Settings::Get(const Key& InKey, Vec4& OutVec) const
 	return true;
 }
 
-Settings::StringList Settings::Split(const Value& InValue)
+ClassSettings::StringList ClassSettings::Split(const Value& InValue)
 {
 	std::stringstream Stream(InValue);
 	StringList Result;
@@ -193,7 +193,7 @@ Settings::StringList Settings::Split(const Value& InValue)
 	return Result;
 }
 
-Settings::FloatList Settings::AsFloat(const StringList& InList)
+ClassSettings::FloatList ClassSettings::AsFloat(const StringList& InList)
 {
 	FloatList OutList;
 	for (const std::string& Element : InList)

@@ -5,7 +5,7 @@
 #include "pk/Window.h"
 #include "Assets.h"
 #include "Game.h"
-#include "pk/SettingsReader.h"
+#include "pk/ClassSettingsReader.h"
 
 Window::SharedPtr CreateWindow();
 
@@ -43,7 +43,7 @@ Window::SharedPtr CreateWindow()
 	int WindowWidth = DEFAULT_WINDOW_WIDTH, WindowHeight = DEFAULT_WINDOW_HEIGHT;
 	std::string WindowTitle = DEFAULT_WINDOW_TITLE;
 
-	Settings::SharedConstPtr WindowSetting = SettingsReader::Load(Assets::Config::WindowFile);
+	ClassSettings::SharedConstPtr WindowSetting = ClassSettingsReader::Load(Assets::Config::WindowFile);
 	if (WindowSetting != nullptr)
 	{
 		WindowSetting->Get("Width", DEFAULT_WINDOW_WIDTH, WindowWidth);

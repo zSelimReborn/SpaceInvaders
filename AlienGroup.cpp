@@ -5,7 +5,7 @@
 #include "Assets.h"
 #include "pk/Random.h"
 #include "pk/Scene.h"
-#include "pk/SettingsReader.h"
+#include "pk/ClassSettingsReader.h"
 #include "pk/SoundEngine.h"
 
 const int AlienGroup::DEFAULT_NUM_ROWS_PER_TYPE = 2;
@@ -211,7 +211,7 @@ void AlienGroup::LoadConfig()
 {
 	Actor::LoadConfig();
 
-	Settings::SharedConstPtr GroupSettings = SettingsReader::Load(GetConfigFile());
+	ClassSettings::SharedConstPtr GroupSettings = ClassSettingsReader::Load(GetConfigFile());
 	if (GroupSettings == nullptr)
 	{
 		return;

@@ -5,7 +5,7 @@
 #include "Assets.h"
 #include "pk/Random.h"
 #include "pk/Scene.h"
-#include "pk/SettingsReader.h"
+#include "pk/ClassSettingsReader.h"
 
 const float Secret::DEFAULT_SPAWN_TIME_MIN = 5.f;
 const float Secret::DEFAULT_SPAWN_TIME_MAX = 8.f;
@@ -84,7 +84,7 @@ void Secret::LoadConfig()
 {
 	Actor::LoadConfig();
 
-	Settings::SharedConstPtr SecretSettings = SettingsReader::Load(GetConfigFile());
+	ClassSettings::SharedConstPtr SecretSettings = ClassSettingsReader::Load(GetConfigFile());
 	if (SecretSettings == nullptr)
 	{
 		return;
