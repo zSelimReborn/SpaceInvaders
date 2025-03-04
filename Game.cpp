@@ -27,12 +27,15 @@ const int Game::MAX_NUM_BUNKERS = 6;
 const int Game::DEFAULT_NUM_BUNKERS = 3;
 const float Game::DEFAULT_BUNKERS_BOTTOM_OFFSET = 90.f;
 const int Game::DEFAULT_TEXT_SIZE = 26;
+const float Game::DEFAULT_PLAYER_HIT_COOLDOWN = 2.f;
 
 Game::Game(const Window::WeakPtr& InWindow)
 	: Scene(InWindow),
 		NumBunkers(DEFAULT_NUM_BUNKERS), TextSize(DEFAULT_TEXT_SIZE),
 		BunkersBottomOffset(DEFAULT_BUNKERS_BOTTOM_OFFSET),
-		ShipSize(DEFAULT_SHIP_SIZE), State(GameState::Menu)
+		ShipSize(DEFAULT_SHIP_SIZE),
+		CurrentHitCooldown(0.f), PlayerHitCooldown(DEFAULT_PLAYER_HIT_COOLDOWN),
+		State(GameState::Menu)
 {
 	LoadConfig();
 
@@ -55,17 +58,19 @@ void Game::LoadConfig()
 	}
 
 	int InNumBunkers, InTextSize;
-	float InBunkersBottomOffset;
+	float InBunkersBottomOffset, InPlayerHitCooldown;
 	glm::vec3 InShipSize(DEFAULT_SHIP_SIZE);
 	GameSettings->Get("ShipSize", InShipSize);
 	GameSettings->Get("NumBunkers", DEFAULT_NUM_BUNKERS, InNumBunkers);
 	GameSettings->Get("TextSize", DEFAULT_TEXT_SIZE, InTextSize);
 	GameSettings->Get("BunkersBottomOffset", DEFAULT_BUNKERS_BOTTOM_OFFSET, InBunkersBottomOffset);
+	GameSettings->Get("PlayerHitCooldown", DEFAULT_PLAYER_HIT_COOLDOWN, InPlayerHitCooldown);
 
 	SetNumBunkers(InNumBunkers);
 	SetTextSize(InTextSize);
 	SetBunkersBottomOffset(InBunkersBottomOffset);
 	SetShipSize(InShipSize);
+	SetPlayerHitCooldown(InPlayerHitCooldown);
 }
 
 void Game::SpawnPlayer()
@@ -189,10 +194,14 @@ void Game::OnInvadersDefeat()
 
 void Game::OnPlayerTakeDamage()
 {
-	// TODO Add hit animation
 	if (PlayerShip->GetLifePoints() <= 0)
 	{
 		OnGameOver(false);
+	}
+	else
+	{
+		PlayAudio(Sounds::PlayerExplosion, 1.f);
+		State = GameState::Pause;
 	}
 }
 
@@ -200,6 +209,7 @@ void Game::OnGameOver(bool bPlayerWon)
 {
 	if (!bPlayerWon)
 	{
+		PlayAudio(Sounds::GameOver, 1.f);
 		State = GameState::GameOver;
 		MainAlienGroup->HideBoard();
 		AlienProjectilePool->ResetPool();
@@ -232,6 +242,30 @@ void Game::SetShipSize(const glm::vec3& InSize)
 void Game::SetBunkersBottomOffset(float InOffset)
 {
 	BunkersBottomOffset = std::abs(InOffset);
+}
+
+void Game::SetPlayerHitCooldown(float InCooldown)
+{
+	PlayerHitCooldown = std::abs(InCooldown);
+}
+
+void Game::UpdatePlayerHitCooldown(float Delta)
+{
+	if (State != GameState::Pause)
+	{
+		return;
+	}
+
+	CurrentHitCooldown += Delta;
+	if (CurrentHitCooldown >= PlayerHitCooldown)
+	{
+		CurrentHitCooldown = 0.f;
+		AlienProjectilePool->ResetPool();
+		PlayerProjectilePool->ResetPool();
+		PlayerShip->SetLocation(GetPlayerStartLocation());
+
+		State = GameState::Play;
+	}
 }
 
 void Game::Begin()
@@ -293,6 +327,8 @@ void Game::Play()
 	SecretAlien->Reset();
 	BuildBunkers();
 	ResetPlayer();
+
+	SoundEngine::Get().Stop(MainAudioChannel);
 }
 
 void Game::Menu()
@@ -302,6 +338,8 @@ void Game::Menu()
 	MainHud->Deactivate();
 	GameOverW->Deactivate();
 	MainMenuW->Activate();
+
+	MainAudioChannel = PlayAudio(Sounds::MainJingle, 1.f, true);
 }
 
 void Game::Quit() const
@@ -317,7 +355,33 @@ void Game::Quit() const
 	CurrentWindow->ShouldClose(true);
 }
 
-void Game::PlayAudio(const std::string& Path, float Volume) const
+void Game::ToggleMute()
+{
+	if (SavePtr == nullptr)
+	{
+		return;
+	}
+
+	SavePtr->ToggleMute();
+	SoundEngine::Get().Mute(MainAudioChannel, SavePtr->IsMuted());
+}
+
+bool Game::IsMuted() const
+{
+	if (SavePtr == nullptr)
+	{
+		return false;
+	}
+
+	return SavePtr->IsMuted();
+}
+
+int Game::PlayAudio(const std::string& Path, float Volume) const
+{
+	return PlayAudio(Path, Volume, false);
+}
+
+int Game::PlayAudio(const std::string& Path, float Volume, bool bLoop) const
 {
 	bool bMuted = false;
 	if (SavePtr != nullptr)
@@ -325,12 +389,7 @@ void Game::PlayAudio(const std::string& Path, float Volume) const
 		bMuted = SavePtr->IsMuted();
 	}
 
-	if (bMuted)
-	{
-		return;
-	}
-
-	SoundEngine::Get().Play(Path, Volume);
+	return SoundEngine::Get().Play(Path, Volume, bMuted, bLoop);
 }
 
 void Game::HandleInput(const float Delta)
@@ -359,18 +418,18 @@ void Game::HandleInput(const float Delta)
 
 void Game::Update(const float Delta)
 {
-	if (State != GameState::Play)
-	{
-		return;
-	}
-
 	MainHud->SetLifePoints(PlayerShip->GetLifePoints());
 	MainHud->SetScore(PlayerShip->GetScorePoints());
 
-	Scene::Update(Delta);
+	if (State == GameState::Play)
+	{
+		Scene::Update(Delta);
 
-	PlayerProjectilePool->UpdateEffects(Delta);
-	AlienProjectilePool->UpdateEffects(Delta);
+		PlayerProjectilePool->UpdateEffects(Delta);
+		AlienProjectilePool->UpdateEffects(Delta);
+	}
+
+	UpdatePlayerHitCooldown(Delta);
 }
 
 void Game::Render(const float Delta)
@@ -430,5 +489,7 @@ void Game::LoadAssets() const
 	SoundEngine::Get().Load(Sounds::Shoot);
 	SoundEngine::Get().Load(Sounds::AlienExplosion);
 	SoundEngine::Get().Load(Sounds::PlayerExplosion);
+	SoundEngine::Get().Load(Sounds::GameOver);
+	SoundEngine::Get().Load(Sounds::MainJingle);
 }
 

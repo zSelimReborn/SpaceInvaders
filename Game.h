@@ -16,6 +16,7 @@ enum class GameState : std::uint8_t
 {
 	Play,
 	Menu,
+	Pause,
 	GameOver
 };
 
@@ -39,6 +40,7 @@ public:
 	static const int DEFAULT_NUM_BUNKERS;
 	static const float DEFAULT_BUNKERS_BOTTOM_OFFSET;
 	static const int DEFAULT_TEXT_SIZE;
+	static const float DEFAULT_PLAYER_HIT_COOLDOWN;
 
 	Game(const Window::WeakPtr& InWindow);
 
@@ -47,8 +49,11 @@ public:
 	void Play();
 	void Menu();
 	void Quit() const;
+	void ToggleMute();
+	bool IsMuted() const;
 
-	void PlayAudio(const std::string& Path, float Volume) const;
+	int PlayAudio(const std::string& Path, float Volume) const;
+	int PlayAudio(const std::string& Path, float Volume, bool bLoop) const;
 
 protected:
 	void HandleInput(const float Delta) override;
@@ -84,11 +89,18 @@ private:
 	void SetTextSize(int InSize);
 	void SetShipSize(const glm::vec3& InSize);
 	void SetBunkersBottomOffset(float InOffset);
+	void SetPlayerHitCooldown(float InCooldown);
+
+	void UpdatePlayerHitCooldown(float Delta);
 
 	int NumBunkers;
 	int TextSize;
+	int MainAudioChannel;
 	float BunkersBottomOffset;
 	glm::vec3 ShipSize;
+
+	float CurrentHitCooldown;
+	float PlayerHitCooldown;
 
 	ShipSharedPtr PlayerShip;
 	AlienGroupPtr MainAlienGroup;

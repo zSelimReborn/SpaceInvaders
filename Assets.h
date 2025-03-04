@@ -103,6 +103,8 @@ namespace Assets
 		const std::string PlayerExplosion = BasePath + InnerPath + "player_explosion.wav";
 		const std::string MenuNavigation = BasePath + InnerPath + "menu_nav.wav";
 		const std::string Shoot = BasePath + InnerPath + "shoot.wav";
+		const std::string GameOver = BasePath + InnerPath + "game_over.wav";
+		const std::string MainJingle = BasePath + InnerPath + "main.ogg";
 	}
 
 	namespace Saves

@@ -16,13 +16,6 @@ MainMenu::MainMenu(const GameWeakPtr& InGame)
 	SetScene(InGame);
 }
 
-void MainMenu::Construct()
-{
-	Widget::Construct();
-
-	SavePtr = SaveSystem::Get().GetSaveObject<GameSave>();
-}
-
 void MainMenu::Input(const InputHandler& Handler, const float Delta)
 {
 	Widget::Input(Handler, Delta);
@@ -55,7 +48,7 @@ void MainMenu::Render()
 {
 	Widget::Render();
 
-	const Scene::SharedPtr CurrentScene = GetScene();
+	const Game::SharedPtr CurrentScene = GetGame();
 	if (CurrentScene == nullptr)
 	{
 		return;
@@ -68,8 +61,8 @@ void MainMenu::Render()
 	const glm::vec2 QuitPos(Center.x, Center.y - 20.f);
 
 	glm::vec2 TitleSize, StartSize, MuteSize, QuitSize;
-	std::string MuteText = "Mute: ";
-	MuteText += (SavePtr != nullptr && SavePtr->IsMuted()) ? "Yes" : "No";
+	std::string MuteText = "MUTE: ";
+	MuteText += (CurrentScene->IsMuted()) ? "YES" : "NO";
 
 	RenderText(Assets::Fonts::HeadingFontName, TitlePos, "Space Invaders", TextOrient::Center, 1.0f, Colors::White, TitleSize.x, TitleSize.y);
 	RenderText(Assets::Fonts::TextFontName, StartPos, "START GAME", TextOrient::Center, 1.0f, Colors::White, StartSize.x, StartSize.y);
@@ -135,12 +128,13 @@ void MainMenu::StartGame()
 
 void MainMenu::ToggleMute() const
 {
-	if (SavePtr == nullptr)
+	const GameSharedPtr Game = GetGame();
+	if (Game == nullptr)
 	{
 		return;
 	}
 
-	SavePtr->ToggleMute();
+	Game->ToggleMute();
 }
 
 void MainMenu::QuitGame()
