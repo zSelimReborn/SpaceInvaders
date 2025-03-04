@@ -237,7 +237,7 @@ void Ship::Shoot()
 	const Scene::SharedPtr CurrentScene = GetScene();
 
 	glm::vec3 SpawnLocation(GetLocation());
-	SpawnLocation.y -= (GetSize().y + 5.f);
+	SpawnLocation.y -= (GetSize().y / 2);
 
 	Projectile::SharedPtr NewProjectile = CurrentProjectilePool->Create(SpawnLocation, TeamPtr->GetTeam());
 	NewProjectile->AddOnHitDelegate([this](const Actor::SharedPtr& HitActor, const CollisionResult& Result)
