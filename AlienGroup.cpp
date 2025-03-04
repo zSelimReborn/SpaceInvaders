@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "Assets.h"
+#include "Game.h"
 #include "pk/Random.h"
 #include "pk/Scene.h"
 #include "pk/ClassSettingsReader.h"
@@ -258,6 +259,8 @@ void AlienGroup::Begin()
 	StartGroup();
 
 	GenerateShootCooldown();
+
+	GamePtr = std::dynamic_pointer_cast<Game>(GetScene());
 }
 
 void AlienGroup::Update(const float Delta)
@@ -368,7 +371,16 @@ void AlienGroup::PrepareTracks()
 
 void AlienGroup::PlayNextTrack()
 {
-	SoundEngine::Get().Play(Tracks[CurrentTrack], 1.0f);
+	const Game::SharedPtr CurrentGame = GetGame();
+	if (CurrentGame == nullptr)
+	{
+		SoundEngine::Get().Play(Tracks[CurrentTrack], 1.0f);
+	}
+	else
+	{
+		CurrentGame->PlayAudio(Tracks[CurrentTrack], 1.0f);
+	}
+
 	CurrentTrack = (CurrentTrack + 1) % Tracks.size();
 }
 
@@ -595,4 +607,9 @@ void AlienGroup::NotifyDefeat() const
 	{
 		Function();
 	}
+}
+
+AlienGroup::GameSharedPtr AlienGroup::GetGame() const
+{
+	return GamePtr.lock();
 }

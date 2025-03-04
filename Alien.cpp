@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "Assets.h"
+#include "Game.h"
 #include "Projectile.h"
 #include "ProjectilePool.h"
 #include "TeamComponent.h"
@@ -63,9 +64,25 @@ void Alien::LoadConfig()
 	SetColor(SettingColor);
 }
 
+void Alien::Begin()
+{
+	Actor::Begin();
+
+	GamePtr = std::dynamic_pointer_cast<Game>(GetScene());
+}
+
 bool Alien::TakeDamage(float InDamage)
 {
-	SoundEngine::Get().Play(Assets::Sounds::AlienExplosion, 1.f);
+	const Game::SharedPtr CurrentGame = GetGame();
+	if (CurrentGame == nullptr)
+	{
+		SoundEngine::Get().Play(Assets::Sounds::AlienExplosion, 1.f);
+	}
+	else
+	{
+		CurrentGame->PlayAudio(Assets::Sounds::AlienExplosion, 1.f);
+	}
+
 	Destroy();
 	return true;
 }
@@ -85,4 +102,9 @@ void Alien::Shoot() const
 
 	Projectile::SharedPtr NewProjectile = CurrentProjectilePool->Create(SpawnLocation, TeamPtr->GetTeam());
 	CurrentScene->Add(NewProjectile);
+}
+
+Alien::GameSharedPtr Alien::GetGame() const
+{
+	return GamePtr.lock();
 }

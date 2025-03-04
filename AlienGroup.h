@@ -7,6 +7,7 @@
 #include "Alien.h"
 
 class ProjectilePool;
+class Game;
 
 enum class GroupState : std::uint8_t
 {
@@ -29,6 +30,8 @@ class AlienGroup : public Actor
 {
 public:
 	typedef std::shared_ptr<AlienGroup> SharedPtr;
+	typedef std::weak_ptr<Game> GameWeakPtr;
+	typedef std::shared_ptr<Game> GameSharedPtr;
 	typedef std::vector<Alien::SharedPtr> AlienList;
 	typedef std::map<AlienType, AlienTypeData> ConfigMap;
 	typedef std::pair<AlienType, AlienTypeData> ConfigMapPair;
@@ -117,6 +120,8 @@ private:
 	void NotifyReachedPlayer() const;
 	void NotifyDefeat() const;
 
+	GameSharedPtr GetGame() const;
+
 	bool bRightDirection;
 	bool bGoDown;
 	int NumRowsPerType;
@@ -154,4 +159,5 @@ private:
 	int CurrentTrack;
 
 	GroupState State;
+	GameWeakPtr GamePtr;
 };

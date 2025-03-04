@@ -5,6 +5,7 @@
 
 class ProjectilePool;
 class TeamComponent;
+class Game;
 
 enum class AlienType : uint8_t
 {
@@ -20,6 +21,8 @@ public:
 	typedef std::shared_ptr<Alien> SharedPtr;
 	typedef std::shared_ptr<ProjectilePool> ProjectilePoolPtr;
 	typedef std::shared_ptr<TeamComponent> TeamComponentPtr;
+	typedef std::shared_ptr<Game> GameSharedPtr;
+	typedef std::weak_ptr<Game> GameWeakPtr;
 
 	Alien(AlienType InType);
 	Alien(const Transform& InTransform, AlienType InType);
@@ -31,16 +34,21 @@ public:
 	AlienType GetType() const;
 
 	void LoadConfig() override;
+	void Begin() override;
 
 	bool TakeDamage(float InDamage) override;
 
 	void Shoot() const;
 
 private:
+	GameSharedPtr GetGame() const;
+
 	int Score;
 	AlienType Type;
 
 	TeamComponentPtr TeamPtr;
 
 	ProjectilePoolPtr CurrentProjectilePool;
+
+	GameWeakPtr GamePtr;
 };

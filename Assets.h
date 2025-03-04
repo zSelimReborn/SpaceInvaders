@@ -102,4 +102,11 @@ namespace Assets
 		const std::string MenuNavigation = BasePath + InnerPath + "menu_nav.wav";
 		const std::string Shoot = BasePath + InnerPath + "shoot.wav";
 	}
+
+	namespace Saves
+	{
+		const std::string BasePath = "Saves/";
+
+		const std::string GameFile = BasePath + "game.dat";
+	}
 }

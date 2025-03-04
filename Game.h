@@ -10,6 +10,7 @@ class Bunker;
 class Hud;
 class MainMenu;
 class GameOver;
+class GameSave;
 
 enum class GameState : std::uint8_t
 {
@@ -30,6 +31,7 @@ public:
 	typedef std::shared_ptr<Hud> HudPtr;
 	typedef std::shared_ptr<MainMenu> MainMenuPtr;
 	typedef std::shared_ptr<GameOver> GameOverPtr;
+	typedef std::shared_ptr<GameSave> GameSavePtr;
 	typedef std::vector<BunkerPtr> BunkerList;
 
 	static const glm::vec3 DEFAULT_SHIP_SIZE;
@@ -46,6 +48,8 @@ public:
 	void Menu();
 	void Quit() const;
 
+	void PlayAudio(const std::string& Path, float Volume) const;
+
 protected:
 	void HandleInput(const float Delta) override;
 	void Update(const float Delta) override;
@@ -53,6 +57,9 @@ protected:
 
 private:
 	void LoadAssets() const;
+
+	void LoadSave();
+	void WriteSave() const;
 
 	void LoadConfig();
 	void SpawnPlayer();
@@ -96,4 +103,6 @@ private:
 	ProjectilePoolPtr AlienProjectilePool;
 
 	GameState State;
+
+	GameSavePtr SavePtr;
 };

@@ -14,8 +14,10 @@
 
 #include "Bunker.h"
 #include "GameOver.h"
+#include "GameSave.h"
 #include "Hud.h"
 #include "MainMenu.h"
+#include "pk/SaveSystem.h"
 #include "pk/SoundEngine.h"
 
 using namespace Assets;
@@ -236,6 +238,8 @@ void Game::Begin()
 {
 	LoadAssets();
 
+	LoadSave();
+
 	SpawnPlayer();
 	SpawnBunkers();
 	SpawnSecretAlien();
@@ -247,6 +251,31 @@ void Game::Begin()
 	Scene::Begin();
 
 	Menu();
+}
+
+void Game::LoadSave()
+{
+	try
+	{
+		SaveSystem::Get().TriggerLoad<GameSave>(Saves::GameFile);
+		SavePtr = SaveSystem::Get().GetSaveObject<GameSave>();
+	}
+	catch (const std::exception& Exception)
+	{
+		std::cout << "Failed to load save file.\n";
+	}
+}
+
+void Game::WriteSave() const
+{
+	try
+	{
+		SaveSystem::Get().TriggerSave();
+	}
+	catch (const std::exception& Exception)
+	{
+		std::cout << "Failed to write save file.\n";
+	}
 }
 
 void Game::Play()
@@ -283,7 +312,24 @@ void Game::Quit() const
 		return;
 	}
 
+	WriteSave();
 	CurrentWindow->ShouldClose(true);
+}
+
+void Game::PlayAudio(const std::string& Path, float Volume) const
+{
+	bool bMuted = false;
+	if (SavePtr != nullptr)
+	{
+		bMuted = SavePtr->IsMuted();
+	}
+
+	if (bMuted)
+	{
+		return;
+	}
+
+	SoundEngine::Get().Play(Path, Volume);
 }
 
 void Game::HandleInput(const float Delta)
