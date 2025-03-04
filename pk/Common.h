@@ -11,8 +11,10 @@ namespace Console
 
 namespace Math
 {
-	float Clamp(const float Value, const float Min, const float Max);
-	float Lerp(const float Min, const float Max, const float Ratio);
+	float Clamp(const float Value, const float Left, const float Right);
+	float Lerp(const float Left, const float Right, const float Ratio);
+	float Min(float Left, float Right);
+	float Max(float Left, float Right);
 }
 
 namespace Colors
@@ -28,6 +30,7 @@ namespace File
 {
 	bool Exists(const std::string& FilePath);
 	void Create(const std::string& FilePath, std::ios_base::openmode Mode);
+	int CreateFolder(const std::string& FolderName);
 	void WriteAll(const std::string& FilePath, const std::string& FileContent);
 	std::string ReadAll(const std::string& FilePath);
 }

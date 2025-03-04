@@ -4,19 +4,36 @@
 #include <iostream>
 #include <sstream>
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#include <Windows.h>
+#elif __linux__
+#include <sys/stat.h> 
+#include <sys/types.h>
+#endif
+
 void Console::Print(const glm::vec3& Vector)
 {
 	std::cout << "{x: " << Vector.x << ", y: " << Vector.y << ", z: " << Vector.z << "}\n";
 }
 
-float Math::Clamp(const float Value, const float Min, const float Max)
+float Math::Clamp(const float Value, const float Left, const float Right)
 {
-	return std::min(Max, std::max(Min, Value));
+	return Min(Right, Math::Max(Left, Value));
 }
 
-float Math::Lerp(const float Min, const float Max, const float Ratio)
+float Math::Lerp(const float Left, const float Right, const float Ratio)
 {
-	return Min * (1.0 - Ratio) + (Max * Ratio);
+	return Left * (1.0 - Ratio) + (Right * Ratio);
+}
+
+float Math::Min(float Left, float Right)
+{
+	return (Left < Right) ? Left : Right;
+}
+
+float Math::Max(float Left, float Right)
+{
+	return (Left > Right) ? Left : Right;
 }
 
 bool File::Exists(const std::string& FilePath)
@@ -28,6 +45,20 @@ bool File::Exists(const std::string& FilePath)
 void File::Create(const std::string& FilePath, std::ios_base::openmode Mode)
 {
 	std::ofstream Handler(FilePath, Mode);
+}
+
+int File::CreateFolder(const std::string& FolderName)
+{
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+	if (CreateDirectoryA(FolderName.c_str(), nullptr) || GetLastError() == ERROR_ALREADY_EXISTS) {
+		return 0;
+	}
+
+	return GetLastError();
+#elif __linux__
+	int result = mkdir(FolderName.c_str(), 0777);
+	return result;
+#endif
 }
 
 std::string File::ReadAll(const std::string& FilePath)

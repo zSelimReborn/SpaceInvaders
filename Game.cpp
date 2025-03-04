@@ -257,6 +257,7 @@ void Game::LoadSave()
 {
 	try
 	{
+		File::CreateFolder(Saves::BasePath);
 		SaveSystem::Get().TriggerLoad<GameSave>(Saves::GameFile);
 		SavePtr = SaveSystem::Get().GetSaveObject<GameSave>();
 	}
