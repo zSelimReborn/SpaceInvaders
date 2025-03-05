@@ -95,7 +95,7 @@ private:
 
 	int NumBunkers;
 	int TextSize;
-	int MainAudioChannel;
+	unsigned int MainAudioChannel;
 	float BunkersBottomOffset;
 	glm::vec3 ShipSize;
 

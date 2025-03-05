@@ -121,6 +121,9 @@ namespace Assets
 
 		const std::string MainJingleName = "main_jingle";
 		const std::string MainJingle = BasePath + InnerPath + "main.ogg";
+
+		const std::string SecretAlienSpawnName = "secret_alien";
+		const std::string SecretAlienSpawn = BasePath + InnerPath + "secret_alien_spawn.wav";
 	}
 
 	namespace Saves

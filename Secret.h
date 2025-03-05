@@ -3,9 +3,14 @@
 #include "pk/Actor.h"
 #include "Alien.h"
 
+class Game;
+
 class Secret : public Actor
 {
 public:
+	typedef std::weak_ptr<Game> GameWeakPtr;
+	typedef std::shared_ptr<Game> GameSharedPtr;
+
 	static const float DEFAULT_SPAWN_TIME_MIN;
 	static const float DEFAULT_SPAWN_TIME_MAX;
 	static const float DEFAULT_ALIEN_SPEED;
@@ -40,6 +45,12 @@ private:
 	void CreateAlien();
 	void SpawnAlien();
 
+	void PlaySpawnAudio();
+	void StopSpawnAudio();
+
+	GameSharedPtr GetGame() const;
+
+	unsigned int SpawnAudioChannel;
 	bool bAlienActive;
 	float SpawnTimeMin;
 	float SpawnTimeMax;
@@ -50,4 +61,5 @@ private:
 	glm::vec3 AlienSize;
 
 	Alien::SharedPtr CurrentAlien;
+	GameWeakPtr GamePtr;
 };

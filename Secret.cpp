@@ -3,9 +3,11 @@
 #include <iostream>
 
 #include "Assets.h"
+#include "Game.h"
 #include "pk/Random.h"
 #include "pk/Scene.h"
 #include "pk/ClassSettingsReader.h"
+#include "pk/SoundEngine.h"
 
 const float Secret::DEFAULT_SPAWN_TIME_MIN = 5.f;
 const float Secret::DEFAULT_SPAWN_TIME_MAX = 8.f;
@@ -14,10 +16,9 @@ const float Secret::DEFAULT_ALIEN_TOP_OFFSET = 10.f;
 const glm::vec3 Secret::DEFAULT_ALIEN_SIZE = glm::vec3(40.f, 20.f, 1.f);
 
 Secret::Secret()
-	: Actor(),
-		bAlienActive(false), SpawnTimeMin(DEFAULT_SPAWN_TIME_MIN), SpawnTimeMax(DEFAULT_SPAWN_TIME_MAX),
-		SelectedSpawnTime(0.f), CurrentSpawnTime(0.f), TopOffset(DEFAULT_ALIEN_TOP_OFFSET),
-		AlienSpeed(DEFAULT_ALIEN_SPEED), AlienSize(DEFAULT_ALIEN_SIZE)
+	: SpawnAudioChannel(0), bAlienActive(false), SpawnTimeMin(DEFAULT_SPAWN_TIME_MIN), SpawnTimeMax(DEFAULT_SPAWN_TIME_MAX),
+		SelectedSpawnTime(0.f), CurrentSpawnTime(0.f), AlienSpeed(DEFAULT_ALIEN_SPEED),
+		TopOffset(DEFAULT_ALIEN_TOP_OFFSET), AlienSize(DEFAULT_ALIEN_SIZE)
 {
 }
 
@@ -111,6 +112,7 @@ void Secret::Begin()
 
 	CreateAlien();
 	SelectSpawnTime();
+	GamePtr = std::dynamic_pointer_cast<Game>(GetScene());
 }
 
 void Secret::Update(const float Delta)
@@ -125,6 +127,7 @@ void Secret::Reset()
 {
 	bAlienActive = false;
 	CurrentAlien->Destroy();
+	StopSpawnAudio();
 	SelectSpawnTime();
 }
 
@@ -159,6 +162,7 @@ void Secret::UpdateAlien()
 	{
 		CurrentAlien->Destroy();
 		bAlienActive = false;
+		StopSpawnAudio();
 		SelectSpawnTime();
 	}
 }
@@ -195,5 +199,33 @@ void Secret::SpawnAlien()
 	CurrentAlien->SetVelocity(Velocity);
 
 	CurrentScene->Add(CurrentAlien);
+	PlaySpawnAudio();
+
 	bAlienActive = true;
+}
+
+void Secret::PlaySpawnAudio()
+{
+	const GameSharedPtr CurrentGame = GetGame();
+	if (CurrentGame == nullptr)
+	{
+		SpawnAudioChannel = SoundEngine::Get().Play(Assets::Sounds::SecretAlienSpawn, 0.5f, false, true);
+	}
+	else
+	{
+		SpawnAudioChannel = CurrentGame->PlayAudio(Assets::Sounds::SecretAlienSpawnName, 0.5f, true);
+	}
+
+	SoundEngine::Get().SetChannelPitch(SpawnAudioChannel, 0.35f);
+}
+
+void Secret::StopSpawnAudio()
+{
+	SoundEngine::Get().Stop(SpawnAudioChannel);
+	SpawnAudioChannel = 0;
+}
+
+Secret::GameSharedPtr Secret::GetGame() const
+{
+	return GamePtr.lock();
 }

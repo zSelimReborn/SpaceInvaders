@@ -336,6 +336,10 @@ void Game::Menu()
 {
 	State = GameState::Menu;
 
+	AlienProjectilePool->ResetPool();
+	PlayerProjectilePool->ResetPool();
+	SecretAlien->Reset();
+
 	MainHud->Deactivate();
 	GameOverW->Deactivate();
 	MainMenuW->Activate();
@@ -393,7 +397,7 @@ int Game::PlayAudio(const std::string& Name, float Volume, bool bLoop) const
 	const AssetManager::SoundSharedPtr Sound = AssetManager::Get().GetSound(Name);
 	if (Sound == nullptr)
 	{
-		return -1;
+		return 0;
 	}
 
 	return SoundEngine::Get().Play(Sound->GetPath(), Volume, bMuted, bLoop);
@@ -498,6 +502,7 @@ void Game::LoadAssets() const
 	AssetManager::Get().LoadSound(Sounds::PlayerExplosionName, Sounds::PlayerExplosion);
 	AssetManager::Get().LoadSound(Sounds::GameOverName, Sounds::GameOver);
 	AssetManager::Get().LoadSound(Sounds::MainJingleName, Sounds::MainJingle);
+	AssetManager::Get().LoadSound(Sounds::SecretAlienSpawnName, Sounds::SecretAlienSpawn);
 	AssetManager::Get().LoadSequenceSound(Sounds::AlienMoveName, String::GenerateStringsFromBase(Sounds::AlienMove, 4));
 	AssetManager::Get().LoadRandomSound(Sounds::ShootName, String::GenerateStringsFromBase(Sounds::Shoot, 4));
 }
