@@ -11,12 +11,16 @@
 
 #include "Widget.h"
 
-Scene::Scene(const Window::WeakPtr& InWindow)
-	: WindowPtr(InWindow), NextActorId(0), NextWidgetId(0), Fps(0)
+Scene::Scene()
+	: CurrentTime(0.f), OldTime(0.f), Delta(0.f), Fps(0.f), NextActorId(0), NextWidgetId(0)
 {
-	Projection = glm::ortho(0.f, static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight()), 0.f, -1.0f, 1.0f);
-
 	IHandler.HandleKey(GLFW_KEY_ESCAPE, InputType::Press);
+}
+
+Scene::Scene(Window::WeakPtr InWindow)
+	: Scene()
+{
+	SetWindow(std::move(InWindow));
 }
 
 int Scene::GetNextActorId() const
@@ -124,6 +128,12 @@ float Scene::GetCurrentTime() const
 float Scene::GetFps() const
 {
 	return Fps;
+}
+
+void Scene::SetWindow(Window::WeakPtr InWindow)
+{
+	WindowPtr = std::move(InWindow);
+	OnSetWindow();
 }
 
 Window::SharedPtr Scene::GetWindow() const
@@ -262,6 +272,16 @@ void Scene::UpdateActiveWidgets()
 }
 
 Scene::~Scene() = default;
+
+void Scene::OnSetWindow()
+{
+	if (WindowPtr.expired())
+	{
+		return;
+	}
+
+	Projection = glm::ortho(0.f, static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight()), 0.f, -1.0f, 1.0f);
+}
 
 void Scene::ClearWindow() const
 {

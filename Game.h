@@ -42,7 +42,8 @@ public:
 	static const int DEFAULT_TEXT_SIZE;
 	static const float DEFAULT_PLAYER_HIT_COOLDOWN;
 
-	Game(const Window::WeakPtr& InWindow);
+	Game();
+	Game(Window::WeakPtr InWindow);
 
 	void Begin() override;
 

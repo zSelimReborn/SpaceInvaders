@@ -27,7 +27,8 @@ public:
 	typedef std::map<int, WidgetSharedPtr> WidgetMap;
 	typedef std::pair<int, WidgetSharedPtr> WidgetMapPair;
 
-	Scene(const Window::WeakPtr& InWindow);
+	Scene();
+	Scene(Window::WeakPtr InWindow);
 
 	int GetNextActorId() const;
 	int GetNextWidgetId() const;
@@ -46,6 +47,7 @@ public:
 	float GetCurrentTime() const;
 	float GetFps() const;
 
+	void SetWindow(Window::WeakPtr InWindow);
 	Window::SharedPtr GetWindow() const;
 
 	void Add(const ActorSharedPtr& InActor);
@@ -56,6 +58,7 @@ public:
 	virtual ~Scene();
 
 protected:
+	void OnSetWindow();
 	void ClearWindow() const;
 	void Clean();
 

@@ -30,16 +30,14 @@ const float Game::DEFAULT_BUNKERS_BOTTOM_OFFSET = 90.f;
 const int Game::DEFAULT_TEXT_SIZE = 26;
 const float Game::DEFAULT_PLAYER_HIT_COOLDOWN = 2.f;
 
-Game::Game(const Window::WeakPtr& InWindow)
-	: Scene(InWindow),
-		NumBunkers(DEFAULT_NUM_BUNKERS), TextSize(DEFAULT_TEXT_SIZE),
-		BunkersBottomOffset(DEFAULT_BUNKERS_BOTTOM_OFFSET),
-		ShipSize(DEFAULT_SHIP_SIZE),
-		CurrentHitCooldown(0.f), PlayerHitCooldown(DEFAULT_PLAYER_HIT_COOLDOWN),
-		State(GameState::Menu)
+Game::Game()
+	: NumBunkers(DEFAULT_NUM_BUNKERS), TextSize(DEFAULT_TEXT_SIZE), MainAudioChannel(0),
+	  BunkersBottomOffset(DEFAULT_BUNKERS_BOTTOM_OFFSET),
+	  ShipSize(DEFAULT_SHIP_SIZE),
+	  CurrentHitCooldown(0.f), PlayerHitCooldown(DEFAULT_PLAYER_HIT_COOLDOWN),
+	  State(GameState::Menu)
 {
 	LoadConfig();
-
 	IHandler.HandleKey(GLFW_KEY_LEFT, InputType::Hold);
 	IHandler.HandleKey(GLFW_KEY_RIGHT, InputType::Hold);
 	IHandler.HandleKey(GLFW_KEY_SPACE, InputType::Hold);
@@ -47,6 +45,12 @@ Game::Game(const Window::WeakPtr& InWindow)
 	IHandler.HandleKey(GLFW_KEY_UP, InputType::Press);
 	IHandler.HandleKey(GLFW_KEY_DOWN, InputType::Press);
 	IHandler.HandleKey(GLFW_KEY_ENTER, InputType::Press);
+}
+
+Game::Game(Window::WeakPtr InWindow)
+	: Game()
+{
+	SetWindow(std::move(InWindow));
 }
 
 void Game::LoadConfig()

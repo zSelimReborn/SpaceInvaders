@@ -155,6 +155,7 @@
     <ClCompile Include="pk\Common.cpp" />
     <ClCompile Include="pk\Component.cpp" />
     <ClCompile Include="pk\Emitter.cpp" />
+    <ClCompile Include="pk\Engine.cpp" />
     <ClCompile Include="pk\Font.cpp" />
     <ClCompile Include="pk\InputHandler.cpp" />
     <ClCompile Include="pk\Random.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="pk\Common.h" />
     <ClInclude Include="pk\Component.h" />
     <ClInclude Include="pk\Emitter.h" />
+    <ClInclude Include="pk\Engine.h" />
     <ClInclude Include="pk\Font.h" />
     <ClInclude Include="pk\IDamageable.h" />
     <ClInclude Include="pk\InputHandler.h" />

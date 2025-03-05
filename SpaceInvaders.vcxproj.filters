@@ -132,6 +132,9 @@
     <ClCompile Include="pk\RandomSound.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
+    <ClCompile Include="pk\Engine.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pk\AssetManager.h">
@@ -255,6 +258,9 @@
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="pk\RandomSound.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\Engine.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>

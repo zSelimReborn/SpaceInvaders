@@ -7,6 +7,7 @@
 #include "Assets.h"
 #include "Game.h"
 #include "pk/ClassSettingsReader.h"
+#include "pk/Engine.h"
 
 Window::SharedPtr CreateWindow();
 
@@ -17,26 +18,22 @@ const std::string DEFAULT_WINDOW_TITLE = "Space Invaders";
 
 int main(int argc, char** argv)
 {
-	Window::SharedPtr WindowPtr;
-	Game::SharedPtr GamePtr;
-
+	Engine CurrentEngine;
 	try
 	{
-		WindowPtr = CreateWindow();
-		GamePtr = std::make_shared<Game>(WindowPtr);
-		GamePtr->Begin();
+		Window::SharedPtr WindowPtr = CreateWindow();
+		Game::SharedPtr GamePtr = std::make_shared<Game>();
+		CurrentEngine.SetWindow(WindowPtr);
+		CurrentEngine.SetCurrentScene(GamePtr);
+		CurrentEngine.Begin();
 	}
 	catch (const std::runtime_error& Error)
 	{
-		std::cout << "[ERROR]: " << Error.what() << "\n";
+		std::cout << "[ENGINE]: Error during begin phase: " << Error.what() << "\n";
 		return -1;
 	}
 
-	while (!GamePtr->ShouldClose())
-	{
-		GamePtr->Frame();
-	}
-
+	CurrentEngine.Run();
 	return 0;
 }
 
