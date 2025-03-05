@@ -8,10 +8,12 @@
 class SoundEngine
 {
 public:
+	typedef unsigned int Id;
+
 	typedef std::map<std::string, FMOD::Sound*> SoundsMap;
 	typedef std::pair<std::string, FMOD::Sound*> SoundPair;
-	typedef std::map<int, FMOD::Channel*> ChannelsMap;
-	typedef std::pair<int, FMOD::Channel*> ChannelPair;
+	typedef std::map<Id, FMOD::Channel*> ChannelsMap;
+	typedef std::pair<Id, FMOD::Channel*> ChannelPair;
 
 	static SoundEngine& Get()
 	{
@@ -20,13 +22,14 @@ public:
 	}
 
 	void Load(const std::string& SoundPath);
-	int Play(const std::string& SoundPath, const float Volume);
-	int Play(const std::string& SoundPath, const float Volume, bool bMuted, bool bLoop);
-	void Mute(int ChannelId, bool bMute);
-	void Stop(int ChannelId);
-	void SetChannelVolume(const int ChannelId, const float NewVolume);
-	void SetChannelPitch(const int ChannelId, const float Pitch);
-	bool IsPlaying(const int ChannelId) const;
+	Id Play(const std::string& SoundPath, float Volume);
+	Id Play(const std::string& SoundPath, float Volume, bool bMuted, bool bLoop);
+	void Mute(Id ChannelId, bool bMute);
+	void Stop(Id ChannelId);
+	void SetChannelVolume(Id ChannelId, float NewVolume);
+	void SetChannelPitch(Id ChannelId, float Pitch);
+	bool IsPlaying(Id ChannelId) const;
+	bool IsLooping(Id ChannelId) const;
 
 	bool IsLoaded(const std::string& SoundName) const;
 
@@ -40,7 +43,7 @@ public:
 	~SoundEngine();
 
 private:
-	bool IsActive(const int ChannelId) const;
+	bool IsActive(Id ChannelId) const;
 	SoundEngine();
 	void Initialize();
 
@@ -49,5 +52,5 @@ private:
 
 	SoundsMap LoadedSounds;
 	ChannelsMap ActiveChannels;
-	int NextChannelId;
+	Id NextChannelId;
 };
