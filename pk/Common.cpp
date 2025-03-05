@@ -1,5 +1,6 @@
 #include "Common.h"
 
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -78,6 +79,41 @@ void File::WriteAll(const std::string& FilePath, const std::string& FileContent)
 	Handler << FileContent;
 }
 
+
+std::string String::ToLower(const std::string& InString)
+{
+	std::string Lowered = InString;
+	std::transform(Lowered.begin(), Lowered.end(), Lowered.begin(), [](unsigned char Char) { return tolower(Char); });
+
+	return Lowered;
+}
+
+std::string String::ToUpper(const std::string& InString)
+{
+	std::string Uppered = InString;
+	std::transform(Uppered.begin(), Uppered.end(), Uppered.begin(), [](unsigned char Char) { return toupper(Char); });
+
+	return Uppered;
+}
+
+std::vector<std::string> String::GenerateStringsFromBase(const std::string& InBase, int Size)
+{
+	std::vector<std::string> Strings;
+	const int BufferSize = static_cast<int>(InBase.size()) + 2;
+	char* FileName = new char[BufferSize];
+	for (int i = 0; i < Size; ++i)
+	{
+		if (sprintf_s(FileName, BufferSize, InBase.c_str(), i + 1) <= 0)
+		{
+			continue;
+		}
+
+		Strings.emplace_back(FileName);
+	}
+
+	delete[] FileName;
+	return Strings;
+}
 
 Transform::Transform()
 	: Location(0.f), Size(0.f)

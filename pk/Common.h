@@ -2,6 +2,7 @@
 
 #include <ios>
 #include <string>
+#include <vector>
 #include <glm/glm.hpp>
 
 namespace Console
@@ -33,6 +34,13 @@ namespace File
 	int CreateFolder(const std::string& FolderName);
 	void WriteAll(const std::string& FilePath, const std::string& FileContent);
 	std::string ReadAll(const std::string& FilePath);
+}
+
+namespace String
+{
+	std::string ToLower(const std::string& InString);
+	std::string ToUpper(const std::string& InString);
+	std::vector<std::string> GenerateStringsFromBase(const std::string& InBase, int Size);
 }
 
 struct Transform
