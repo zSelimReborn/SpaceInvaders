@@ -13,12 +13,13 @@
 #include "Common.h"
 #include "Renderer.h"
 
-void Particle::Set(const glm::vec3& InPosition, const glm::vec3& InDirection, const glm::vec4& InColor, float InLife, float InSpeed)
+void Particle::Set(const glm::vec3& InPosition, const glm::vec3& InDirection, const glm::vec4& InColor, float InLife, float InSpeed, float InOverrideScale)
 {
 	Position = InPosition;
 	Direction = InDirection;
 	Color = InColor;
 	Life = InLife;
+	OverrideScale = InOverrideScale;
 	Speed = InSpeed;
 }
 
@@ -52,7 +53,8 @@ int ParticlePattern::Base::GetSpawnAmount() const
 	return SpawnAmount;
 }
 
-void ParticlePattern::Base::Spawn(ParticleList& Pool, int& LastInactive, const glm::vec3& Position, const glm::vec3& Direction)
+void ParticlePattern::Base::Spawn(ParticleList& Pool, int& LastInactive, const glm::vec3& Position,
+	const glm::vec3& Direction, float OverrideScale)
 {
 }
 
@@ -77,20 +79,14 @@ int ParticlePattern::Base::NextInactive(ParticleList& Pool, const int LastInacti
 	return 0;
 }
 
-void ParticlePattern::Base::SpawnParticle(const Particle::SharedPtr& NewParticle, const glm::vec3& Position, const glm::vec3& Direction) const
+void ParticlePattern::Base::SpawnParticle(const Particle::SharedPtr& NewParticle, const glm::vec3& Position, const glm::vec3& Direction, float OverrideScale) const
 {
 	if (NewParticle == nullptr)
 	{
 		return;
 	}
 
-	/* float RandomOffsetFactor = 0.f; //((rand() % 100) - 50) / 10.0f;
-	float RandomColor = 0.5f + ((rand() % 100) / 100.0f);
-
-	const glm::vec3 CalcPosition(Position.x + RandomOffsetFactor, Position.y + RandomOffsetFactor, 0.f);
-	const glm::vec4 Color(RandomColor, RandomColor, RandomColor, 1.0f); */
-
-	NewParticle->Set(Position, Direction, Color, Life, Speed);
+	NewParticle->Set(Position, Direction, Color, Life, Speed, OverrideScale);
 }
 
 ParticlePattern::Linear::Linear(float InSpeed, float InLife, int InSpawnAmount, const glm::vec4& InColor)
@@ -99,12 +95,12 @@ ParticlePattern::Linear::Linear(float InSpeed, float InLife, int InSpawnAmount, 
 }
 
 void ParticlePattern::Linear::Spawn(ParticleList& Pool, int& LastInactive, const glm::vec3& Position,
-	const glm::vec3& Direction)
+	const glm::vec3& Direction, float OverrideScale)
 {
 	for (int i = 0; i < GetSpawnAmount(); ++i)
 	{
 		LastInactive = NextInactive(Pool, LastInactive);
-		SpawnParticle(Pool[LastInactive], Position, Direction);
+		SpawnParticle(Pool[LastInactive], Position, Direction, OverrideScale);
 	}
 }
 
@@ -115,7 +111,7 @@ ParticlePattern::Bounce::Bounce(float InSpeed, float InLife, int InSpawnAmount, 
 }
 
 void ParticlePattern::Bounce::Spawn(ParticleList& Pool, int& LastInactive, const glm::vec3& Position,
-	const glm::vec3& Direction)
+	const glm::vec3& Direction, float OverrideScale)
 {
 	const std::vector<glm::vec3> Compass = {
 		glm::vec3(0.f, -1.f, 0.f), // Top
@@ -150,7 +146,7 @@ void ParticlePattern::Bounce::Spawn(ParticleList& Pool, int& LastInactive, const
 	for (int i = 0; i < GetSpawnAmount(); ++i)
 	{
 		LastInactive = NextInactive(Pool, LastInactive);
-		SpawnParticle(Pool[LastInactive], Position, DirectionsToSpawn[i % DirectionsCount]);
+		SpawnParticle(Pool[LastInactive], Position, DirectionsToSpawn[i % DirectionsCount], OverrideScale);
 	}
 }
 
@@ -163,14 +159,24 @@ Emitter::Emitter(int InPoolCapacity, float InParticleScale, std::string InShader
 	InitializePool();
 }
 
-void Emitter::Spawn(const glm::vec3& Position, const glm::vec3& Direction)
+void Emitter::Spawn(const glm::vec3& Position, const glm::vec3& Direction, float OverrideScale)
 {
 	if (!ParticlePattern)
 	{
 		return;
 	}
 
-	ParticlePattern->Spawn(Pool, LastInactive, Position, Direction);
+	ParticlePattern->Spawn(Pool, LastInactive, Position, Direction, OverrideScale);
+}
+
+void Emitter::Spawn(const glm::vec3& Position, float OverrideScale)
+{
+	Spawn(Position, glm::vec3(0.f), OverrideScale);
+}
+
+void Emitter::Spawn(const glm::vec3& Position, const glm::vec3& Direction)
+{
+	Spawn(Position, Direction, -1.f);
 }
 
 void Emitter::Spawn(const glm::vec3& Position)
@@ -187,7 +193,7 @@ void Emitter::Update(float Delta, const glm::vec3& Position, const glm::vec3& Di
 
 	if (ParticlePattern->ShouldLoop())
 	{
-		ParticlePattern->Spawn(Pool, LastInactive, Position, Direction);
+		ParticlePattern->Spawn(Pool, LastInactive, Position, Direction, -1.f);
 	}
 
 	const float ColorDecayFactor = 2.f / ParticlePattern->GetLife();

@@ -6,12 +6,12 @@ Explosion::Explosion(float InSpeed, float InLife, int InSpawnAmount, const glm::
 	BuildCompass();
 }
 
-void Explosion::Spawn(ParticleList& Pool, int& LastInactive, const glm::vec3& Position, const glm::vec3& Direction)
+void Explosion::Spawn(ParticleList& Pool, int& LastInactive, const glm::vec3& Position, const glm::vec3& Direction, float OverrideScale)
 {
 	for (int i = 0; i < GetSpawnAmount(); ++i)
 	{
 		LastInactive = NextInactive(Pool, LastInactive);
-		SpawnParticle(Pool[LastInactive], Position, Compass[i % Compass.size()]);
+		SpawnParticle(Pool[LastInactive], Position, Compass[i % Compass.size()], OverrideScale);
 	}
 }
 
@@ -34,8 +34,8 @@ SpawnTexture::SpawnTexture(float InSpeed, float InLife, int InSpawnAmount, const
 {
 }
 
-void SpawnTexture::Spawn(ParticleList& Pool, int& LastInactive, const glm::vec3& Position, const glm::vec3& Direction)
+void SpawnTexture::Spawn(ParticleList& Pool, int& LastInactive, const glm::vec3& Position, const glm::vec3& Direction, float OverrideScale)
 {
 	LastInactive = NextInactive(Pool, LastInactive);
-	SpawnParticle(Pool[LastInactive], Position, glm::vec3(0.f));
+	SpawnParticle(Pool[LastInactive], Position, glm::vec3(0.f), OverrideScale);
 }

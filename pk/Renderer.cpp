@@ -104,8 +104,6 @@ void Renderer::RenderParticleVfx(const ParticleList& Particles,
 		Shader->Use();
 	}
 
-	Shader->SetFloat("scale", Scale);
-
 	glBindVertexArray(SpriteQuadId);
 
 	if (Texture != nullptr)
@@ -121,8 +119,15 @@ void Renderer::RenderParticleVfx(const ParticleList& Particles,
 			continue;
 		}
 
+		float CurrentScale = Scale;
+		if (CurrentParticle->OverrideScale >= 0.f)
+		{
+			CurrentScale = CurrentParticle->OverrideScale;
+		}
+
 		Shader->SetFloat("position", CurrentParticle->Position);
 		Shader->SetFloat("color", CurrentParticle->Color);
+		Shader->SetFloat("scale", CurrentScale);
 
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}

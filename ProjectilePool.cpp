@@ -161,12 +161,10 @@ void ProjectilePool::OnProjectileHit(const Actor::SharedPtr& HitActor, const Col
 {
 	if (HitActor->IsA<Ship>())
 	{
-		ExplosionEmitter->SetParticleScale(ParticleScale * 2);
-		ExplosionEmitter->Spawn(Result.ImpactLocation);
+		ExplosionEmitter->Spawn(Result.ImpactLocation, ParticleScale * 2.f);
 	}
 	else
 	{
-		ExplosionEmitter->SetParticleScale(ParticleScale);
 		ExplosionEmitter->Spawn(HitActor->GetLocation());
 	}
 }
