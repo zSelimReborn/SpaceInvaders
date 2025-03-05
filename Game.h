@@ -52,8 +52,8 @@ public:
 	void ToggleMute();
 	bool IsMuted() const;
 
-	int PlayAudio(const std::string& Path, float Volume) const;
-	int PlayAudio(const std::string& Path, float Volume, bool bLoop) const;
+	int PlayAudio(const std::string& Name, float Volume) const;
+	int PlayAudio(const std::string& Name, float Volume, bool bLoop) const;
 
 protected:
 	void HandleInput(const float Delta) override;

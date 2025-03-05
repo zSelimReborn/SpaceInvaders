@@ -98,12 +98,28 @@ namespace Assets
 	{
 		const std::string InnerPath = "Sounds/";
 
+		const std::string AlienMoveName = "invader_move";
 		const std::string AlienMove = BasePath + InnerPath + "fastinvader%d.wav";
+
+		const std::string AlienExplosionName = "invader_explosion";
 		const std::string AlienExplosion = BasePath + InnerPath + "kill.wav";
+
+		const std::string PlayerExplosionName = "player_explosion";
 		const std::string PlayerExplosion = BasePath + InnerPath + "player_explosion.wav";
+
+		const std::string MenuNavigationName = "menu_nav";
 		const std::string MenuNavigation = BasePath + InnerPath + "menu_nav.wav";
-		const std::string Shoot = BasePath + InnerPath + "shoot.wav";
+
+		const std::string ShootName = "shoot";
+		const std::string Shoot = BasePath + InnerPath + "shoot%d.wav";
+
+		const std::string OldShootName = "old_shoot";
+		const std::string OldShoot = BasePath + InnerPath + "shoot_old.wav";
+
+		const std::string GameOverName = "game_over";
 		const std::string GameOver = BasePath + InnerPath + "game_over.wav";
+
+		const std::string MainJingleName = "main_jingle";
 		const std::string MainJingle = BasePath + InnerPath + "main.ogg";
 	}
 

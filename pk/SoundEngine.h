@@ -28,6 +28,8 @@ public:
 	void SetChannelPitch(const int ChannelId, const float Pitch);
 	bool IsPlaying(const int ChannelId) const;
 
+	bool IsLoaded(const std::string& SoundName) const;
+
 	FMOD_RESULT GetLastResult() const;
 
 	void Update(const float Delta);

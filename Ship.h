@@ -62,7 +62,7 @@ private:
 
 	void NotifyOnTakeDamage() const;
 
-	void PlayAudio(const std::string& FilePath, float Volume) const;
+	void PlayAudio(const std::string& Name, const std::string& FilePath, float Volume) const;
 
 	GameSharedPtr GetGame() const;
 

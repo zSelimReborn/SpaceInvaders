@@ -12,7 +12,6 @@
 const int AlienGroup::DEFAULT_NUM_ROWS_PER_TYPE = 2;
 const int AlienGroup::DEFAULT_ALIEN_PER_ROW = 11;
 const int AlienGroup::DEFAULT_MAX_SHOOTING_ALIEN = 1;
-const int AlienGroup::NUM_AUDIO_TRACKS = 4;
 const float AlienGroup::DEFAULT_TOP_OFFSET = 60.f;
 const float AlienGroup::DEFAULT_MIN_MOVE_DELAY = 1.f;
 const float AlienGroup::DEFAULT_MAX_MOVE_DELAY = 2.f;
@@ -34,7 +33,7 @@ AlienGroup::AlienGroup()
 		ShootMaxCooldown(DEFAULT_SHOOT_MAX_COOLDOWN), ShootMinCooldown(DEFAULT_SHOOT_MIN_COOLDOWN), SelectedShootCooldown(DEFAULT_SHOOT_MAX_COOLDOWN), CurrentShootCooldown(0.f),
 		HorizontalMoveStep(DEFAULT_H_MOVE_STEP), VerticalMoveStep(DEFAULT_V_MOVE_STEP),
 		HorizontalDistance(DEFAULT_H_DISTANCE), VerticalDistance(DEFAULT_V_DISTANCE),
-		AlienSize(DEFAULT_ALIEN_SIZE), CurrentTrack(0),
+		AlienSize(DEFAULT_ALIEN_SIZE),
 		State(GroupState::None)
 {
 	AlienTypeData SquidData(Config::SquidFile, Textures::SquidName);
@@ -254,7 +253,6 @@ void AlienGroup::Begin()
 {
 	Actor::Begin();
 
-	PrepareTracks();
 	BuildMatrix();
 	StartGroup();
 
@@ -352,37 +350,15 @@ void AlienGroup::HideBoard() const
 	}
 }
 
-void AlienGroup::PrepareTracks()
-{
-	const int BufferSize = static_cast<int>(Sounds::AlienMove.size()) + 2;
-	char* FileName = new char[BufferSize];
-	for (int i = 0; i < NUM_AUDIO_TRACKS; ++i)
-	{
-		if (sprintf_s(FileName, BufferSize, Sounds::AlienMove.c_str(), i + 1) <= 0)
-		{
-			continue;
-		}
-
-		SoundEngine::Get().Load(FileName);
-		Tracks.emplace_back(FileName);
-	}
-
-	delete[] FileName;
-}
-
-void AlienGroup::PlayNextTrack()
+void AlienGroup::PlayNextTrack() const
 {
 	const Game::SharedPtr CurrentGame = GetGame();
 	if (CurrentGame == nullptr)
 	{
-		SoundEngine::Get().Play(Tracks[CurrentTrack], 1.0f);
-	}
-	else
-	{
-		CurrentGame->PlayAudio(Tracks[CurrentTrack], 1.0f);
+		return;
 	}
 
-	CurrentTrack = (CurrentTrack + 1) % Tracks.size();
+	CurrentGame->PlayAudio(Assets::Sounds::AlienMoveName, 1.0f);
 }
 
 void AlienGroup::BuildMatrix()

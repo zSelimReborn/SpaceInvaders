@@ -1,7 +1,12 @@
 #include "AssetManager.h"
 
+#include "RandomSound.h"
+#include "SequenceSound.h"
+#include "SimpleSound.h"
+#include "SoundEngine.h"
+
 Shader::SharedPtr AssetManager::LoadShader(const std::string& Name, const std::string& Vertex,
-	const std::string& Fragment)
+                                           const std::string& Fragment)
 {
 	Shader::SharedPtr FoundShader = GetShader(Name);
 	if (FoundShader != nullptr)
@@ -45,6 +50,59 @@ Font::SharedPtr AssetManager::LoadFont(const std::string& Name, const std::strin
 	return NewFont;
 }
 
+AssetManager::SoundSharedPtr AssetManager::LoadSound(const std::string& Name, const std::string& Path)
+{
+	SoundSharedPtr FoundSound = GetSound(Name);
+	if (FoundSound != nullptr)
+	{
+		return FoundSound;
+	}
+
+	std::shared_ptr<SimpleSound> NewSound = std::make_shared<SimpleSound>(Path);
+	SoundEngine::Get().Load(Path);
+	Sounds.insert(SoundPair(Name, NewSound));
+
+	return NewSound;
+}
+
+AssetManager::SoundSharedPtr AssetManager::LoadSequenceSound(const std::string& Name,
+	const std::vector<std::string>& Paths)
+{
+	SoundSharedPtr FoundSound = GetSound(Name);
+	if (FoundSound != nullptr)
+	{
+		return FoundSound;
+	}
+
+	std::shared_ptr<SequenceSound> NewSound = std::make_shared<SequenceSound>(Paths);
+	for (const std::string& Path : Paths)
+	{
+		SoundEngine::Get().Load(Path);
+	}
+
+	Sounds.insert(SoundPair(Name, NewSound));
+	return NewSound;
+}
+
+AssetManager::SoundSharedPtr AssetManager::LoadRandomSound(const std::string& Name,
+	const std::vector<std::string>& Paths)
+{
+	SoundSharedPtr FoundSound = GetSound(Name);
+	if (FoundSound != nullptr)
+	{
+		return FoundSound;
+	}
+
+	std::shared_ptr<RandomSound> NewSound = std::make_shared<RandomSound>(Paths);
+	for (const std::string& Path : Paths)
+	{
+		SoundEngine::Get().Load(Path);
+	}
+
+	Sounds.insert(SoundPair(Name, NewSound));
+	return NewSound;
+}
+
 Texture::SharedPtr AssetManager::GetTexture(const std::string& Name)
 {
 	if (Textures.count(Name) <= 0)
@@ -63,6 +121,16 @@ Font::SharedPtr AssetManager::GetFont(const std::string& Name)
 	}
 
 	return Fonts[Name];
+}
+
+AssetManager::SoundSharedPtr AssetManager::GetSound(const std::string& Name)
+{
+	if (Sounds.count(Name) <= 0)
+	{
+		return nullptr;
+	}
+
+	return Sounds[Name];
 }
 
 Shader::SharedPtr AssetManager::GetShader(const std::string& Name)

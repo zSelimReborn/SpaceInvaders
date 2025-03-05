@@ -7,12 +7,7 @@
 
 void SoundEngine::Load(const std::string& SoundPath)
 {
-	if (!System)
-	{
-		return;
-	}
-
-	if (LoadedSounds.count(SoundPath) > 0)
+	if (!System || IsLoaded(SoundPath))
 	{
 		return;
 	}
@@ -23,8 +18,15 @@ void SoundEngine::Load(const std::string& SoundPath)
 	Mode |= FMOD_CREATECOMPRESSEDSAMPLE;
 
 	FMOD::Sound* SoundObject = nullptr;
-	System->createSound(SoundPath.c_str(), Mode, nullptr, &SoundObject);
-	LoadedSounds.insert(std::pair<std::string, FMOD::Sound*>(SoundPath, SoundObject));
+	FMOD_RESULT Result = System->createSound(SoundPath.c_str(), Mode, nullptr, &SoundObject);
+	if (Result == FMOD_RESULT::FMOD_OK)
+	{
+		LoadedSounds.insert(std::pair<std::string, FMOD::Sound*>(SoundPath, SoundObject));
+	}
+	else
+	{
+		std::cout << "Unable to load " << SoundPath << " " << Result << "\n";
+	}
 }
 
 int SoundEngine::Play(const std::string& SoundPath, const float Volume)
@@ -34,14 +36,9 @@ int SoundEngine::Play(const std::string& SoundPath, const float Volume)
 
 int SoundEngine::Play(const std::string& SoundPath, const float Volume, bool bMuted, bool bLoop)
 {
-	if (!System)
+	if (!System || !IsLoaded(SoundPath))
 	{
 		return -1;
-	}
-
-	if (LoadedSounds.count(SoundPath) <= 0)
-	{
-		Load(SoundPath);
 	}
 
 	const float ActualVolume = Math::Clamp(Volume, 0.f, 1.f);
@@ -116,6 +113,11 @@ bool SoundEngine::IsPlaying(const int ChannelId) const
 	bool bPlaying = false;
 	ActiveChannels.at(ChannelId)->isPlaying(&bPlaying);
 	return bPlaying;
+}
+
+bool SoundEngine::IsLoaded(const std::string& SoundName) const
+{
+	return LoadedSounds.count(SoundName) > 0;
 }
 
 FMOD_RESULT SoundEngine::GetLastResult() const

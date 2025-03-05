@@ -177,7 +177,7 @@ bool Ship::TakeDamage(float InDamage)
 {
 	LifePoints = std::max(0, LifePoints - 1);
 
-	PlayAudio(Assets::Sounds::PlayerExplosion, 1.f);
+	PlayAudio(Assets::Sounds::PlayerExplosionName, Assets::Sounds::PlayerExplosion, 1.f);
 	NotifyOnTakeDamage();
 	return false;
 }
@@ -253,7 +253,7 @@ void Ship::Shoot()
 
 	CurrentScene->Add(NewProjectile);
 
-	PlayAudio(Assets::Sounds::Shoot, 1.f);
+	PlayAudio(Assets::Sounds::ShootName, Assets::Sounds::OldShoot, 1.f);
 	bCanShoot = false;
 }
 
@@ -296,7 +296,7 @@ void Ship::NotifyOnTakeDamage() const
 	}
 }
 
-void Ship::PlayAudio(const std::string& FilePath, float Volume) const
+void Ship::PlayAudio(const std::string& Name, const std::string& FilePath, float Volume) const
 {
 	const GameSharedPtr CurrentGame = GetGame();
 	if (CurrentGame == nullptr)
@@ -305,7 +305,7 @@ void Ship::PlayAudio(const std::string& FilePath, float Volume) const
 	}
 	else
 	{
-		CurrentGame->PlayAudio(FilePath, Volume);
+		CurrentGame->PlayAudio(Name, Volume);
 	}
 }
 

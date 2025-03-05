@@ -17,6 +17,7 @@
 #include "GameSave.h"
 #include "Hud.h"
 #include "MainMenu.h"
+#include "pk/ISound.h"
 #include "pk/SaveSystem.h"
 #include "pk/SoundEngine.h"
 
@@ -200,7 +201,7 @@ void Game::OnPlayerTakeDamage()
 	}
 	else
 	{
-		PlayAudio(Sounds::PlayerExplosion, 1.f);
+		PlayAudio(Sounds::PlayerExplosionName, 1.f);
 		State = GameState::Pause;
 	}
 }
@@ -209,7 +210,7 @@ void Game::OnGameOver(bool bPlayerWon)
 {
 	if (!bPlayerWon)
 	{
-		PlayAudio(Sounds::GameOver, 1.f);
+		PlayAudio(Sounds::GameOverName, 1.f);
 		State = GameState::GameOver;
 		MainAlienGroup->HideBoard();
 		AlienProjectilePool->ResetPool();
@@ -339,7 +340,7 @@ void Game::Menu()
 	GameOverW->Deactivate();
 	MainMenuW->Activate();
 
-	MainAudioChannel = PlayAudio(Sounds::MainJingle, 1.f, true);
+	MainAudioChannel = PlayAudio(Sounds::MainJingleName, 1.f, true);
 }
 
 void Game::Quit() const
@@ -376,12 +377,12 @@ bool Game::IsMuted() const
 	return SavePtr->IsMuted();
 }
 
-int Game::PlayAudio(const std::string& Path, float Volume) const
+int Game::PlayAudio(const std::string& Name, float Volume) const
 {
-	return PlayAudio(Path, Volume, false);
+	return PlayAudio(Name, Volume, false);
 }
 
-int Game::PlayAudio(const std::string& Path, float Volume, bool bLoop) const
+int Game::PlayAudio(const std::string& Name, float Volume, bool bLoop) const
 {
 	bool bMuted = false;
 	if (SavePtr != nullptr)
@@ -389,7 +390,13 @@ int Game::PlayAudio(const std::string& Path, float Volume, bool bLoop) const
 		bMuted = SavePtr->IsMuted();
 	}
 
-	return SoundEngine::Get().Play(Path, Volume, bMuted, bLoop);
+	const AssetManager::SoundSharedPtr Sound = AssetManager::Get().GetSound(Name);
+	if (Sound == nullptr)
+	{
+		return -1;
+	}
+
+	return SoundEngine::Get().Play(Sound->GetPath(), Volume, bMuted, bLoop);
 }
 
 void Game::HandleInput(const float Delta)
@@ -485,11 +492,13 @@ void Game::LoadAssets() const
 	Font::SharedPtr HeadingFont = AssetManager::Get().LoadFont(Fonts::HeadingFontName, Fonts::HeadingFontPath, Shaders::TextName);
 	HeadingFont->Load(50, GL_CLAMP_TO_BORDER, GL_NEAREST);
 
-	SoundEngine::Get().Load(Sounds::MenuNavigation);
-	SoundEngine::Get().Load(Sounds::Shoot);
-	SoundEngine::Get().Load(Sounds::AlienExplosion);
-	SoundEngine::Get().Load(Sounds::PlayerExplosion);
-	SoundEngine::Get().Load(Sounds::GameOver);
-	SoundEngine::Get().Load(Sounds::MainJingle);
+	AssetManager::Get().LoadSound(Sounds::MenuNavigationName, Sounds::MenuNavigation);
+	AssetManager::Get().LoadSound(Sounds::OldShootName, Sounds::OldShoot);
+	AssetManager::Get().LoadSound(Sounds::AlienExplosionName, Sounds::AlienExplosion);
+	AssetManager::Get().LoadSound(Sounds::PlayerExplosionName, Sounds::PlayerExplosion);
+	AssetManager::Get().LoadSound(Sounds::GameOverName, Sounds::GameOver);
+	AssetManager::Get().LoadSound(Sounds::MainJingleName, Sounds::MainJingle);
+	AssetManager::Get().LoadSequenceSound(Sounds::AlienMoveName, String::GenerateStringsFromBase(Sounds::AlienMove, 4));
+	AssetManager::Get().LoadRandomSound(Sounds::ShootName, String::GenerateStringsFromBase(Sounds::Shoot, 4));
 }
 

@@ -80,7 +80,7 @@ bool Alien::TakeDamage(float InDamage)
 	}
 	else
 	{
-		CurrentGame->PlayAudio(Assets::Sounds::AlienExplosion, 1.f);
+		CurrentGame->PlayAudio(Assets::Sounds::AlienExplosionName, 1.f);
 	}
 
 	Destroy();

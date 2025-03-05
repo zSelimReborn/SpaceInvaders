@@ -159,7 +159,7 @@ void MainMenu::PlayNavSound() const
 	}
 	else
 	{
-		CurrentGame->PlayAudio(Assets::Sounds::MenuNavigation, 1.f);
+		CurrentGame->PlayAudio(Assets::Sounds::MenuNavigationName, 1.f);
 	}
 }
 
