@@ -63,12 +63,11 @@ void Widget::RenderText(const std::string& InFontName,
 		return;
 	}
 
-
 	Font->GetTextSize(InText, Scale, OutWidth, OutHeight);
 	glm::vec2 TextLocation = StartLocation;
 	if (Orient == TextOrient::Center)
 	{
-		TextLocation.x -= (OutWidth / 2);
+		TextLocation.x -= (OutWidth / 2.f);
 	}
 	else if (Orient == TextOrient::Right)
 	{

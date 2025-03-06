@@ -34,7 +34,8 @@ public:
 
 	void Load(unsigned int InSize, int InWrapMode, int InFilterMode);
 	void Render(const std::string& Text, const glm::vec2& Position, float Scale, const glm::vec4& Color) const;
-	void GetTextSize(const std::string& Text, float Scale, float& OutHSize, float& OutVSize);
+	void GetTextSize(const std::string& Text, float Scale, float& OutHSize, float& OutVSize) const;
+	float GetCharacterAdvance(char InCharacter, float Scale) const;
 
 	CharacterMap GetCharacterMap() const;
 

@@ -5,7 +5,7 @@
 
 #include "Assets.h"
 #include "Game.h"
-#include "GameSave.h"
+#include "pk/AssetManager.h"
 #include "pk/Common.h"
 #include "pk/SaveSystem.h"
 #include "pk/SoundEngine.h"
@@ -20,11 +20,11 @@ void MainMenu::Input(const InputHandler& Handler, const float Delta)
 {
 	Widget::Input(Handler, Delta);
 
-	if (Handler.IsPressed(GLFW_KEY_ENTER))
+	if (Handler.IsPressed(GLFW_KEY_ENTER) || Handler.IsPadPressed(GLFW_GAMEPAD_BUTTON_CROSS))
 	{
 		HandleChoice();
 	}
-	else if (Handler.IsPressed(GLFW_KEY_UP))
+	else if (Handler.IsPressed(GLFW_KEY_UP) || Handler.IsPadPressed(GLFW_GAMEPAD_BUTTON_DPAD_UP))
 	{
 		int OldChoice = CurrentChoice;
 		CurrentChoice = std::max(0, CurrentChoice - 1);
@@ -33,7 +33,7 @@ void MainMenu::Input(const InputHandler& Handler, const float Delta)
 			OnChangeChoice();
 		}
 	}
-	else if (Handler.IsPressed(GLFW_KEY_DOWN))
+	else if (Handler.IsPressed(GLFW_KEY_DOWN) || Handler.IsPadPressed(GLFW_GAMEPAD_BUTTON_DPAD_DOWN))
 	{
 		int OldChoice = CurrentChoice;
 		CurrentChoice = std::min(MaxChoice, CurrentChoice + 1);
@@ -54,6 +54,7 @@ void MainMenu::Render()
 		return;
 	}
 
+	const std::string TitleText = "SPACE INVADERS", StartText = "START GAME", QuitText = "QUIT";
 	const glm::vec2 Center(CurrentScene->GetScreenCenter());
 	const glm::vec2 TitlePos(Center.x, Center.y - 150.f);
 	const glm::vec2 StartPos(Center.x, Center.y - 90.f);
@@ -64,25 +65,28 @@ void MainMenu::Render()
 	std::string MuteText = "MUTE: ";
 	MuteText += (CurrentScene->IsMuted()) ? "YES" : "NO";
 
-	RenderText(Assets::Fonts::HeadingFontName, TitlePos, "Space Invaders", TextOrient::Center, 1.0f, Colors::White, TitleSize.x, TitleSize.y);
-	RenderText(Assets::Fonts::TextFontName, StartPos, "START GAME", TextOrient::Center, 1.0f, Colors::White, StartSize.x, StartSize.y);
+	RenderText(Assets::Fonts::HeadingFontName, TitlePos, TitleText, TextOrient::Center, 1.0f, Colors::White, TitleSize.x, TitleSize.y);
+	RenderText(Assets::Fonts::TextFontName, StartPos, StartText, TextOrient::Center, 1.0f, Colors::White, StartSize.x, StartSize.y);
 	RenderText(Assets::Fonts::TextFontName, MutePos, MuteText, TextOrient::Center, 1.0f, Colors::White, MuteSize.x, MuteSize.y);
-	RenderText(Assets::Fonts::TextFontName, QuitPos, "QUIT", TextOrient::Center, 1.0f, Colors::White, QuitSize.x, QuitSize.y);
+	RenderText(Assets::Fonts::TextFontName, QuitPos, QuitText, TextOrient::Center, 1.0f, Colors::White, QuitSize.x, QuitSize.y);
 
+	std::string SelectedText = StartText;
 	glm::vec2 SelectedPos = StartPos;
 	glm::vec2 SelectedSize = StartSize;
 	if (CurrentChoice == 1)
 	{
+		SelectedText = MuteText;
 		SelectedPos = MutePos;
 		SelectedSize = MuteSize;
 	}
 	else if (CurrentChoice == 2)
 	{
+		SelectedText = QuitText;
 		SelectedPos = QuitPos;
 		SelectedSize = QuitSize;
 	}
 
-	RenderSelectArrows(SelectedPos, SelectedSize);
+	RenderSelectArrows(SelectedText, SelectedPos, SelectedSize);
 }
 
 MainMenu::GameSharedPtr MainMenu::GetGame() const
@@ -163,10 +167,17 @@ void MainMenu::PlayNavSound() const
 	}
 }
 
-void MainMenu::RenderSelectArrows(const glm::vec2& OptionPos, const glm::vec2& OptionSize) const
+void MainMenu::RenderSelectArrows(const std::string& InText, const glm::vec2& OptionPos, const glm::vec2& OptionSize) const
 {
-	const float LeftOffset = (OptionSize.x / 2) + 20.f;
-	const float RightOffset = (OptionSize.x / 2) + 10.f;
+	Font::SharedPtr Font = AssetManager::Get().GetFont(Assets::Fonts::TextFontName);
+	float FirstAdvance = 2.f;
+	if (Font != nullptr)
+	{
+		FirstAdvance += Font->GetCharacterAdvance(InText[0], 1.f);
+	}
+
+	const float LeftOffset = (OptionSize.x / 2.f) + FirstAdvance;
+	const float RightOffset = (OptionSize.x / 2.f);
 
 	const glm::vec2 LeftArrow(OptionPos.x - LeftOffset, OptionPos.y);
 	const glm::vec2 RightArrow(OptionPos.x + RightOffset, OptionPos.y);

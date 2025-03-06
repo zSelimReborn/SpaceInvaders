@@ -27,7 +27,7 @@ private:
 
 	void PlayNavSound() const;
 
-	void RenderSelectArrows(const glm::vec2& OptionPos, const glm::vec2& OptionSize) const;
+	void RenderSelectArrows(const std::string& InText, const glm::vec2& OptionPos, const glm::vec2& OptionSize) const;
 
 	int CurrentChoice;
 	int MaxChoice;

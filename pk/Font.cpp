@@ -67,28 +67,27 @@ void Font::Render(const std::string& Text, const glm::vec2& Position, float Scal
     Renderer::Get().RenderText(Text, GetShader(), Characters, Position, Scale, Color);
 }
 
-void Font::GetTextSize(const std::string& Text, float Scale, float& OutHSize, float& OutVSize)
+void Font::GetTextSize(const std::string& Text, float Scale, float& OutHSize, float& OutVSize) const
 {
     OutHSize = 0;
     OutVSize = 0;
 
-    int LastW = 0;
+    float LastAdvance = 0;
     for (const char c : Text)
     {
-        Character Glyph = Characters[c];
-
-        float w = Glyph.Size.x * Scale + Glyph.Bearing.x * Scale;
-        if (isblank(c))
-        {
-            w = LastW;
-        }
+        Character Glyph = Characters.at(c);
 
         float h = Glyph.Size.y * Scale;
-
-        OutHSize += w;
         OutVSize = std::max(OutVSize, h);
-        LastW = w;
+        LastAdvance = (Glyph.Advance >> 6) * Scale;
+        OutHSize += LastAdvance;
     }
+}
+
+float Font::GetCharacterAdvance(char InCharacter, float Scale) const
+{
+    Character Glyph = Characters.at(InCharacter);
+    return (Glyph.Advance >> 6) * Scale;
 }
 
 Font::CharacterMap Font::GetCharacterMap() const
