@@ -10,8 +10,14 @@
 #include "pk/SaveSystem.h"
 #include "pk/SoundEngine.h"
 
+const int MainMenu::START_GAME_OPTION = 0;
+const int MainMenu::SCORES_OPTION = 1;
+const int MainMenu::MUTE_OPTION = 2;
+const int MainMenu::QUIT_OPTION = 3;
+const int MainMenu::MAX_OPTION = 3;
+
 MainMenu::MainMenu(const GameWeakPtr& InGame)
-	: CurrentChoice(0), MaxChoice(2), GamePtr(InGame)
+	: CurrentChoice(START_GAME_OPTION), MaxChoice(MAX_OPTION), GamePtr(InGame), CurrentPanel(Panel::Main)
 {
 	SetScene(InGame);
 }
@@ -20,26 +26,44 @@ void MainMenu::Input(const InputHandler& Handler, const float Delta)
 {
 	Widget::Input(Handler, Delta);
 
+	if (Handler.IsPressed(GLFW_KEY_ESCAPE) || Handler.IsPadPressed(GLFW_GAMEPAD_BUTTON_START))
+	{
+		if (CurrentPanel == Panel::Main)
+		{
+			QuitGame();
+		}
+		else
+		{
+			BackMenu();
+		}
+	}
+
 	if (Handler.IsPressed(GLFW_KEY_ENTER) || Handler.IsPadPressed(GLFW_GAMEPAD_BUTTON_CROSS))
 	{
 		HandleChoice();
 	}
 	else if (Handler.IsPressed(GLFW_KEY_UP) || Handler.IsPadPressed(GLFW_GAMEPAD_BUTTON_DPAD_UP))
 	{
-		int OldChoice = CurrentChoice;
-		CurrentChoice = std::max(0, CurrentChoice - 1);
-		if (OldChoice != CurrentChoice)
+		if (CurrentPanel == Panel::Main)
 		{
-			OnChangeChoice();
+			int OldChoice = CurrentChoice;
+			CurrentChoice = std::max(0, CurrentChoice - 1);
+			if (OldChoice != CurrentChoice)
+			{
+				OnChangeChoice();
+			}
 		}
 	}
 	else if (Handler.IsPressed(GLFW_KEY_DOWN) || Handler.IsPadPressed(GLFW_GAMEPAD_BUTTON_DPAD_DOWN))
 	{
-		int OldChoice = CurrentChoice;
-		CurrentChoice = std::min(MaxChoice, CurrentChoice + 1);
-		if (OldChoice != CurrentChoice)
+		if (CurrentPanel == Panel::Main)
 		{
-			OnChangeChoice();
+			int OldChoice = CurrentChoice;
+			CurrentChoice = std::min(MaxChoice, CurrentChoice + 1);
+			if (OldChoice != CurrentChoice)
+			{
+				OnChangeChoice();
+			}
 		}
 	}
 }
@@ -48,38 +72,63 @@ void MainMenu::Render()
 {
 	Widget::Render();
 
+	if (CurrentPanel == Panel::Main)
+	{
+		RenderMain();
+	}
+	else
+	{
+		RenderScores();
+	}
+}
+
+MainMenu::GameSharedPtr MainMenu::GetGame() const
+{
+	return GamePtr.lock();
+}
+
+void MainMenu::RenderMain() const
+{
 	const Game::SharedPtr CurrentScene = GetGame();
 	if (CurrentScene == nullptr)
 	{
 		return;
 	}
 
-	const std::string TitleText = "SPACE INVADERS", StartText = "START GAME", QuitText = "QUIT";
+	const std::string TitleText = "SPACE INVADERS", StartText = "START GAME", QuitText = "QUIT", ScoresText = "HIGH SCORES";
 	const glm::vec2 Center(CurrentScene->GetScreenCenter());
 	const glm::vec2 TitlePos(Center.x, Center.y - 150.f);
 	const glm::vec2 StartPos(Center.x, Center.y - 90.f);
-	const glm::vec2 MutePos(Center.x, Center.y - 55.f);
-	const glm::vec2 QuitPos(Center.x, Center.y - 20.f);
+	const glm::vec2 ScoresPos(Center.x, Center.y - 55.f);
+	const glm::vec2 MutePos(Center.x, Center.y - 20.f);
+	const glm::vec2 QuitPos(Center.x, Center.y + 15.f);
 
-	glm::vec2 TitleSize, StartSize, MuteSize, QuitSize;
+	glm::vec2 TitleSize, StartSize, MuteSize, QuitSize, ScoresSize;
 	std::string MuteText = "MUTE: ";
 	MuteText += (CurrentScene->IsMuted()) ? "YES" : "NO";
 
 	RenderText(Assets::Fonts::HeadingFontName, TitlePos, TitleText, TextOrient::Center, 1.0f, Colors::White, TitleSize.x, TitleSize.y);
 	RenderText(Assets::Fonts::TextFontName, StartPos, StartText, TextOrient::Center, 1.0f, Colors::White, StartSize.x, StartSize.y);
+	RenderText(Assets::Fonts::TextFontName, ScoresPos, ScoresText, TextOrient::Center, 1.0f, Colors::White, ScoresSize.x, ScoresSize.y);
 	RenderText(Assets::Fonts::TextFontName, MutePos, MuteText, TextOrient::Center, 1.0f, Colors::White, MuteSize.x, MuteSize.y);
 	RenderText(Assets::Fonts::TextFontName, QuitPos, QuitText, TextOrient::Center, 1.0f, Colors::White, QuitSize.x, QuitSize.y);
 
 	std::string SelectedText = StartText;
 	glm::vec2 SelectedPos = StartPos;
 	glm::vec2 SelectedSize = StartSize;
-	if (CurrentChoice == 1)
+	if (CurrentChoice == SCORES_OPTION)
+	{
+		SelectedText = ScoresText;
+		SelectedPos = ScoresPos;
+		SelectedSize = ScoresSize;
+	}
+	else if (CurrentChoice == MUTE_OPTION)
 	{
 		SelectedText = MuteText;
 		SelectedPos = MutePos;
 		SelectedSize = MuteSize;
 	}
-	else if (CurrentChoice == 2)
+	else if (CurrentChoice == QUIT_OPTION)
 	{
 		SelectedText = QuitText;
 		SelectedPos = QuitPos;
@@ -89,9 +138,49 @@ void MainMenu::Render()
 	RenderSelectArrows(SelectedText, SelectedPos, SelectedSize);
 }
 
-MainMenu::GameSharedPtr MainMenu::GetGame() const
+void MainMenu::RenderScores() const
 {
-	return GamePtr.lock();
+	const Game::SharedPtr CurrentScene = GetGame();
+	if (CurrentScene == nullptr)
+	{
+		return;
+	}
+
+	const std::vector<int> Scores = CurrentScene->GetHighScores();
+	const std::string TitleText = "HIGH SCORES", NoDataText = "N/D", BackText = "BACK";
+	const glm::vec2 Center(CurrentScene->GetScreenCenter());
+	const glm::vec2 TitlePos(Center.x, Center.y - 150.f);
+	const glm::vec2 NoDataPos(Center.x, Center.y - 90.f);
+
+	glm::vec2 TitleSize, NoDataSize, CurrentScorePos = NoDataPos;
+	RenderText(Assets::Fonts::HeadingFontName, TitlePos, TitleText, TextOrient::Center, 1.0f, Colors::White, TitleSize.x, TitleSize.y);
+	if (!Scores.empty())
+	{
+		
+		for (int i = 0; i < Scores.size() && i < CurrentScene->GetMaxScores(); ++i)
+		{
+			const int Score = Scores[i];
+			const int Position = i + 1;
+			std::string ScoreText = std::to_string(Position);
+			ScoreText += ". ";
+			ScoreText += std::to_string(Score);
+
+			glm::vec2 ScoreSize;
+			RenderText(Assets::Fonts::TextFontName, CurrentScorePos, ScoreText, TextOrient::Center, 1.0f, Colors::White, ScoreSize.x, ScoreSize.y);
+
+			CurrentScorePos.y += 35.f;
+		}
+	}
+	else
+	{
+		RenderText(Assets::Fonts::TextFontName, NoDataPos, NoDataText, TextOrient::Center, 1.0f, Colors::White, NoDataSize.x, NoDataSize.y);
+		CurrentScorePos.y += 35.f;
+	}
+
+	CurrentScorePos.y += 35.f;
+	glm::vec2 BackSize;
+	RenderText(Assets::Fonts::TextFontName, CurrentScorePos, BackText, TextOrient::Center, 1.0f, Colors::White, BackSize.x, BackSize.y);
+	RenderSelectArrows(BackText, CurrentScorePos, BackSize);
 }
 
 void MainMenu::OnChangeChoice() const
@@ -101,15 +190,25 @@ void MainMenu::OnChangeChoice() const
 
 void MainMenu::HandleChoice()
 {
+	if (CurrentPanel == Panel::Scores)
+	{
+		BackMenu();
+		PlayNavSound();
+		return;
+	}
+
 	switch (CurrentChoice)
 	{
-	case 1:
+	case SCORES_OPTION:
+		ShowScores();
+		break;
+	case MUTE_OPTION:
 		ToggleMute();
 		break;
-	case 2:
+	case QUIT_OPTION:
 		QuitGame();
 		break;
-	case 0:
+	case START_GAME_OPTION:
 	default:
 		StartGame();
 	}
@@ -128,6 +227,11 @@ void MainMenu::StartGame()
 
 	Game->Play();
 	Deactivate();
+}
+
+void MainMenu::ShowScores()
+{
+	CurrentPanel = Panel::Scores;
 }
 
 void MainMenu::ToggleMute() const
@@ -152,6 +256,11 @@ void MainMenu::QuitGame()
 
 	Game->Quit();
 	Deactivate();
+}
+
+void MainMenu::BackMenu()
+{
+	CurrentPanel = Panel::Main;
 }
 
 void MainMenu::PlayNavSound() const

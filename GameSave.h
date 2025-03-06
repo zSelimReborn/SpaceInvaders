@@ -1,8 +1,19 @@
 #pragma once
 
 #include <fstream>
+#include <vector>
 
 #include "pk/ISaveFile.h"
+
+struct SaveImpl
+{
+	static const int MAX_SCORES;
+
+	int bMuted;
+	std::vector<int> Scores;
+
+	SaveImpl() : bMuted(false) {}
+};
 
 class GameSave : public ISaveFile
 {
@@ -15,6 +26,10 @@ public:
 	bool IsMuted() const;
 	void ToggleMute();
 
+	std::vector<int> GetHighScores() const;
+	void AddScore(int InScore);
+	int GetMaxScores() const;
+
 private:
-	int bMuted;
+	SaveImpl CurrentSave;
 };

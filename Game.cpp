@@ -19,6 +19,7 @@
 #include "Hud.h"
 #include "MainMenu.h"
 #include "pk/ISound.h"
+#include "pk/Random.h"
 #include "pk/SaveSystem.h"
 #include "pk/SoundEngine.h"
 
@@ -36,7 +37,7 @@ Game::Game()
 	  BunkersBottomOffset(DEFAULT_BUNKERS_BOTTOM_OFFSET),
 	  ShipSize(DEFAULT_SHIP_SIZE),
 	  CurrentHitCooldown(0.f), PlayerHitCooldown(DEFAULT_PLAYER_HIT_COOLDOWN),
-	  State(GameState::Menu)
+	  State(GameState::Play)
 {
 	LoadConfig();
 	IHandler.HandlePad(GLFW_JOYSTICK_1);
@@ -227,6 +228,7 @@ void Game::OnGameOver(bool bPlayerWon)
 {
 	if (!bPlayerWon)
 	{
+		SaveScore();
 		PlayAudio(Sounds::GameOverName, 1.f);
 		State = GameState::GameOver;
 		MainAlienGroup->HideBoard();
@@ -286,6 +288,16 @@ void Game::UpdatePlayerHitCooldown(float Delta)
 	}
 }
 
+void Game::SaveScore() const
+{
+	if (SavePtr == nullptr || PlayerShip->GetScorePoints() <= 0)
+	{
+		return;
+	}
+
+	SavePtr->AddScore(PlayerShip->GetScorePoints());
+}
+
 void Game::Begin()
 {
 	LoadAssets();
@@ -333,6 +345,11 @@ void Game::WriteSave() const
 
 void Game::Play()
 {
+	if (State == GameState::Play)
+	{
+		return;
+	}
+
 	State = GameState::Play;
 
 	MainMenuW->Deactivate();
@@ -351,6 +368,11 @@ void Game::Play()
 
 void Game::Menu()
 {
+	if (State == GameState::Menu)
+	{
+		return;
+	}
+
 	State = GameState::Menu;
 
 	AlienProjectilePool->ResetPool();
@@ -362,19 +384,14 @@ void Game::Menu()
 	MainMenuW->Activate();
 
 	MainAudioChannel = PlayAudio(Sounds::MainJingleName, 1.f, true);
+
+	SaveScore();
 }
 
-void Game::Quit() const
+void Game::Quit()
 {
-	const Window::SharedPtr CurrentWindow = GetWindow();
-	if (CurrentWindow == nullptr)
-	{
-		std::cout << "Unable to quit, empty window\n";
-		return;
-	}
-
 	WriteSave();
-	CurrentWindow->ShouldClose(true);
+	Scene::Quit();
 }
 
 void Game::ToggleMute()
@@ -396,6 +413,27 @@ bool Game::IsMuted() const
 	}
 
 	return SavePtr->IsMuted();
+}
+
+int Game::GetMaxScores() const
+{
+	if (SavePtr == nullptr)
+	{
+		return 0;
+	}
+
+	return SavePtr->GetMaxScores();
+}
+
+std::vector<int> Game::GetHighScores() const
+{
+	std::vector<int> Empty;
+	if (SavePtr == nullptr)
+	{
+		return Empty;
+	}
+
+	return SavePtr->GetHighScores();
 }
 
 int Game::PlayAudio(const std::string& Name, float Volume) const
@@ -424,14 +462,7 @@ void Game::HandleInput(const float Delta)
 {
 	if (IHandler.IsPressed(GLFW_KEY_ESCAPE) || IHandler.IsPadPressed(GLFW_GAMEPAD_BUTTON_START))
 	{
-		if (State == GameState::Menu)
-		{
-			Quit();
-		}
-		else
-		{
-			Menu();
-		}
+		Menu();
 	}
 
 	if (State == GameState::Play)

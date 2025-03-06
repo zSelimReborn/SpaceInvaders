@@ -49,9 +49,12 @@ public:
 
 	void Play();
 	void Menu();
-	void Quit() const;
+	void Quit() override;
 	void ToggleMute();
 	bool IsMuted() const;
+
+	int GetMaxScores() const;
+	std::vector<int> GetHighScores() const;
 
 	int PlayAudio(const std::string& Name, float Volume) const;
 	int PlayAudio(const std::string& Name, float Volume, bool bLoop) const;
@@ -93,6 +96,8 @@ private:
 	void SetPlayerHitCooldown(float InCooldown);
 
 	void UpdatePlayerHitCooldown(float Delta);
+
+	void SaveScore() const;
 
 	int NumBunkers;
 	int TextSize;
