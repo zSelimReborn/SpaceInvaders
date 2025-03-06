@@ -147,16 +147,19 @@ float Ship::GetSpeed() const
 void Ship::Input(const InputHandler& Handler, const float Delta)
 {
 	glm::vec3 Direction(0.f, 0.f, 0.f);
-	if (Handler.IsPressed(GLFW_KEY_LEFT))
+	if (Handler.IsPressed(GLFW_KEY_LEFT) || Handler.IsPadPressed(GLFW_GAMEPAD_BUTTON_DPAD_LEFT))
 	{
 		Direction.x = -1.f;
 	}
-	else if (Handler.IsPressed(GLFW_KEY_RIGHT))
+	else if (Handler.IsPressed(GLFW_KEY_RIGHT) || Handler.IsPadPressed(GLFW_GAMEPAD_BUTTON_DPAD_RIGHT))
 	{
 		Direction.x = 1.f;
 	}
 
-	if (Handler.IsPressed(GLFW_KEY_SPACE) && CurrentCooldown <= 0.f)
+	if ((Handler.IsPressed(GLFW_KEY_SPACE) 
+		|| Handler.IsPadPressed(GLFW_GAMEPAD_BUTTON_SQUARE)) 
+		&& CurrentCooldown <= 0.f
+	)
 	{
 		bShouldCooldown = true;
 		Shoot();

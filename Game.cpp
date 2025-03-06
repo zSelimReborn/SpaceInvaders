@@ -38,6 +38,8 @@ Game::Game()
 	  State(GameState::Menu)
 {
 	LoadConfig();
+	IHandler.HandlePad(GLFW_JOYSTICK_1);
+
 	IHandler.HandleKey(GLFW_KEY_LEFT, InputType::Hold);
 	IHandler.HandleKey(GLFW_KEY_RIGHT, InputType::Hold);
 	IHandler.HandleKey(GLFW_KEY_SPACE, InputType::Hold);
@@ -45,6 +47,15 @@ Game::Game()
 	IHandler.HandleKey(GLFW_KEY_UP, InputType::Press);
 	IHandler.HandleKey(GLFW_KEY_DOWN, InputType::Press);
 	IHandler.HandleKey(GLFW_KEY_ENTER, InputType::Press);
+
+	IHandler.HandlePadKey(GLFW_GAMEPAD_BUTTON_START, InputType::Press);
+	IHandler.HandlePadKey(GLFW_GAMEPAD_BUTTON_DPAD_UP, InputType::Press);
+	IHandler.HandlePadKey(GLFW_GAMEPAD_BUTTON_DPAD_DOWN, InputType::Press);
+	IHandler.HandlePadKey(GLFW_GAMEPAD_BUTTON_CROSS, InputType::Press);
+
+	IHandler.HandlePadKey(GLFW_GAMEPAD_BUTTON_DPAD_LEFT, InputType::Hold);
+	IHandler.HandlePadKey(GLFW_GAMEPAD_BUTTON_DPAD_RIGHT, InputType::Hold);
+	IHandler.HandlePadKey(GLFW_GAMEPAD_BUTTON_SQUARE, InputType::Hold);
 }
 
 Game::Game(Window::WeakPtr InWindow)
@@ -205,6 +216,7 @@ void Game::OnPlayerTakeDamage()
 	}
 	else
 	{
+		SecretAlien->Reset();
 		PlayAudio(Sounds::PlayerExplosionName, 1.f);
 		State = GameState::Pause;
 	}
@@ -409,7 +421,7 @@ int Game::PlayAudio(const std::string& Name, float Volume, bool bLoop) const
 
 void Game::HandleInput(const float Delta)
 {
-	if (IHandler.IsPressed(GLFW_KEY_ESCAPE))
+	if (IHandler.IsPressed(GLFW_KEY_ESCAPE) || IHandler.IsPadPressed(GLFW_GAMEPAD_BUTTON_START))
 	{
 		if (State == GameState::Menu)
 		{

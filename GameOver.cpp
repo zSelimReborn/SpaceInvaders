@@ -17,7 +17,7 @@ void GameOver::Input(const InputHandler& Handler, const float Delta)
 {
 	Widget::Input(Handler, Delta);
 
-	if (Handler.IsPressed(GLFW_KEY_ENTER))
+	if (Handler.IsPressed(GLFW_KEY_ENTER) || Handler.IsPadPressed(GLFW_GAMEPAD_BUTTON_CROSS))
 	{
 		HandleInput();
 	}
