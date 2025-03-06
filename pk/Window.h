@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <memory>
 #include <string>
 #include <glm/glm.hpp>
@@ -13,6 +14,7 @@ public:
 	typedef std::shared_ptr<Window> SharedPtr;
 	typedef std::weak_ptr<Window> WeakPtr;
 	typedef std::unique_ptr<Window> UniquePtr;
+	typedef std::function<void()> OnCloseDelegate;
 
 	Window(const int _Width, const int _Height, const std::string& _Title);
 	Window(const Window&) = delete;
@@ -44,6 +46,8 @@ public:
 
 	void SetIcon(unsigned char* IconBytes, int IconWidth, int IconHeight) const;
 
+	void SetOnCloseFunction(const OnCloseDelegate& InDelegate);
+
 	virtual ~Window();
 
 	class Error : public std::runtime_error
@@ -52,12 +56,15 @@ public:
 	};
 
 private:
-	static void FrameBufferSizeCallback(GLFWwindow* Window, int _Width, int _Height);
+	void FrameBufferSizeCallback(GLFWwindow* InWindow, int InWidth, int InHeight);
+	void OnCloseCallback(GLFWwindow* InWindow);
 
 	int Width;
 	int Height;
 	std::string Title;
 
 	GLFWwindow* WindowPtr;
+
+	OnCloseDelegate OnCloseFunction;
 };
 

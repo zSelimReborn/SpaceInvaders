@@ -13,9 +13,14 @@ namespace Console
 namespace Math
 {
 	float Clamp(const float Value, const float Left, const float Right);
+	int Clamp(int Value, int Left, int Right);
+
 	float Lerp(const float Left, const float Right, const float Ratio);
+
 	float Min(float Left, float Right);
+	int Min(int Left, int Right);
 	float Max(float Left, float Right);
+	int Max(int Left, int Right);
 }
 
 namespace Colors

@@ -32,7 +32,17 @@ void Window::Initialize()
         throw Error("Failed to initialize GLAD");
     }
 
-    glfwSetFramebufferSizeCallback(window, FrameBufferSizeCallback);
+    glfwSetWindowUserPointer(WindowPtr, this);
+    glfwSetFramebufferSizeCallback(WindowPtr, [](GLFWwindow* InWindow, int InWidth, int InHeight)
+	    {
+	        static_cast<Window*>(glfwGetWindowUserPointer(InWindow))->FrameBufferSizeCallback(InWindow, InWidth, InHeight);
+	    }
+    );
+    glfwSetWindowCloseCallback(WindowPtr, [](GLFWwindow* InWindow)
+        {
+            static_cast<Window*>(glfwGetWindowUserPointer(InWindow))->OnCloseCallback(InWindow);
+        }
+    );
 
     glEnable(GL_BLEND);
     SetBlendFunction(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -128,12 +138,22 @@ void Window::SetIcon(unsigned char* IconBytes, int IconWidth, int IconHeight) co
     glfwSetWindowIcon(WindowPtr, 1, Icon);
 }
 
+void Window::SetOnCloseFunction(const OnCloseDelegate& InDelegate)
+{
+    OnCloseFunction = InDelegate;
+}
+
 Window::~Window()
 {
     glfwTerminate();
 }
 
-void Window::FrameBufferSizeCallback(GLFWwindow* Window, int _Width, int _Height)
+void Window::FrameBufferSizeCallback(GLFWwindow* InWindow, int InWidth, int InHeight)
 {
-    glad_glViewport(0, 0, _Width, _Height);
+    glad_glViewport(0, 0, InWidth, InHeight);
+}
+
+void Window::OnCloseCallback(GLFWwindow* InWindow)
+{
+    OnCloseFunction();
 }

@@ -35,6 +35,7 @@ public:
 
 	virtual void Begin();
 	virtual void Frame();
+	virtual void Quit();
 	bool ShouldClose() const;
 
 	int GetScreenWidth() const;

@@ -35,6 +35,12 @@ int Scene::GetNextWidgetId() const
 
 void Scene::Begin()
 {
+	const Window::SharedPtr CurrentWindow = GetWindow();
+	if (CurrentWindow != nullptr)
+	{
+		CurrentWindow->SetOnCloseFunction([this]() { Quit(); });
+	}
+
 	OldTime = static_cast<float>(glfwGetTime());
 	AddPendingActors();
 }
@@ -51,6 +57,17 @@ void Scene::Frame()
 	Render(Delta);
 
 	Clean();
+}
+
+void Scene::Quit()
+{
+	const Window::SharedPtr CurrentWindow = GetWindow();
+	if (CurrentWindow == nullptr)
+	{
+		return;
+	}
+
+	CurrentWindow->ShouldClose(true);
 }
 
 bool Scene::ShouldClose() const

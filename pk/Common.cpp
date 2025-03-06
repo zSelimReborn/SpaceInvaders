@@ -22,6 +22,11 @@ float Math::Clamp(const float Value, const float Left, const float Right)
 	return Min(Right, Math::Max(Left, Value));
 }
 
+int Math::Clamp(int Value, int Left, int Right)
+{
+	return Min(Right, Math::Max(Left, Value));
+}
+
 float Math::Lerp(const float Left, const float Right, const float Ratio)
 {
 	return Left * (1.0 - Ratio) + (Right * Ratio);
@@ -32,7 +37,17 @@ float Math::Min(float Left, float Right)
 	return (Left < Right) ? Left : Right;
 }
 
+int Math::Min(int Left, int Right)
+{
+	return (Left < Right) ? Left : Right;
+}
+
 float Math::Max(float Left, float Right)
+{
+	return (Left > Right) ? Left : Right;
+}
+
+int Math::Max(int Left, int Right)
 {
 	return (Left > Right) ? Left : Right;
 }
