@@ -3,7 +3,6 @@
 #include <memory>
 #include <string>
 #include <stdexcept>
-#include <glad/glad.h>
 #include <glm/glm.hpp>
 
 class Shader
@@ -40,7 +39,7 @@ private:
 	void Initialize(const std::string&, const std::string&);
 
 	std::string GetShaderContent(const std::string&) const;
-	unsigned int CompileShader(const GLenum type, const std::string& content);
+	unsigned int CompileShader(const unsigned int type, const std::string& content);
 
 	int GetUniformLocation(const std::string& name) const;
 

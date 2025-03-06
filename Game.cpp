@@ -1,6 +1,7 @@
 #include "Game.h"
 
 #include <iostream>
+#include <glad/glad.h>
 
 #include "AlienGroup.h"
 #include "Assets.h"

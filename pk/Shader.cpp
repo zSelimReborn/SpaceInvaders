@@ -1,5 +1,7 @@
 #include "Shader.h"
 
+#include <glad/glad.h>
+
 #include <sstream>
 #include <fstream>
 #include <glm/gtc/type_ptr.hpp>
@@ -138,7 +140,7 @@ std::string Shader::GetShaderContent(const std::string& shaderFile) const
     }
 }
 
-unsigned int Shader::CompileShader(const GLenum type, const std::string& content)
+unsigned int Shader::CompileShader(const unsigned int type, const std::string& content)
 {
     unsigned int shader;
     shader = glCreateShader(type);
