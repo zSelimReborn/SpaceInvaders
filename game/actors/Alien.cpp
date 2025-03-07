@@ -2,14 +2,14 @@
 
 #include <iostream>
 
-#include "Assets.h"
-#include "Game.h"
+#include "../../pk/core/world/Scene.h"
+#include "../../pk/core/utils/ClassSettingsReader.h"
+#include "../../pk/sound/SoundEngine.h"
+#include "../Assets.h"
+#include "../scenes/Game.h"
+#include "../pools/ProjectilePool.h"
+#include "../components/TeamComponent.h"
 #include "Projectile.h"
-#include "ProjectilePool.h"
-#include "TeamComponent.h"
-#include "pk/core/world/Scene.h"
-#include "pk/core/utils/ClassSettingsReader.h"
-#include "pk/sound/SoundEngine.h"
 
 Alien::Alien(AlienType InType)
 	: Score(0), Type(InType)

@@ -1,10 +1,10 @@
 #include "AlienGroup.h"
 
-#include "Assets.h"
-#include "Game.h"
-#include "pk/core/utils/Random.h"
-#include "pk/core/utils/ClassSettingsReader.h"
-#include "pk/core/world/Scene.h"
+#include "../Assets.h"
+#include "../scenes/Game.h"
+#include "../../pk/core/utils/Random.h"
+#include "../../pk/core/utils/ClassSettingsReader.h"
+#include "../../pk/core/world/Scene.h"
 
 const int AlienGroup::DEFAULT_NUM_ROWS_PER_TYPE = 2;
 const int AlienGroup::DEFAULT_ALIEN_PER_ROW = 11;

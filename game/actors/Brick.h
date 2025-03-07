@@ -1,8 +1,8 @@
 #pragma once
 
-#include "TeamComponent.h"
-#include "pk/core/world/Actor.h"
-#include "pk/core/interfaces/IDamageable.h"
+#include "../components/TeamComponent.h"
+#include "../../pk/core/world/Actor.h"
+#include "../../pk/core/interfaces/IDamageable.h"
 
 class Brick : public Actor, public IDamageable
 {

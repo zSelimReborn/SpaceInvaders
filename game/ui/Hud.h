@@ -1,13 +1,13 @@
 #pragma once
 
-#include "pk/ui/Widget.h"
+#include "../../pk/ui/Widget.h"
 
 #include <string>
 
 class Hud : public Widget
 {
 public:
-	Hud(const std::string& InFontName);
+	Hud(std::string InFontName);
 
 	void SetLifePoints(int InLifePoints);
 	void SetScore(int InScore);

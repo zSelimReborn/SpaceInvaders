@@ -1,7 +1,7 @@
 #pragma once
 
-#include "pk/core/world/Actor.h"
-#include "pk/core/interfaces/IDamageable.h"
+#include "../../pk/core/world/Actor.h"
+#include "../../pk/core/interfaces/IDamageable.h"
 
 class ProjectilePool;
 class TeamComponent;

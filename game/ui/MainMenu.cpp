@@ -3,12 +3,12 @@
 #include <iostream>
 #include <GLFW/glfw3.h>
 
-#include "Assets.h"
-#include "Game.h"
-#include "pk/core/asset/AssetManager.h"
-#include "pk/core/utils/Common.h"
-#include "pk/core/save/SaveSystem.h"
-#include "pk/sound/SoundEngine.h"
+#include "../Assets.h"
+#include "../scenes/Game.h"
+#include "../../pk/core/asset/AssetManager.h"
+#include "../../pk/core/utils/Common.h"
+#include "../../pk/core/save/SaveSystem.h"
+#include "../../pk/sound/SoundEngine.h"
 
 const int MainMenu::START_GAME_OPTION = 0;
 const int MainMenu::SCORES_OPTION = 1;

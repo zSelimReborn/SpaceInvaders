@@ -18,51 +18,6 @@
     <ClCompile Include="main.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
-    <ClCompile Include="Ship.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="Projectile.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="ProjectilePool.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="Alien.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="AlienGroup.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="Secret.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="TeamComponent.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="Brick.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="Bunker.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="Hud.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="MainMenu.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="GameOver.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="Effects.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="GameSave.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
     <ClCompile Include="pk\Engine.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
@@ -135,59 +90,53 @@
     <ClCompile Include="lib\image_loader.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
+    <ClCompile Include="game\vfx\Effects.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="game\ui\GameOver.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="game\ui\Hud.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="game\ui\MainMenu.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="game\scenes\Game.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="game\saves\GameSave.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="game\pools\ProjectilePool.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="game\components\TeamComponent.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actors\Alien.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actors\AlienGroup.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actors\Brick.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actors\Bunker.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actors\Projectile.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actors\Secret.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="game\actors\Ship.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Assets.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="Ship.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="Projectile.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="Types.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="ProjectilePool.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="Alien.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="AlienGroup.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="Secret.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="TeamComponent.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="Brick.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="Bunker.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="Hud.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="MainMenu.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="GameOver.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="Effects.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="GameSave.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
     <ClInclude Include="pk\Engine.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
@@ -261,6 +210,57 @@
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="pk\core\asset\Texture.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="game\Assets.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="game\Types.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="game\vfx\Effects.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="game\ui\GameOver.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="game\ui\Hud.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="game\ui\MainMenu.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="game\scenes\Game.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="game\saves\GameSave.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="game\pools\ProjectilePool.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="game\components\TeamComponent.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actors\Alien.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actors\AlienGroup.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actors\Brick.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actors\Bunker.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actors\Projectile.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actors\Secret.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="game\actors\Ship.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>

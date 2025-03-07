@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pk/core/world/Actor.h"
+#include "../../pk/core/world/Actor.h"
 #include "Alien.h"
 
 class Game;

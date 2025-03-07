@@ -5,23 +5,23 @@
 
 #include <GLFW/glfw3.h>
 
-#include "pk/core/asset/AssetManager.h"
-#include "pk/core/utils/ClassSettingsReader.h"
-#include "pk/sound/ISound.h"
-#include "pk/core/utils/Random.h"
-#include "pk/core/save/SaveSystem.h"
-#include "pk/sound/SoundEngine.h"
+#include "../../pk/core/asset/AssetManager.h"
+#include "../../pk/core/utils/ClassSettingsReader.h"
+#include "../../pk/sound/ISound.h"
+#include "../../pk/core/utils/Random.h"
+#include "../../pk/core/save/SaveSystem.h"
+#include "../../pk/sound/SoundEngine.h"
 
-#include "AlienGroup.h"
-#include "Assets.h"
-#include "ProjectilePool.h"
-#include "Secret.h"
-#include "Ship.h"
-#include "Bunker.h"
-#include "GameOver.h"
-#include "GameSave.h"
-#include "Hud.h"
-#include "MainMenu.h"
+#include "../Assets.h"
+#include "../actors/AlienGroup.h"
+#include "../actors/Secret.h"
+#include "../actors/Ship.h"
+#include "../actors/Bunker.h"
+#include "../ui/GameOver.h"
+#include "../ui/Hud.h"
+#include "../ui/MainMenu.h"
+#include "../saves/GameSave.h"
+#include "../pools/ProjectilePool.h"
 
 using namespace Assets;
 

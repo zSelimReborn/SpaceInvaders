@@ -7,8 +7,8 @@
 #include "pk/core/utils/ClassSettingsReader.h"
 #include "pk/Engine.h"
 
-#include "Assets.h"
-#include "Game.h"
+#include "game/Assets.h"
+#include "game/scenes/Game.h"
 
 Window::SharedPtr CreateWindow();
 

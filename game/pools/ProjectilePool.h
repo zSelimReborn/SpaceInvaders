@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "Projectile.h"
-#include "Types.h"
+#include "../actors/Projectile.h"
+#include "../Types.h"
 
 class Emitter;
 

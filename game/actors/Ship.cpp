@@ -4,16 +4,16 @@
 #include <GLFW/glfw3.h>
 
 #include "Alien.h"
-#include "Assets.h"
-#include "Game.h"
 #include "Projectile.h"
-#include "ProjectilePool.h"
-#include "TeamComponent.h"
+#include "../Assets.h"
+#include "../scenes/Game.h"
+#include "../pools/ProjectilePool.h"
+#include "../components/TeamComponent.h"
 
-#include "pk/core/world/Scene.h"
-#include "pk/core/window/Window.h"
-#include "pk/core/utils/ClassSettingsReader.h"
-#include "pk/sound/SoundEngine.h"
+#include "../../pk/core/world/Scene.h"
+#include "../../pk/core/window/Window.h"
+#include "../../pk/core/utils/ClassSettingsReader.h"
+#include "../../pk/sound/SoundEngine.h"
 
 const float Ship::DEFAULT_SPEED = 450.f;
 const float Ship::DEFAULT_COOLDOWN = 1.f;

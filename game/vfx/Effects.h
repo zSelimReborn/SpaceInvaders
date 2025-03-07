@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pk/core/vfx/Emitter.h"
+#include "../../pk/core/vfx/Emitter.h"
 
 class Explosion : public ParticlePattern::Base
 {

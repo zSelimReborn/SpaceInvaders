@@ -137,19 +137,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Alien.cpp" />
-    <ClCompile Include="AlienGroup.cpp" />
-    <ClCompile Include="Brick.cpp" />
-    <ClCompile Include="Bunker.cpp" />
-    <ClCompile Include="Effects.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameOver.cpp" />
-    <ClCompile Include="GameSave.cpp" />
-    <ClCompile Include="Hud.cpp" />
+    <ClCompile Include="game\actors\Alien.cpp" />
+    <ClCompile Include="game\actors\AlienGroup.cpp" />
+    <ClCompile Include="game\actors\Brick.cpp" />
+    <ClCompile Include="game\actors\Bunker.cpp" />
+    <ClCompile Include="game\actors\Projectile.cpp" />
+    <ClCompile Include="game\actors\Secret.cpp" />
+    <ClCompile Include="game\actors\Ship.cpp" />
+    <ClCompile Include="game\components\TeamComponent.cpp" />
+    <ClCompile Include="game\pools\ProjectilePool.cpp" />
+    <ClCompile Include="game\saves\GameSave.cpp" />
+    <ClCompile Include="game\scenes\Game.cpp" />
+    <ClCompile Include="game\ui\GameOver.cpp" />
+    <ClCompile Include="game\ui\Hud.cpp" />
+    <ClCompile Include="game\ui\MainMenu.cpp" />
+    <ClCompile Include="game\vfx\Effects.cpp" />
     <ClCompile Include="lib\glad.c" />
     <ClCompile Include="lib\image_loader.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="pk\core\asset\AssetManager.cpp" />
     <ClCompile Include="pk\core\asset\Font.cpp" />
     <ClCompile Include="pk\core\asset\Shader.cpp" />
@@ -172,24 +177,25 @@
     <ClCompile Include="pk\sound\SimpleSound.cpp" />
     <ClCompile Include="pk\sound\SoundEngine.cpp" />
     <ClCompile Include="pk\ui\Widget.cpp" />
-    <ClCompile Include="Projectile.cpp" />
-    <ClCompile Include="ProjectilePool.cpp" />
-    <ClCompile Include="Secret.cpp" />
-    <ClCompile Include="Ship.cpp" />
-    <ClCompile Include="TeamComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Alien.h" />
-    <ClInclude Include="AlienGroup.h" />
-    <ClInclude Include="Assets.h" />
-    <ClInclude Include="Brick.h" />
-    <ClInclude Include="Bunker.h" />
-    <ClInclude Include="Effects.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="GameOver.h" />
-    <ClInclude Include="GameSave.h" />
-    <ClInclude Include="Hud.h" />
-    <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="game\actors\Alien.h" />
+    <ClInclude Include="game\actors\AlienGroup.h" />
+    <ClInclude Include="game\actors\Brick.h" />
+    <ClInclude Include="game\actors\Bunker.h" />
+    <ClInclude Include="game\actors\Projectile.h" />
+    <ClInclude Include="game\actors\Secret.h" />
+    <ClInclude Include="game\actors\Ship.h" />
+    <ClInclude Include="game\Assets.h" />
+    <ClInclude Include="game\components\TeamComponent.h" />
+    <ClInclude Include="game\pools\ProjectilePool.h" />
+    <ClInclude Include="game\saves\GameSave.h" />
+    <ClInclude Include="game\scenes\Game.h" />
+    <ClInclude Include="game\Types.h" />
+    <ClInclude Include="game\ui\GameOver.h" />
+    <ClInclude Include="game\ui\Hud.h" />
+    <ClInclude Include="game\ui\MainMenu.h" />
+    <ClInclude Include="game\vfx\Effects.h" />
     <ClInclude Include="pk\core\asset\AssetManager.h" />
     <ClInclude Include="pk\core\asset\Font.h" />
     <ClInclude Include="pk\core\asset\Shader.h" />
@@ -215,12 +221,6 @@
     <ClInclude Include="pk\sound\SimpleSound.h" />
     <ClInclude Include="pk\sound\SoundEngine.h" />
     <ClInclude Include="pk\ui\Widget.h" />
-    <ClInclude Include="Projectile.h" />
-    <ClInclude Include="ProjectilePool.h" />
-    <ClInclude Include="Secret.h" />
-    <ClInclude Include="Ship.h" />
-    <ClInclude Include="TeamComponent.h" />
-    <ClInclude Include="Types.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\particle_shape.frag" />

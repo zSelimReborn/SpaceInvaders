@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "TeamComponent.h"
-#include "pk/core/world/Scene.h"
+#include "../components/TeamComponent.h"
+#include "../../pk/core/world/Scene.h"
 
 Projectile::Projectile()
 {

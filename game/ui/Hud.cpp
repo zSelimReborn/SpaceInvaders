@@ -2,12 +2,12 @@
 
 #include <sstream>
 
-#include "pk/core/asset/AssetManager.h"
-#include "pk/core/utils/Common.h"
-#include "pk/core/world/Scene.h"
+#include "../../pk/core/asset/AssetManager.h"
+#include "../../pk/core/utils/Common.h"
+#include "../../pk/core/world/Scene.h"
 
-Hud::Hud(const std::string& InFontName)
-	: LifePoints(0), Score(0), FontName(InFontName)
+Hud::Hud(std::string InFontName)
+	: LifePoints(0), Score(0), FontName(std::move(InFontName))
 {
 }
 

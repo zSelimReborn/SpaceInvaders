@@ -3,10 +3,10 @@
 #include <iostream>
 #include <GLFW/glfw3.h>
 
-#include "Assets.h"
-#include "Game.h"
-#include "pk/core/utils/Common.h"
-#include "pk/core/input/InputHandler.h"
+#include "../Assets.h"
+#include "../scenes/Game.h"
+#include "../../pk/core/utils/Common.h"
+#include "../../pk/core/input/InputHandler.h"
 
 GameOver::GameOver(const GameWeakPtr& InGame)
 	: GamePtr(InGame)
