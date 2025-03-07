@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pk/Scene.h"
+#include "pk/core/world/Scene.h"
 
 class Ship;
 class ProjectilePool;

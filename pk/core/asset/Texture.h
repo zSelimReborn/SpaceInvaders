@@ -9,7 +9,7 @@ class Texture
 public:
 	typedef std::shared_ptr<Texture> SharedPtr;
 
-	Texture(const std::string& _Path, int _Format, int _WrapS, int _WrapT, int _MinFilter, int _MaxFilter);
+	Texture(std::string InPath, int InFormat, int InWrapS, int InWrapT, int InMinFilter, int InMaxFilter);
 
 	unsigned int GetId() const;
 	std::string GetPath() const;

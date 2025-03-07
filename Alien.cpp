@@ -7,9 +7,9 @@
 #include "Projectile.h"
 #include "ProjectilePool.h"
 #include "TeamComponent.h"
-#include "pk/Scene.h"
-#include "pk/ClassSettingsReader.h"
-#include "pk/SoundEngine.h"
+#include "pk/core/world/Scene.h"
+#include "pk/core/utils/ClassSettingsReader.h"
+#include "pk/sound/SoundEngine.h"
 
 Alien::Alien(AlienType InType)
 	: Score(0), Type(InType)

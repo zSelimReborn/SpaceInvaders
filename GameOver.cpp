@@ -5,8 +5,8 @@
 
 #include "Assets.h"
 #include "Game.h"
-#include "pk/Common.h"
-#include "pk/InputHandler.h"
+#include "pk/core/utils/Common.h"
+#include "pk/core/input/InputHandler.h"
 
 GameOver::GameOver(const GameWeakPtr& InGame)
 	: GamePtr(InGame)

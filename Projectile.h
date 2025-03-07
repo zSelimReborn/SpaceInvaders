@@ -1,7 +1,7 @@
 #pragma once
 
-#include "pk/Actor.h"
-#include "pk/IDamageable.h"
+#include "pk/core/world/Actor.h"
+#include "pk/core/interfaces/IDamageable.h"
 #include "Types.h"
 
 #include <functional>

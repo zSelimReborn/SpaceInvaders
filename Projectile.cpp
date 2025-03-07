@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "TeamComponent.h"
-#include "pk/Scene.h"
+#include "pk/core/world/Scene.h"
 
 Projectile::Projectile()
 {

@@ -1,17 +1,12 @@
 #include "Emitter.h"
 
-#include "Shader.h"
-#include "Texture.h"
-
-#include <ctime>
-#include <cstdlib>
-#include <iostream>
-
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "AssetManager.h"
-#include "Common.h"
-#include "Renderer.h"
+#include "../asset/Shader.h"
+#include "../asset/Texture.h"
+#include "../asset/AssetManager.h"
+#include "../utils/Common.h"
+#include "../render/Renderer.h"
 
 void Particle::Set(const glm::vec3& InPosition, const glm::vec3& InDirection, const glm::vec4& InColor, float InLife, float InSpeed, float InOverrideScale)
 {

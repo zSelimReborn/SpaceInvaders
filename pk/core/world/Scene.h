@@ -5,8 +5,8 @@
 #include <map>
 #include <memory>
 
-#include "Window.h"
-#include "InputHandler.h"
+#include "../window/Window.h"
+#include "../input/InputHandler.h"
 
 class Actor;
 class Widget;

@@ -1,13 +1,14 @@
 #include <iostream>
 
-#include "glad/glad.h"
+#include <glad/glad.h>
 #include <stb_image.h>
 
-#include "pk/Window.h"
+#include "pk/core/window/Window.h"
+#include "pk/core/utils/ClassSettingsReader.h"
+#include "pk/Engine.h"
+
 #include "Assets.h"
 #include "Game.h"
-#include "pk/ClassSettingsReader.h"
-#include "pk/Engine.h"
 
 Window::SharedPtr CreateWindow();
 

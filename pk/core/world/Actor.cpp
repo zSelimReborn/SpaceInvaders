@@ -2,9 +2,9 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "AssetManager.h"
+#include "../asset/AssetManager.h"
 #include "Component.h"
-#include "Renderer.h"
+#include "../render/Renderer.h"
 #include "Scene.h"
 
 Actor::Actor()

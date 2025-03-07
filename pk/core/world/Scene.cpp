@@ -1,15 +1,16 @@
 #include "Scene.h"
 
-#include "Window.h"
-#include "Common.h"
-#include "Font.h"
-#include "SoundEngine.h"
+#include "../window/Window.h"
+#include "../utils/Common.h"
+#include "../asset/Font.h"
+#include "../../sound/SoundEngine.h"
+#include "../../ui/Widget.h"
+
 #include "Actor.h"
 
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Widget.h"
 
 Scene::Scene()
 	: CurrentTime(0.f), OldTime(0.f), Delta(0.f), Fps(0.f), NextActorId(0), NextWidgetId(0)

@@ -1,6 +1,6 @@
 #include "RandomSound.h"
 
-#include "Random.h"
+#include "../core/utils/Random.h"
 
 RandomSound::RandomSound()
 {

@@ -2,10 +2,10 @@
 
 #include <glad/glad.h>
 
-#include "Emitter.h"
-#include "Font.h"
-#include "Shader.h"
-#include "Texture.h"
+#include "../vfx/Emitter.h"
+#include "../asset/Font.h"
+#include "../asset/Shader.h"
+#include "../asset/Texture.h"
 
 Renderer::Renderer()
 	: SpriteQuadId(-1), TextQuadId(-1), TextBufferId(-1), LastShaderId(-1)

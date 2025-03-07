@@ -1,9 +1,9 @@
 #include "AssetManager.h"
 
-#include "RandomSound.h"
-#include "SequenceSound.h"
-#include "SimpleSound.h"
-#include "SoundEngine.h"
+#include "../../sound/RandomSound.h"
+#include "../../sound/SequenceSound.h"
+#include "../../sound/SimpleSound.h"
+#include "../../sound/SoundEngine.h"
 
 Shader::SharedPtr AssetManager::LoadShader(const std::string& Name, const std::string& Vertex,
                                            const std::string& Fragment)

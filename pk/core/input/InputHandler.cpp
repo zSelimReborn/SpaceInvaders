@@ -3,7 +3,7 @@
 #include <iostream>
 #include <GLFW/glfw3.h>
 
-#include "Window.h"
+#include "../window/Window.h"
 
 InputHandler::InputHandler()
 	: HandledPad(-1)

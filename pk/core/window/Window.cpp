@@ -5,8 +5,8 @@
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 
-Window::Window(const int _Width, const int _Height, const std::string& _Title)
-	: Width(_Width), Height(_Height), Title(_Title), WindowPtr(nullptr)
+Window::Window(const int InWidth, const int InHeight, std::string InTitle)
+	: Width(InWidth), Height(InHeight), Title(std::move(InTitle)), WindowPtr(nullptr)
 {
     Initialize();
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pk/Widget.h"
+#include "pk/ui/Widget.h"
 
 #include <string>
 

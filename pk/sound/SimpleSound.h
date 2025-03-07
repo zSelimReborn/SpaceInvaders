@@ -1,4 +1,5 @@
 #pragma once
+
 #include "ISound.h"
 
 class SimpleSound : public ISound

@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "Scene.h"
+#include "core/world/Scene.h"
 
 Engine::Engine() = default;
 

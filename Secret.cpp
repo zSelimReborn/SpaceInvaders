@@ -1,13 +1,11 @@
 #include "Secret.h"
 
-#include <iostream>
-
 #include "Assets.h"
 #include "Game.h"
-#include "pk/Random.h"
-#include "pk/Scene.h"
-#include "pk/ClassSettingsReader.h"
-#include "pk/SoundEngine.h"
+#include "pk/core/utils/Random.h"
+#include "pk/core/utils/ClassSettingsReader.h"
+#include "pk/core/world/Scene.h"
+#include "pk/sound/SoundEngine.h"
 
 const float Secret::DEFAULT_SPAWN_TIME_MIN = 5.f;
 const float Secret::DEFAULT_SPAWN_TIME_MAX = 8.f;

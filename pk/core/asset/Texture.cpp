@@ -3,8 +3,9 @@
 #include <glad/glad.h>
 #include <stb_image.h>
 
-Texture::Texture(const std::string& _Path, int _Format, int _WrapS, int _WrapT, int _MinFilter, int _MaxFilter)
-	: Path(_Path), Width(0), Height(0), Channels(0), Format(_Format), WrapS(_WrapS), WrapT(_WrapT), MinFilter(_MinFilter), MaxFilter(_MaxFilter)
+Texture::Texture(std::string InPath, int InFormat, int InWrapS, int InWrapT, int InMinFilter, int InMaxFilter)
+	: Path(std::move(InPath)), Width(0), Height(0), Channels(0),
+		Format(InFormat), WrapS(InWrapS), WrapT(InWrapT), MinFilter(InMinFilter), MaxFilter(InMaxFilter)
 {
 	glGenTextures(1, &Id);
 	Bind();

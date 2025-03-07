@@ -4,8 +4,8 @@
 
 #include "Assets.h"
 #include "Brick.h"
-#include "pk/Scene.h"
-#include "pk/ClassSettingsReader.h"
+#include "pk/core/world/Scene.h"
+#include "pk/core/utils/ClassSettingsReader.h"
 
 const glm::vec3 Bunker::DEFAULT_BRICK_SIZE = glm::vec3(15.f, 15.f, 1.f);
 const glm::vec4 Bunker::DEFAULT_BRICK_COLOR = Colors::White;

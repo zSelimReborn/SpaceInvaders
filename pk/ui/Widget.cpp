@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "AssetManager.h"
+#include "../core/asset/AssetManager.h"
 
 Widget::Widget()
 	: bActive(false), Id(-1)

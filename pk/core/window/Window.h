@@ -16,7 +16,7 @@ public:
 	typedef std::unique_ptr<Window> UniquePtr;
 	typedef std::function<void()> OnCloseDelegate;
 
-	Window(const int _Width, const int _Height, const std::string& _Title);
+	Window(const int InWidth, const int InHeight, std::string InTitle);
 	Window(const Window&) = delete;
 	Window(const Window&&) = delete;
 	void operator=(const Window&) = delete;

@@ -3,10 +3,7 @@
 #include <sstream>
 #include <glm/gtc/matrix_transform.hpp>
 
-ClassSettings::ClassSettings()
-	: Map()
-{
-}
+ClassSettings::ClassSettings() = default;
 
 ClassSettings::ClassSettings(const SettingsMap& InMap)
 	: Map(InMap)

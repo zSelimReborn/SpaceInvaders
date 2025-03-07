@@ -1,6 +1,6 @@
 #include "SequenceSound.h"
 
-#include "Random.h"
+#include "../core/utils/Random.h"
 
 SequenceSound::SequenceSound()
 	: CurrentIndex(0)

@@ -1,11 +1,10 @@
 #include "Hud.h"
 
-#include <iostream>
 #include <sstream>
 
-#include "pk/AssetManager.h"
-#include "pk/Common.h"
-#include "pk/Scene.h"
+#include "pk/core/asset/AssetManager.h"
+#include "pk/core/utils/Common.h"
+#include "pk/core/world/Scene.h"
 
 Hud::Hud(const std::string& InFontName)
 	: LifePoints(0), Score(0), FontName(InFontName)

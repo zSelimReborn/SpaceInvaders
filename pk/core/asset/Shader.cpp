@@ -2,11 +2,10 @@
 
 #include <glad/glad.h>
 
-#include <sstream>
 #include <fstream>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Common.h"
+#include "../utils/Common.h"
 
 Shader::Shader() : shaderId(0), bIsCompiled(false)
 {

@@ -5,8 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "Texture.h"
-#include "Common.h"
+#include "../utils/Common.h"
 
 class Scene;
 class Window;

@@ -5,10 +5,10 @@
 
 #include "Assets.h"
 #include "Game.h"
-#include "pk/AssetManager.h"
-#include "pk/Common.h"
-#include "pk/SaveSystem.h"
-#include "pk/SoundEngine.h"
+#include "pk/core/asset/AssetManager.h"
+#include "pk/core/utils/Common.h"
+#include "pk/core/save/SaveSystem.h"
+#include "pk/sound/SoundEngine.h"
 
 const int MainMenu::START_GAME_OPTION = 0;
 const int MainMenu::SCORES_OPTION = 1;

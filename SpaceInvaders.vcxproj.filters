@@ -24,39 +24,6 @@
     <ClCompile Include="image_loader.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
-    <ClCompile Include="pk\AssetManager.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="pk\Common.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="pk\Emitter.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="pk\Font.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="pk\Renderer.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="pk\Shader.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="pk\SoundEngine.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="pk\Texture.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="pk\Window.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="pk\Actor.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="pk\Scene.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
     <ClCompile Include="Ship.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
@@ -64,12 +31,6 @@
       <Filter>File di origine</Filter>
     </ClCompile>
     <ClCompile Include="Projectile.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="pk\ClassSettings.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="pk\ClassSettingsReader.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
     <ClCompile Include="ProjectilePool.cpp">
@@ -81,28 +42,16 @@
     <ClCompile Include="AlienGroup.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
-    <ClCompile Include="pk\Random.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
     <ClCompile Include="Secret.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
-    <ClCompile Include="pk\Component.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
     <ClCompile Include="TeamComponent.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="pk\InputHandler.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
     <ClCompile Include="Brick.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
     <ClCompile Include="Bunker.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="pk\Widget.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
     <ClCompile Include="Hud.cpp">
@@ -117,59 +66,77 @@
     <ClCompile Include="Effects.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
-    <ClCompile Include="pk\SaveSystem.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
     <ClCompile Include="GameSave.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="pk\SimpleSound.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="pk\SequenceSound.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="pk\RandomSound.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
     <ClCompile Include="pk\Engine.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
+    <ClCompile Include="pk\ui\Widget.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\sound\RandomSound.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\sound\SequenceSound.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\sound\SimpleSound.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\sound\SoundEngine.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\core\world\Actor.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\core\world\Component.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\core\world\Scene.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\core\window\Window.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\core\vfx\Emitter.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\core\utils\ClassSettings.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\core\utils\ClassSettingsReader.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\core\utils\Common.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\core\utils\Random.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\core\save\SaveSystem.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\core\render\Renderer.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\core\input\InputHandler.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\core\asset\AssetManager.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\core\asset\Font.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\core\asset\Shader.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="pk\core\asset\Texture.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pk\AssetManager.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="pk\Common.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="pk\Emitter.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="pk\Font.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="pk\Renderer.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="pk\Shader.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="pk\SoundEngine.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="pk\Texture.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="pk\Window.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="pk\Actor.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="pk\Scene.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
     <ClInclude Include="Assets.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
@@ -185,12 +152,6 @@
     <ClInclude Include="Types.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="pk\ClassSettingsReader.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="pk\ClassSettings.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
     <ClInclude Include="ProjectilePool.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
@@ -200,31 +161,16 @@
     <ClInclude Include="AlienGroup.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="pk\Random.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="pk\IDamageable.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
     <ClInclude Include="Secret.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="pk\Component.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
     <ClInclude Include="TeamComponent.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="pk\InputHandler.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="Brick.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="Bunker.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="pk\Widget.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="Hud.h">
@@ -239,28 +185,82 @@
     <ClInclude Include="Effects.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="pk\ISaveFile.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="pk\SaveSystem.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
     <ClInclude Include="GameSave.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="pk\ISound.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="pk\SimpleSound.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="pk\SequenceSound.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="pk\RandomSound.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
     <ClInclude Include="pk\Engine.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\ui\Widget.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\sound\ISound.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\sound\RandomSound.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\sound\SequenceSound.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\sound\SimpleSound.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\sound\SoundEngine.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\core\world\Actor.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\core\world\Component.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\core\world\Scene.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\core\window\Window.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\core\vfx\Emitter.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\core\utils\ClassSettings.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\core\utils\ClassSettingsReader.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\core\utils\Common.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\core\utils\Random.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\core\save\ISaveFile.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\core\save\SaveSystem.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\core\render\Renderer.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\core\interfaces\IDamageable.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\core\input\InputHandler.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\core\asset\AssetManager.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\core\asset\Font.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\core\asset\Shader.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\core\asset\Texture.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>

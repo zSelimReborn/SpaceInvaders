@@ -3,25 +3,25 @@
 #include <iostream>
 #include <glad/glad.h>
 
+#include <GLFW/glfw3.h>
+
+#include "pk/core/asset/AssetManager.h"
+#include "pk/core/utils/ClassSettingsReader.h"
+#include "pk/sound/ISound.h"
+#include "pk/core/utils/Random.h"
+#include "pk/core/save/SaveSystem.h"
+#include "pk/sound/SoundEngine.h"
+
 #include "AlienGroup.h"
 #include "Assets.h"
 #include "ProjectilePool.h"
 #include "Secret.h"
 #include "Ship.h"
-#include "pk/AssetManager.h"
-#include "pk/ClassSettingsReader.h"
-
-#include <GLFW/glfw3.h>
-
 #include "Bunker.h"
 #include "GameOver.h"
 #include "GameSave.h"
 #include "Hud.h"
 #include "MainMenu.h"
-#include "pk/ISound.h"
-#include "pk/Random.h"
-#include "pk/SaveSystem.h"
-#include "pk/SoundEngine.h"
 
 using namespace Assets;
 

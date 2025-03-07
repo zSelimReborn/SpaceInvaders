@@ -3,7 +3,6 @@
 #include <map>
 #include <string>
 #include <vector>
-#include <glm/glm.hpp>
 
 #include "Shader.h"
 #include "Texture.h"

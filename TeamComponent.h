@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Types.h"
-#include "pk/Component.h"
+#include "pk/core/world/Component.h"
 
 
 class TeamComponent : public Component
