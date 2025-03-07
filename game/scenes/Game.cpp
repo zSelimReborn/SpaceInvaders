@@ -315,6 +315,8 @@ void Game::Begin()
 	Scene::Begin();
 
 	Menu();
+
+	GetWindow()->SetInputMode(GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void Game::LoadSave()
