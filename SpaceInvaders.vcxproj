@@ -145,9 +145,9 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="GameSave.cpp" />
-    <ClCompile Include="glad.c" />
     <ClCompile Include="Hud.cpp" />
-    <ClCompile Include="image_loader.cpp" />
+    <ClCompile Include="lib\glad.c" />
+    <ClCompile Include="lib\image_loader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="pk\core\asset\AssetManager.cpp" />
