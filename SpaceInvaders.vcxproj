@@ -159,6 +159,7 @@
     <ClCompile Include="pk\core\asset\Font.cpp" />
     <ClCompile Include="pk\core\asset\Shader.cpp" />
     <ClCompile Include="pk\core\asset\Texture.cpp" />
+    <ClCompile Include="pk\core\collisions\QuadTree.cpp" />
     <ClCompile Include="pk\core\input\InputHandler.cpp" />
     <ClCompile Include="pk\core\render\Renderer.cpp" />
     <ClCompile Include="pk\core\save\SaveSystem.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="pk\core\asset\Font.h" />
     <ClInclude Include="pk\core\asset\Shader.h" />
     <ClInclude Include="pk\core\asset\Texture.h" />
+    <ClInclude Include="pk\core\collisions\QuadTree.h" />
     <ClInclude Include="pk\core\input\InputHandler.h" />
     <ClInclude Include="pk\core\interfaces\IDamageable.h" />
     <ClInclude Include="pk\core\render\Renderer.h" />

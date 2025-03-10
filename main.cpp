@@ -9,6 +9,7 @@
 
 #include "game/Assets.h"
 #include "game/scenes/Game.h"
+#include "pk/core/collisions/QuadTree.h"
 
 Window::SharedPtr CreateWindow();
 
@@ -27,6 +28,26 @@ int main(int argc, char** argv)
 		CurrentEngine.SetWindow(WindowPtr);
 		CurrentEngine.SetCurrentScene(GamePtr);
 		CurrentEngine.Begin();
+
+		QuadTree* Root = new QuadTree(glm::vec3(0.f), WindowPtr->GetWidth(), WindowPtr->GetHeight());
+		Root->Insert(1, glm::vec3(10.f, 10.f, 1.f));
+		Root->Insert(2, glm::vec3(20.f, 20.f, 1.f));
+		Root->Insert(3, glm::vec3(500.f, 25.f, 1.f));
+		Root->Insert(4, glm::vec3(600.f, 50.f, 1.f));
+		Root->Insert(5, glm::vec3(50.f, 400.f, 1.f));
+		Root->Insert(6, glm::vec3(550.f, 400.f, 1.f));
+
+		QuadTree* Found = Root->Search(glm::vec3(10.f, 640.f, 1.f));
+		if (Found != nullptr)
+		{
+			for (auto El : Found->GetEntities())
+			{
+				std::cout << "Found: " << El << " ";
+			}
+
+			std::cout << "\n";
+		}
+		delete Root;
 	}
 	catch (const std::runtime_error& Error)
 	{

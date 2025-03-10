@@ -135,6 +135,9 @@
     <ClCompile Include="game\actors\Ship.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
+    <ClCompile Include="pk\core\collisions\QuadTree.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pk\Engine.h">
@@ -261,6 +264,9 @@
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="game\actors\Ship.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="pk\core\collisions\QuadTree.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>
