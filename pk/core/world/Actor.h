@@ -59,6 +59,7 @@ public:
 
 	void HasCollision(bool bInCollision);
 	bool HasCollision() const;
+	virtual void OnActorHit(const SharedPtr& HitActor, const CollisionResult& Result);
 
 	glm::mat4 GetRenderModel() const;
 	BoundingBox GetBoundingBox() const;

@@ -7,6 +7,7 @@
 
 QuadTree* QuadPool::GetQuadTree()
 {
+	// Should be an assert
 	if (IsEmpty())
 	{
 		std::cerr << "QuadPool is full.\n";
@@ -36,7 +37,6 @@ QuadPool::~QuadPool()
 		delete Quad;
 	}
 
-	std::cout << "Free " << Pool.size() << " quadtrees\n";
 	Pool.clear();
 }
 

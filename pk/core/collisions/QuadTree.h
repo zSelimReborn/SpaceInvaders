@@ -20,7 +20,8 @@ struct QuadBox
 	QuadBox& operator=(const QuadBox& InBox);
 	QuadBox& operator=(QuadBox&& InBox);
 	void Set(const glm::vec3& InOrigin, float InWidth, float InHeight);
-	bool Contains(const glm::vec3& InLocation) const;
+	bool LooseContains(const glm::vec3& InLocation) const;
+	bool StrictContains(const glm::vec3& InLocation) const;
 	void CalcLooseProperties();
 };
 
@@ -45,7 +46,8 @@ public:
 	void Reset(const QuadBox& InBox, int InLevel);
 	void Reset(const glm::vec3& InOrigin, float InWidth, float InHeight, int InLevel);
 	void Insert(int Entity, const glm::vec3& Location);
-	bool Contains(const glm::vec3& InLocation) const;
+	bool LooseContains(const glm::vec3& InLocation) const;
+	bool StrictContains(const glm::vec3& InLocation) const;
 	QuadTree* Search(const glm::vec3& InLocation);
 	std::vector<int> GetEntities() const;
 

@@ -51,6 +51,13 @@ void Projectile::AddOnDestroyDelegate(const OnDestroyDelegate& InDelegate)
 	OnDestroyFunctions.push_back(InDelegate);
 }
 
+void Projectile::OnActorHit(const Actor::SharedPtr& HitActor, const CollisionResult& Result)
+{
+	Actor::OnActorHit(HitActor, Result);
+
+	OnHit(HitActor, Result);
+}
+
 void Projectile::Update(const float Delta)
 {
 	Actor::Update(Delta);
@@ -58,8 +65,6 @@ void Projectile::Update(const float Delta)
 	{
 		Destroy();
 	}
-
-	CheckCollisions();
 }
 
 void Projectile::Destroy()
@@ -71,36 +76,7 @@ void Projectile::Destroy()
 	OnDestroyFunctions.clear();
 }
 
-Projectile::~Projectile()
-{
-	std::cout << "Projectile destroyed!\n";
-}
-
-void Projectile::CheckCollisions()
-{
-	const Scene::SharedPtr CurrentScene = GetScene();
-	if (CurrentScene == nullptr)
-	{
-		return;
-	}
-
-	const std::vector<Actor::SharedPtr> CollisionActors = CurrentScene->GetCollisionActors();
-	for (const Actor::SharedPtr& CheckingActor : CollisionActors)
-	{
-		if (!CheckingActor 
-			|| CheckingActor->IsDestroyed() 
-			|| CheckingActor->GetId() == GetId()
-		) {
-			continue;
-		}
-
-		CollisionResult Result;
-		if (Collide(*CheckingActor, Result))
-		{
-			OnHit(CheckingActor, Result);
-		}
-	}
-}
+Projectile::~Projectile() = default;
 
 void Projectile::OnHit(const Actor::SharedPtr& HitActor, const CollisionResult& Result)
 {

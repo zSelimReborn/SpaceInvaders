@@ -1,8 +1,6 @@
 #include "QuadTree.h"
 #include "Constants.h"
 
-#include <iostream>
-
 #include "QuadPool.h"
 
 QuadBox::QuadBox() = default;
@@ -46,16 +44,16 @@ void QuadBox::Set(const glm::vec3& InOrigin, float InWidth, float InHeight)
 	CalcLooseProperties();
 }
 
-bool QuadBox::Contains(const glm::vec3& InLocation) const
+bool QuadBox::LooseContains(const glm::vec3& InLocation) const
 {
-	if (QUAD_LOOSE)
-	{
-		const float Right = LooseOrigin.x + LooseWidth;
-		const float Bottom = LooseOrigin.y + LooseHeight;
-		return (InLocation.x >= LooseOrigin.x && InLocation.x <= Right) &&
-			(InLocation.y >= LooseOrigin.y && InLocation.y <= Bottom);
-	}
+	const float Right = LooseOrigin.x + LooseWidth;
+	const float Bottom = LooseOrigin.y + LooseHeight;
+	return (InLocation.x >= LooseOrigin.x && InLocation.x <= Right) &&
+		(InLocation.y >= LooseOrigin.y && InLocation.y <= Bottom);
+}
 
+bool QuadBox::StrictContains(const glm::vec3& InLocation) const
+{
 	const float Right = Origin.x + Width;
 	const float Bottom =  Origin.y + Height;
 	return (InLocation.x >= Origin.x && InLocation.x <= Right) &&
@@ -108,6 +106,8 @@ void QuadTree::Reset(const QuadBox& InBox, int InLevel)
 	bDivided = false;
 	Entities.clear();
 	CurrentLevel = InLevel;
+
+	TopLeft = TopRight = BottomLeft = BottomRight = nullptr;
 }
 
 void QuadTree::Reset(const glm::vec3& InOrigin, float InWidth, float InHeight, int InLevel)
@@ -120,14 +120,19 @@ void QuadTree::Insert(int Entity, const glm::vec3& Location)
 	Insert(QuadEntity(Entity, Location));
 }
 
-bool QuadTree::Contains(const glm::vec3& InLocation) const
+bool QuadTree::LooseContains(const glm::vec3& InLocation) const
 {
-	return Box.Contains(InLocation);
+	return Box.LooseContains(InLocation);
+}
+
+bool QuadTree::StrictContains(const glm::vec3& InLocation) const
+{
+	return Box.StrictContains(InLocation);
 }
 
 QuadTree* QuadTree::Search(const glm::vec3& InLocation)
 {
-	if (!Contains(InLocation))
+	if (!StrictContains(InLocation))
 	{
 		return nullptr;
 	}
@@ -137,22 +142,22 @@ QuadTree* QuadTree::Search(const glm::vec3& InLocation)
 		return this;
 	}
 
-	if (TopLeft != nullptr && TopLeft->Contains(InLocation))
+	if (TopLeft != nullptr && TopLeft->StrictContains(InLocation))
 	{
 		return TopLeft->Search(InLocation);
 	}
 
-	if (TopRight != nullptr && TopRight->Contains(InLocation))
+	if (TopRight != nullptr && TopRight->StrictContains(InLocation))
 	{
 		return TopRight->Search(InLocation);
 	}
 
-	if (BottomLeft != nullptr && BottomLeft->Contains(InLocation))
+	if (BottomLeft != nullptr && BottomLeft->StrictContains(InLocation))
 	{
 		return BottomLeft->Search(InLocation);
 	}
 
-	if (BottomRight != nullptr && BottomRight->Contains(InLocation))
+	if (BottomRight != nullptr && BottomRight->StrictContains(InLocation))
 	{
 		return BottomRight->Search(InLocation);
 	}
@@ -197,22 +202,22 @@ void QuadTree::Insert(const QuadEntity& InEntity)
 
 void QuadTree::InsertInChildren(const QuadEntity& InEntity) const
 {
-	if (TopLeft != nullptr && TopLeft->Contains(InEntity.Location))
+	if (TopLeft != nullptr && TopLeft->LooseContains(InEntity.Location))
 	{
 		TopLeft->Insert(InEntity);
 	}
 
-	if (TopRight != nullptr && TopRight->Contains(InEntity.Location))
+	if (TopRight != nullptr && TopRight->LooseContains(InEntity.Location))
 	{
 		TopRight->Insert(InEntity);
 	}
 
-	if (BottomLeft != nullptr && BottomLeft->Contains(InEntity.Location))
+	if (BottomLeft != nullptr && BottomLeft->LooseContains(InEntity.Location))
 	{
 		BottomLeft->Insert(InEntity);
 	}
 
-	if (BottomRight != nullptr && BottomRight->Contains(InEntity.Location))
+	if (BottomRight != nullptr && BottomRight->LooseContains(InEntity.Location))
 	{
 		BottomRight->Insert(InEntity);
 	}
