@@ -4,11 +4,6 @@
 #include <memory>
 #include <vector>
 
-constexpr bool QUAD_LOOSE = true;
-constexpr float QUAD_LOOSE_PERCENTAGE = 10;
-constexpr int MAX_ENTITIES_PER_NODE = 5;
-constexpr int MAX_LVL = 10;
-
 struct QuadBox
 {
 	glm::vec3 Origin;
@@ -19,7 +14,11 @@ struct QuadBox
 	float LooseHeight;
 
 	QuadBox();
+	QuadBox(const QuadBox& InBox);
+	QuadBox(QuadBox&& InBox);
 	QuadBox(const glm::vec3& InOrigin, float InWidth, float InHeight);
+	QuadBox& operator=(const QuadBox& InBox);
+	QuadBox& operator=(QuadBox&& InBox);
 	void Set(const glm::vec3& InOrigin, float InWidth, float InHeight);
 	bool Contains(const glm::vec3& InLocation) const;
 	void CalcLooseProperties();
@@ -41,6 +40,10 @@ public:
 	QuadTree(const QuadBox& InBox);
 	QuadTree(const glm::vec3& InOrigin, float InWidth, float InHeight);
 
+	void SetBox(const QuadBox& InBox);
+	void SetBox(const glm::vec3& InOrigin, float InWidth, float InHeight);
+	void Reset(const QuadBox& InBox, int InLevel);
+	void Reset(const glm::vec3& InOrigin, float InWidth, float InHeight, int InLevel);
 	void Insert(int Entity, const glm::vec3& Location);
 	bool Contains(const glm::vec3& InLocation) const;
 	QuadTree* Search(const glm::vec3& InLocation);
@@ -58,8 +61,8 @@ private:
 	std::vector<QuadEntity> Entities;
 	int CurrentLevel;
 
-	std::unique_ptr<QuadTree> TopLeft;
-	std::unique_ptr<QuadTree> TopRight;
-	std::unique_ptr<QuadTree> BottomLeft;
-	std::unique_ptr<QuadTree> BottomRight;
+	QuadTree* TopLeft;
+	QuadTree* TopRight;
+	QuadTree* BottomLeft;
+	QuadTree* BottomRight;
 };

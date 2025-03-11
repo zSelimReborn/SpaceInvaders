@@ -1,8 +1,33 @@
 #include "QuadTree.h"
+#include "Constants.h"
 
 #include <iostream>
 
+#include "QuadPool.h"
+
 QuadBox::QuadBox() = default;
+
+QuadBox::QuadBox(const QuadBox& InBox)
+{
+	Set(InBox.Origin, InBox.Width, InBox.Height);
+}
+
+QuadBox::QuadBox(QuadBox&& InBox)
+{
+	Set(InBox.Origin, InBox.Width, InBox.Height);
+}
+
+QuadBox& QuadBox::operator=(const QuadBox& InBox)
+{
+	Set(InBox.Origin, InBox.Width, InBox.Height);
+	return *this;
+}
+
+QuadBox& QuadBox::operator=(QuadBox&& InBox)
+{
+	Set(InBox.Origin, InBox.Width, InBox.Height);
+	return *this;
+}
 
 QuadBox::QuadBox(const glm::vec3& InOrigin, float InWidth, float InHeight)
 	: Origin(InOrigin), LooseOrigin(InOrigin),
@@ -51,16 +76,44 @@ QuadEntity::QuadEntity() = default;
 QuadEntity::QuadEntity(int InEntity, const glm::vec3& InLocation)
 	: Entity(InEntity), Location(InLocation) { }
 
-QuadTree::QuadTree() = default;
+QuadTree::QuadTree()
+	: bDivided(false), CurrentLevel(0),
+		TopLeft(nullptr), TopRight(nullptr), BottomLeft(nullptr), BottomRight(nullptr)
+{
+}
 
 QuadTree::QuadTree(const QuadBox& InBox)
-	: bDivided(false), Box(InBox), CurrentLevel(0)
+	: QuadTree()
 {
+	Box = InBox;
 	Entities.clear();
 }
 
 QuadTree::QuadTree(const glm::vec3& InOrigin, float InWidth, float InHeight)
 	: QuadTree(QuadBox(InOrigin, InWidth, InHeight)) { }
+
+void QuadTree::SetBox(const QuadBox& InBox)
+{
+	Box = InBox;
+}
+
+void QuadTree::SetBox(const glm::vec3& InOrigin, float InWidth, float InHeight)
+{
+	Box.Set(InOrigin, InWidth, InHeight);
+}
+
+void QuadTree::Reset(const QuadBox& InBox, int InLevel)
+{
+	SetBox(InBox);
+	bDivided = false;
+	Entities.clear();
+	CurrentLevel = InLevel;
+}
+
+void QuadTree::Reset(const glm::vec3& InOrigin, float InWidth, float InHeight, int InLevel)
+{
+	Reset(QuadBox(InOrigin, InWidth, InHeight), InLevel);
+}
 
 void QuadTree::Insert(int Entity, const glm::vec3& Location)
 {
@@ -120,14 +173,14 @@ std::vector<int> QuadTree::GetEntities() const
 	return ActualEntities;
 }
 
-QuadTree::~QuadTree()
-{
-	std::cout << "Quad tree destroyed\n";
-}
+QuadTree::~QuadTree() = default;
 
 void QuadTree::Insert(const QuadEntity& InEntity)
 {
-	if (Entities.size() >= MAX_ENTITIES_PER_NODE && CurrentLevel < MAX_LVL)
+	if (Entities.size() >= MAX_ENTITIES_PER_NODE 
+		&& CurrentLevel < MAX_LVL 
+		&& !QuadPool::Get().IsEmpty()
+	)
 	{
 		Divide();
 	}
@@ -175,15 +228,19 @@ void QuadTree::Divide()
 	const glm::vec3 BottomLeftOrigin = glm::vec3(Box.Origin.x, Box.Origin.y + HalfHeight, Box.Origin.z);
 	const glm::vec3 BottomRightOrigin = glm::vec3(Box.Origin.x + HalfWidth, Box.Origin.y + HalfHeight, Box.Origin.z);
 
-	TopLeft = std::make_unique<QuadTree>(TopLeftOrigin, HalfWidth, HalfHeight);
-	TopRight = std::make_unique<QuadTree>(TopRightOrigin, HalfWidth, HalfHeight);
-	BottomLeft = std::make_unique<QuadTree>(BottomLeftOrigin, HalfWidth, HalfHeight);
-	BottomRight = std::make_unique<QuadTree>(BottomRightOrigin, HalfWidth, HalfHeight);
+	const int ChildrenLevel = CurrentLevel + 1;
 
-	TopLeft->CurrentLevel = CurrentLevel + 1;
-	TopRight->CurrentLevel = CurrentLevel + 1;
-	BottomLeft->CurrentLevel = CurrentLevel + 1;
-	BottomRight->CurrentLevel = CurrentLevel + 1;
+	TopLeft = QuadPool::Get().GetQuadTree();
+	TopLeft->Reset(TopLeftOrigin, HalfWidth, HalfHeight, ChildrenLevel);
+
+	TopRight = QuadPool::Get().GetQuadTree();
+	TopRight->Reset(TopRightOrigin, HalfWidth, HalfHeight, ChildrenLevel);
+
+	BottomLeft = QuadPool::Get().GetQuadTree();
+	BottomLeft->Reset(BottomLeftOrigin, HalfWidth, HalfHeight, ChildrenLevel);
+
+	BottomRight = QuadPool::Get().GetQuadTree();
+	BottomRight->Reset(BottomRightOrigin, HalfWidth, HalfHeight, ChildrenLevel);
 
 	for (const QuadEntity& Entity : Entities)
 	{
