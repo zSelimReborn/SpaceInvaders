@@ -5,19 +5,24 @@
 #include <vector>
 
 constexpr bool QUAD_LOOSE = true;
-constexpr int MAX_ENTITIES_PER_NODE = 2;
+constexpr float QUAD_LOOSE_PERCENTAGE = 10;
+constexpr int MAX_ENTITIES_PER_NODE = 5;
 constexpr int MAX_LVL = 10;
 
 struct QuadBox
 {
 	glm::vec3 Origin;
+	glm::vec3 LooseOrigin;
 	float Width;
+	float LooseWidth;
 	float Height;
+	float LooseHeight;
 
 	QuadBox();
 	QuadBox(const glm::vec3& InOrigin, float InWidth, float InHeight);
 	void Set(const glm::vec3& InOrigin, float InWidth, float InHeight);
 	bool Contains(const glm::vec3& InLocation) const;
+	void CalcLooseProperties();
 };
 
 struct QuadEntity
@@ -45,7 +50,7 @@ public:
 
 private:
 	void Insert(const QuadEntity& InEntity);
-	QuadTree* GetCorrectChild(const QuadEntity& InEntity) const;
+	void InsertInChildren(const QuadEntity& InEntity) const;
 	void Divide();
 
 	bool bDivided;

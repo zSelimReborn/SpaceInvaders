@@ -5,21 +5,45 @@
 QuadBox::QuadBox() = default;
 
 QuadBox::QuadBox(const glm::vec3& InOrigin, float InWidth, float InHeight)
-	: Origin(InOrigin), Width(InWidth), Height(InHeight) { }
+	: Origin(InOrigin), LooseOrigin(InOrigin),
+		Width(InWidth), LooseWidth(InWidth),
+		Height(InHeight), LooseHeight(InHeight)
+{
+	CalcLooseProperties();
+}
 
 void QuadBox::Set(const glm::vec3& InOrigin, float InWidth, float InHeight)
 {
 	Origin = InOrigin;
 	Width = InWidth;
 	Height = InHeight;
+
+	CalcLooseProperties();
 }
 
 bool QuadBox::Contains(const glm::vec3& InLocation) const
 {
+	if (QUAD_LOOSE)
+	{
+		const float Right = LooseOrigin.x + LooseWidth;
+		const float Bottom = LooseOrigin.y + LooseHeight;
+		return (InLocation.x >= LooseOrigin.x && InLocation.x <= Right) &&
+			(InLocation.y >= LooseOrigin.y && InLocation.y <= Bottom);
+	}
+
 	const float Right = Origin.x + Width;
 	const float Bottom =  Origin.y + Height;
 	return (InLocation.x >= Origin.x && InLocation.x <= Right) &&
 		(InLocation.y >= Origin.y && InLocation.y <= Bottom);
+}
+
+void QuadBox::CalcLooseProperties()
+{
+	const float WidthLoosePercentage = (Width * QUAD_LOOSE_PERCENTAGE) / 100.f;
+	const float HeightLoosePercentage = (Height * QUAD_LOOSE_PERCENTAGE) / 100.f;
+	LooseWidth = Width + WidthLoosePercentage;
+	LooseHeight = Height + HeightLoosePercentage;
+	LooseOrigin = glm::vec3(Origin.x - (WidthLoosePercentage / 2.f), Origin.y - (HeightLoosePercentage / 2.f), Origin.z);
 }
 
 QuadEntity::QuadEntity() = default;
@@ -114,37 +138,31 @@ void QuadTree::Insert(const QuadEntity& InEntity)
 	}
 	else
 	{
-		QuadTree* Node = GetCorrectChild(InEntity);
-		if (Node != nullptr)
-		{
-			Node->Insert(InEntity);
-		}
+		InsertInChildren(InEntity);
 	}
 }
 
-QuadTree* QuadTree::GetCorrectChild(const QuadEntity& InEntity) const
+void QuadTree::InsertInChildren(const QuadEntity& InEntity) const
 {
 	if (TopLeft != nullptr && TopLeft->Contains(InEntity.Location))
 	{
-		return TopLeft.get();
+		TopLeft->Insert(InEntity);
 	}
 
 	if (TopRight != nullptr && TopRight->Contains(InEntity.Location))
 	{
-		return TopRight.get();
+		TopRight->Insert(InEntity);
 	}
 
 	if (BottomLeft != nullptr && BottomLeft->Contains(InEntity.Location))
 	{
-		return BottomLeft.get();
+		BottomLeft->Insert(InEntity);
 	}
 
 	if (BottomRight != nullptr && BottomRight->Contains(InEntity.Location))
 	{
-		return BottomRight.get();
+		BottomRight->Insert(InEntity);
 	}
-
-	return nullptr;
 }
 
 void QuadTree::Divide()
@@ -167,14 +185,9 @@ void QuadTree::Divide()
 	BottomLeft->CurrentLevel = CurrentLevel + 1;
 	BottomRight->CurrentLevel = CurrentLevel + 1;
 
-	// Insert in all children to ensure overlapping objects are detected
 	for (const QuadEntity& Entity : Entities)
 	{
-		QuadTree* Node = GetCorrectChild(Entity);
-		if (Node != nullptr)
-		{
-			Node->Insert(Entity);
-		}
+		InsertInChildren(Entity);
 	}
 
 	Entities.clear();
