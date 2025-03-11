@@ -11,9 +11,12 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "../collisions/QuadPool.h"
+#include "../collisions/QuadTree.h"
+
 
 Scene::Scene()
-	: CurrentTime(0.f), OldTime(0.f), Delta(0.f), Fps(0.f), NextActorId(0), NextWidgetId(0)
+	: CollisionRoot(nullptr), CurrentTime(0.f), OldTime(0.f), Delta(0.f), Fps(0.f), NextActorId(0), NextWidgetId(0)
 {
 	IHandler.HandleKey(GLFW_KEY_ESCAPE, InputType::Press);
 }
@@ -78,12 +81,14 @@ bool Scene::ShouldClose() const
 
 void Scene::Update(const float Delta)
 {
-	UpdateCollisionActorsVector();
+	BuildCollisionTree();
 
 	for (const ActorMapPair ActorPair : Actors)
 	{
 		ActorPair.second->Update(Delta);
 	}
+
+	CheckCollisions(Delta);
 }
 
 void Scene::Input(const float Delta)
@@ -148,6 +153,48 @@ float Scene::GetFps() const
 	return Fps;
 }
 
+void Scene::BuildCollisionTree()
+{
+	QuadPool::Get().Reset();
+	CollisionRoot = QuadPool::Get().GetQuadTree();
+	CollisionRoot->Reset(glm::vec3(0.f), static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight()), 0);
+	for (const ActorMapPair ActorPair : CollisionActors)
+	{
+		int Id = ActorPair.first;
+		const ActorSharedPtr Actor = ActorPair.second;
+		CollisionRoot->Insert(Id, Actor->GetLocation());
+	}
+}
+
+void Scene::CheckCollisions(float Delta)
+{
+	for (const ActorMapPair ActorPair : CollisionActors)
+	{
+		int Id = ActorPair.first;
+		const ActorSharedPtr Actor = ActorPair.second;
+		QuadTree* FoundQuad = CollisionRoot->Search(Actor->GetLocation());
+		if (FoundQuad == nullptr)
+		{
+			continue;
+		}
+
+		for (int QuadActorId : FoundQuad->GetEntities())
+		{
+			const ActorSharedPtr QuadActor = CollisionActors[QuadActorId];
+			if (!QuadActor || QuadActor->IsDestroyed() || QuadActorId == Id)
+			{
+				continue;
+			}
+
+			CollisionResult Result;
+			if (Actor->Collide(*QuadActor, Result))
+			{
+				Actor->OnActorHit(QuadActor, Result);
+			}
+		}
+	}
+}
+
 void Scene::SetWindow(Window::WeakPtr InWindow)
 {
 	WindowPtr = std::move(InWindow);
@@ -175,11 +222,6 @@ void Scene::Add(const Actor::SharedPtr& InActor)
 	InActor->SetScene(weak_from_this());
 	InActor->Begin();
 	PendingActors.push_back(InActor);
-}
-
-std::vector<Scene::ActorSharedPtr> Scene::GetCollisionActors() const
-{
-	return CollisionActorsVector;
 }
 
 void Scene::Add(const WidgetSharedPtr& InWidget)
@@ -240,17 +282,6 @@ void Scene::AddPendingActors()
 	}
 
 	PendingActors.clear();
-}
-
-void Scene::UpdateCollisionActorsVector()
-{
-	CollisionActorsVector.clear();
-	CollisionActorsVector.reserve(CollisionActors.size());
-
-	for (const ActorMapPair ActorPair : CollisionActors)
-	{
-		CollisionActorsVector.push_back(ActorPair.second);
-	}
 }
 
 void Scene::UpdateActiveWidgets()

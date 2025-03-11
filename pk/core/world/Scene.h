@@ -10,6 +10,7 @@
 
 class Actor;
 class Widget;
+class QuadTree;
 
 class Scene : public std::enable_shared_from_this<Scene>
 {
@@ -52,13 +53,14 @@ public:
 	Window::SharedPtr GetWindow() const;
 
 	void Add(const ActorSharedPtr& InActor);
-	std::vector<ActorSharedPtr> GetCollisionActors() const;
 
 	void Add(const WidgetSharedPtr& InWidget);
 
 	virtual ~Scene();
 
 protected:
+	void BuildCollisionTree();
+	void CheckCollisions(float Delta);
 	void OnSetWindow();
 	void ClearWindow() const;
 	void Clean();
@@ -70,7 +72,6 @@ protected:
 	void HandleWidgetInput(const float Delta) const;
 	void Destroyer();
 	void AddPendingActors();
-	void UpdateCollisionActorsVector();
 	void UpdateActiveWidgets();
 
 	virtual void Input(const float Delta);
@@ -83,7 +84,7 @@ protected:
 	ActorMap Actors;
 	ActorMap CollisionActors;
 	ActorList PendingActors;
-	ActorList CollisionActorsVector;
+	QuadTree* CollisionRoot;
 
 	WidgetMap ActiveWidgets;
 	WidgetList InactiveWidgets;

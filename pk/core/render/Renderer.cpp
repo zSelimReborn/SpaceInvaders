@@ -16,15 +16,6 @@ Renderer::Renderer()
 
 void Renderer::InitializeSpriteQuad()
 {
-	/* float VertexData[] = {
-		-0.5f, 0.5f, 0.f, 1.f,
-		-0.5f, -0.5f, 0.f, 0.f,
-		0.5f, -0.5f, 1.f, 0.f,
-		-0.5f, 0.5f, 0.f, 1.f,
-		0.5f, 0.5f, 1.f, 1.f,
-		0.5f, -0.5f, 1.f, 0.f
-	}; */
-
 	float VertexData[] = {
 	 0.5f,  0.5f, 1.f, 1.f,
 	 0.5f, -0.5f, 1.f, 0.f,
@@ -32,10 +23,11 @@ void Renderer::InitializeSpriteQuad()
 	-0.5f,  0.5f, 0.f, 1.f
 	};
 
-	unsigned int Indices[] = {  // note that we start from 0!
-		0, 1, 3,   // first triangle
-		1, 2, 3    // second triangle
+	unsigned int Indices[] = {  
+		0, 1, 3,
+		1, 2, 3 
 	};
+
 	unsigned int VAO = 0;
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);

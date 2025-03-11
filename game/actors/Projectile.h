@@ -30,6 +30,8 @@ public:
 	void AddOnHitDelegate(const OnHitDelegate& InDelegate);
 	void AddOnDestroyDelegate(const OnDestroyDelegate& InDelegate);
 
+	void OnActorHit(const Actor::SharedPtr& HitActor, const CollisionResult& Result) override;
+
 	void Update(const float Delta) override;
 
 	void Destroy() override;
@@ -37,7 +39,6 @@ public:
 	~Projectile() override;
 
 private:
-	void CheckCollisions();
 	void OnHit(const Actor::SharedPtr& HitActor, const CollisionResult& Result);
 	void NotifyHit(const Actor::SharedPtr& HitActor, const CollisionResult& Result) const;
 	void NotifyDestroy() const;

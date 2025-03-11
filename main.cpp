@@ -9,6 +9,7 @@
 
 #include "game/Assets.h"
 #include "game/scenes/Game.h"
+#include "pk/core/collisions/QuadTree.h"
 
 Window::SharedPtr CreateWindow();
 

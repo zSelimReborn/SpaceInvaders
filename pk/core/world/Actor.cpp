@@ -136,6 +136,10 @@ bool Actor::HasCollision() const
 	return bHasCollision;
 }
 
+void Actor::OnActorHit(const SharedPtr& HitActor, const CollisionResult& Result)
+{
+}
+
 void Actor::Move(const float Delta)
 {
 	mTransform.Location += Velocity * Delta;

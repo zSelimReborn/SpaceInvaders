@@ -339,6 +339,12 @@ void AlienGroup::AddOnDefeatDelegate(const OnDefeatDelegate& InFunction)
 	OnDefeatFunctions.push_back(InFunction);
 }
 
+void AlienGroup::InvadersWon()
+{
+	HideBoard();
+	State = GroupState::Stopped;
+}
+
 void AlienGroup::HideBoard() const
 {
 	for (const Alien::SharedPtr& Alien : AllAliens)
@@ -556,6 +562,11 @@ void AlienGroup::GenerateMoveDelay()
 
 void AlienGroup::UpdateAliveAliens()
 {
+	if (State == GroupState::Stopped)
+	{
+		return;
+	}
+
 	AliveAliensIdx.erase(
 		std::remove_if(AliveAliensIdx.begin(), AliveAliensIdx.end(), [this](int Index) { return AllAliens[Index]->IsDestroyed(); }),
 		AliveAliensIdx.end()
@@ -564,7 +575,7 @@ void AlienGroup::UpdateAliveAliens()
 	if (AliveAliensIdx.empty())
 	{
 		State = GroupState::Stopped;
-;		NotifyDefeat();
+		NotifyDefeat();
 	}
 }
 
