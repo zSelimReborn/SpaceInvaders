@@ -96,6 +96,7 @@ public:
 	void AddOnReachedPlayerDelegate(const OnReachedPlayerDelegate& InFunction);
 	void AddOnDefeatDelegate(const OnDefeatDelegate& InFunction);
 
+	void InvadersWon();
 	void HideBoard() const;
 
 private:

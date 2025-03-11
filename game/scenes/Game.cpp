@@ -231,7 +231,7 @@ void Game::OnGameOver(bool bPlayerWon)
 		SaveScore();
 		PlayAudio(Sounds::GameOverName, 1.f);
 		State = GameState::GameOver;
-		MainAlienGroup->HideBoard();
+		MainAlienGroup->InvadersWon();
 		AlienProjectilePool->ResetPool();
 		PlayerProjectilePool->ResetPool();
 		MainMenuW->Deactivate();
