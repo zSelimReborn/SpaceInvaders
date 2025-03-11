@@ -4,6 +4,8 @@
 
 #include <string>
 
+using namespace pk;
+
 class Hud : public Widget
 {
 public:

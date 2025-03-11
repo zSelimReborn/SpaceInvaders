@@ -5,6 +5,8 @@
 
 #include "../core/utils/Common.h"
 
+using namespace pk;
+
 void SoundEngine::Load(const std::string& SoundPath)
 {
 	if (!System || IsLoaded(SoundPath))

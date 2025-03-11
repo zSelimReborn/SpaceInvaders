@@ -4,6 +4,8 @@
 
 class Game;
 
+using namespace pk;
+
 class GameOver : public Widget
 {
 public:

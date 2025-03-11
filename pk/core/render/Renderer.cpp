@@ -7,6 +7,8 @@
 #include "../asset/Shader.h"
 #include "../asset/Texture.h"
 
+using namespace pk;
+
 Renderer::Renderer()
 	: SpriteQuadId(-1), TextQuadId(-1), TextBufferId(-1), LastShaderId(-1)
 {

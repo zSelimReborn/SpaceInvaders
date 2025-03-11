@@ -7,8 +7,9 @@
 #include <functional>
 #include <vector>
 
-
 class TeamComponent;
+
+using namespace pk;
 
 class Projectile : public Actor, public IDamageable
 {

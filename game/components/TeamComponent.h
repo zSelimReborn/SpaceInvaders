@@ -3,6 +3,7 @@
 #include "../Types.h"
 #include "../../pk/core/world/Component.h"
 
+using namespace pk;
 
 class TeamComponent : public Component
 {

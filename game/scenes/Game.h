@@ -12,6 +12,8 @@ class MainMenu;
 class GameOver;
 class GameSave;
 
+using namespace pk;
+
 enum class GameState : std::uint8_t
 {
 	Play,

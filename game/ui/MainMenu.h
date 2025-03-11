@@ -2,6 +2,8 @@
 
 #include "../../pk/ui/Widget.h"
 
+using namespace pk;
+
 class Game;
 class GameSave;
 

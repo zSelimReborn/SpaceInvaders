@@ -14,30 +14,31 @@
 #include "../collisions/QuadPool.h"
 #include "../collisions/QuadTree.h"
 
+using namespace pk;
 
-Scene::Scene()
+pk::Scene::Scene()
 	: CollisionRoot(nullptr), CurrentTime(0.f), OldTime(0.f), Delta(0.f), Fps(0.f), NextActorId(0), NextWidgetId(0)
 {
 	IHandler.HandleKey(GLFW_KEY_ESCAPE, InputType::Press);
 }
 
-Scene::Scene(Window::WeakPtr InWindow)
-	: Scene()
+pk::Scene::Scene(Window::WeakPtr InWindow)
+	: pk::Scene()
 {
 	SetWindow(std::move(InWindow));
 }
 
-int Scene::GetNextActorId() const
+int pk::Scene::GetNextActorId() const
 {
 	return NextActorId;
 }
 
-int Scene::GetNextWidgetId() const
+int pk::Scene::GetNextWidgetId() const
 {
 	return NextWidgetId;
 }
 
-void Scene::Begin()
+void pk::Scene::Begin()
 {
 	const Window::SharedPtr CurrentWindow = GetWindow();
 	if (CurrentWindow != nullptr)
@@ -49,7 +50,7 @@ void Scene::Begin()
 	AddPendingActors();
 }
 
-void Scene::Frame()
+void pk::Scene::Frame()
 {
 	UpdateDelta();
 
@@ -63,7 +64,7 @@ void Scene::Frame()
 	Clean();
 }
 
-void Scene::Quit()
+void pk::Scene::Quit()
 {
 	const Window::SharedPtr CurrentWindow = GetWindow();
 	if (CurrentWindow == nullptr)
@@ -74,12 +75,12 @@ void Scene::Quit()
 	CurrentWindow->ShouldClose(true);
 }
 
-bool Scene::ShouldClose() const
+bool pk::Scene::ShouldClose() const
 {
 	return GetWindow()->ShouldClose();
 }
 
-void Scene::Update(const float Delta)
+void pk::Scene::Update(const float Delta)
 {
 	BuildCollisionTree();
 
@@ -91,7 +92,7 @@ void Scene::Update(const float Delta)
 	CheckCollisions(Delta);
 }
 
-void Scene::Input(const float Delta)
+void pk::Scene::Input(const float Delta)
 {
 	if (WindowPtr.expired())
 	{
@@ -106,54 +107,54 @@ void Scene::Input(const float Delta)
 	IHandler.Clean();
 }
 
-void Scene::HandleInput(const float Delta)
+void pk::Scene::HandleInput(const float Delta)
 {
 	HandleActorsInput(Delta);
 	HandleWidgetInput(Delta);
 }
 
-void Scene::Render(const float Delta)
+void pk::Scene::Render(const float Delta)
 {
 	RenderActors();
 	RenderWidgets();
 }
 
-int Scene::GetScreenWidth() const
+int pk::Scene::GetScreenWidth() const
 {
 	return GetWindow()->GetWidth();
 }
 
-int Scene::GetScreenHeight() const
+int pk::Scene::GetScreenHeight() const
 {
 	return GetWindow()->GetHeight();
 }
 
-glm::vec2 Scene::GetScreenCenter() const
+glm::vec2 pk::Scene::GetScreenCenter() const
 {
 	return GetWindow()->GetScreenCenter();
 }
 
-glm::mat4 Scene::GetProjection() const
+glm::mat4 pk::Scene::GetProjection() const
 {
 	return Projection;
 }
 
-float Scene::GetDelta() const
+float pk::Scene::GetDelta() const
 {
 	return Delta;
 }
 
-float Scene::GetCurrentTime() const
+float pk::Scene::GetCurrentTime() const
 {
 	return CurrentTime;
 }
 
-float Scene::GetFps() const
+float pk::Scene::GetFps() const
 {
 	return Fps;
 }
 
-void Scene::BuildCollisionTree()
+void pk::Scene::BuildCollisionTree()
 {
 	QuadPool::Get().Reset();
 	CollisionRoot = QuadPool::Get().GetQuadTree();
@@ -166,7 +167,7 @@ void Scene::BuildCollisionTree()
 	}
 }
 
-void Scene::CheckCollisions(float Delta)
+void pk::Scene::CheckCollisions(float Delta)
 {
 	for (const ActorMapPair ActorPair : CollisionActors)
 	{
@@ -195,18 +196,18 @@ void Scene::CheckCollisions(float Delta)
 	}
 }
 
-void Scene::SetWindow(Window::WeakPtr InWindow)
+void pk::Scene::SetWindow(Window::WeakPtr InWindow)
 {
 	WindowPtr = std::move(InWindow);
 	OnSetWindow();
 }
 
-Window::SharedPtr Scene::GetWindow() const
+Window::SharedPtr pk::Scene::GetWindow() const
 {
 	return WindowPtr.lock();
 }
 
-void Scene::Add(const Actor::SharedPtr& InActor)
+void pk::Scene::Add(const Actor::SharedPtr& InActor)
 {
 	if (InActor == nullptr)
 	{
@@ -224,7 +225,7 @@ void Scene::Add(const Actor::SharedPtr& InActor)
 	PendingActors.push_back(InActor);
 }
 
-void Scene::Add(const WidgetSharedPtr& InWidget)
+void pk::Scene::Add(const WidgetSharedPtr& InWidget)
 {
 	if (InWidget == nullptr)
 	{
@@ -242,7 +243,7 @@ void Scene::Add(const WidgetSharedPtr& InWidget)
 	InactiveWidgets.push_back(InWidget);
 }
 
-void Scene::Destroyer()
+void pk::Scene::Destroyer()
 {
 	std::vector<int> RemovingIds;
 	for (const ActorMapPair ActorPair : Actors)
@@ -265,7 +266,7 @@ void Scene::Destroyer()
 	}
 }
 
-void Scene::AddPendingActors()
+void pk::Scene::AddPendingActors()
 {
 	if (PendingActors.empty())
 	{
@@ -284,7 +285,7 @@ void Scene::AddPendingActors()
 	PendingActors.clear();
 }
 
-void Scene::UpdateActiveWidgets()
+void pk::Scene::UpdateActiveWidgets()
 {
 	for (const WidgetSharedPtr& Widget : InactiveWidgets)
 	{
@@ -320,9 +321,9 @@ void Scene::UpdateActiveWidgets()
 	}
 }
 
-Scene::~Scene() = default;
+pk::Scene::~Scene() = default;
 
-void Scene::OnSetWindow()
+void pk::Scene::OnSetWindow()
 {
 	if (WindowPtr.expired())
 	{
@@ -332,13 +333,13 @@ void Scene::OnSetWindow()
 	Projection = glm::ortho(0.f, static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight()), 0.f, -1.0f, 1.0f);
 }
 
-void Scene::ClearWindow() const
+void pk::Scene::ClearWindow() const
 {
 	GetWindow()->ClearColor(Colors::LightBlack);
 	GetWindow()->ClearFlags(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Scene::Clean()
+void pk::Scene::Clean()
 {
 	AddPendingActors();
 	Destroyer();
@@ -346,7 +347,7 @@ void Scene::Clean()
 	GetWindow()->CloseFrame();
 }
 
-void Scene::UpdateDelta()
+void pk::Scene::UpdateDelta()
 {
 	CurrentTime = static_cast<float>(glfwGetTime());
 	Delta = CurrentTime - OldTime;
@@ -354,7 +355,7 @@ void Scene::UpdateDelta()
 	Fps = 1 / Delta;
 }
 
-void Scene::RenderActors() const
+void pk::Scene::RenderActors() const
 {
 	for (const ActorMapPair ActorPair : Actors)
 	{
@@ -362,7 +363,7 @@ void Scene::RenderActors() const
 	}
 }
 
-void Scene::RenderWidgets() const
+void pk::Scene::RenderWidgets() const
 {
 	for (const WidgetMapPair WidgetPair : ActiveWidgets)
 	{
@@ -370,7 +371,7 @@ void Scene::RenderWidgets() const
 	}
 }
 
-void Scene::HandleActorsInput(const float Delta) const
+void pk::Scene::HandleActorsInput(const float Delta) const
 {
 	for (const ActorMapPair ActorPair : Actors)
 	{
@@ -378,7 +379,7 @@ void Scene::HandleActorsInput(const float Delta) const
 	}
 }
 
-void Scene::HandleWidgetInput(const float Delta) const
+void pk::Scene::HandleWidgetInput(const float Delta) const
 {
 	for (const WidgetMapPair WidgetMap : ActiveWidgets)
 	{

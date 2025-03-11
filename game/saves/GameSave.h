@@ -5,6 +5,8 @@
 
 #include "../../pk/core/save/ISaveFile.h"
 
+using namespace pk;
+
 struct SaveImpl
 {
 	static const int MAX_SCORES;

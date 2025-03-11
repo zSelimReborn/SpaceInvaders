@@ -2,6 +2,8 @@
 
 #include "../core/utils/Random.h"
 
+using namespace pk;
+
 RandomSound::RandomSound()
 {
 	Paths.clear();

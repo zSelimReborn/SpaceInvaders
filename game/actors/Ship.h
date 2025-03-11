@@ -9,6 +9,8 @@ class ProjectilePool;
 class TeamComponent;
 class Game;
 
+using namespace pk;
+
 class Ship : public Actor, public IDamageable
 {
 public:

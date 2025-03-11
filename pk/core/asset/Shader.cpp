@@ -7,6 +7,8 @@
 
 #include "../utils/Common.h"
 
+using namespace pk;
+
 Shader::Shader() : shaderId(0), bIsCompiled(false)
 {
 }

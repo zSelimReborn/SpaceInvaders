@@ -5,6 +5,8 @@
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 
+using namespace pk;
+
 Window::Window(const int InWidth, const int InHeight, std::string InTitle)
 	: Width(InWidth), Height(InHeight), Title(std::move(InTitle)), WindowPtr(nullptr)
 {

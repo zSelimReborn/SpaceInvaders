@@ -8,6 +8,8 @@
 #include "../utils/Common.h"
 #include "../render/Renderer.h"
 
+using namespace pk;
+
 void Particle::Set(const glm::vec3& InPosition, const glm::vec3& InDirection, const glm::vec4& InColor, float InLife, float InSpeed, float InOverrideScale)
 {
 	Position = InPosition;

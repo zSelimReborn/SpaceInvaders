@@ -4,6 +4,8 @@
 
 #include "core/world/Scene.h"
 
+using namespace pk;
+
 Engine::Engine() = default;
 
 void Engine::SetWindow(const WindowSharedPtr& InWindow)

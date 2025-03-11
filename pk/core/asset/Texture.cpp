@@ -3,6 +3,8 @@
 #include <glad/glad.h>
 #include <stb_image.h>
 
+using namespace pk;
+
 Texture::Texture(std::string InPath, int InFormat, int InWrapS, int InWrapT, int InMinFilter, int InMaxFilter)
 	: Path(std::move(InPath)), Width(0), Height(0), Channels(0),
 		Format(InFormat), WrapS(InWrapS), WrapT(InWrapT), MinFilter(InMinFilter), MaxFilter(InMaxFilter)

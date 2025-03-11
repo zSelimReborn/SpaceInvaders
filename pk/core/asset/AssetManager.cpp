@@ -5,6 +5,8 @@
 #include "../../sound/SimpleSound.h"
 #include "../../sound/SoundEngine.h"
 
+using namespace pk;
+
 Shader::SharedPtr AssetManager::LoadShader(const std::string& Name, const std::string& Vertex,
                                            const std::string& Fragment)
 {

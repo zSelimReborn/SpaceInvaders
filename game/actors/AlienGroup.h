@@ -9,6 +9,8 @@
 class ProjectilePool;
 class Game;
 
+using namespace pk;
+
 enum class GroupState : std::uint8_t
 {
 	None,

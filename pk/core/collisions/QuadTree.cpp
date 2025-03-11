@@ -3,6 +3,8 @@
 
 #include "QuadPool.h"
 
+using namespace pk;
+
 QuadBox::QuadBox() = default;
 
 QuadBox::QuadBox(const QuadBox& InBox)

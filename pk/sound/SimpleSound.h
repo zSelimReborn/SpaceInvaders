@@ -2,13 +2,16 @@
 
 #include "ISound.h"
 
-class SimpleSound : public ISound
+namespace pk
 {
-public:
-	SimpleSound(std::string InName);
+	class SimpleSound : public ISound
+	{
+	public:
+		SimpleSound(std::string InName);
 
-	std::string GetPath() override;
+		std::string GetPath() override;
 
-private:
-	std::string Name;
-};
+	private:
+		std::string Name;
+	};
+}

@@ -5,6 +5,8 @@
 
 #include "../window/Window.h"
 
+using namespace pk;
+
 InputHandler::InputHandler()
 	: HandledPad(-1)
 {

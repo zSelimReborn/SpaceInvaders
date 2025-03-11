@@ -5,7 +5,10 @@
 #include "../actors/Projectile.h"
 #include "../Types.h"
 
-class Emitter;
+namespace pk
+{
+	class Emitter;
+}
 
 class ProjectilePool
 {

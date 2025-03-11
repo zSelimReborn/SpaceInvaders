@@ -12,6 +12,8 @@
 #include <sys/types.h>
 #endif
 
+using namespace pk;
+
 void Console::Print(const glm::vec3& Vector)
 {
 	std::cout << "{x: " << Vector.x << ", y: " << Vector.y << ", z: " << Vector.z << "}\n";

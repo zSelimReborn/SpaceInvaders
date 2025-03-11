@@ -6,6 +6,8 @@
 #include "AssetManager.h"
 #include "../render/Renderer.h"
 
+using namespace pk;
+
 Font::Font(std::string InPath, std::string InName, std::string InTextShader)
 	: Path(std::move(InPath)), Name(std::move(InName)), TextShader(std::move(InTextShader)), Size(14)
 {

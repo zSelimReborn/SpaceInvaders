@@ -2,24 +2,27 @@
 
 #include <memory>
 
-class Actor;
-
-class Component
+namespace pk
 {
-public:
-	typedef std::shared_ptr<Component> SharedPtr;
-	typedef std::shared_ptr<Actor> ActorSharedPtr;
-	typedef std::weak_ptr<Actor> ActorWeakPtr;
+	class Actor;
 
-	Component(const ActorWeakPtr& InOwner);
+	class Component
+	{
+	public:
+		typedef std::shared_ptr<Component> SharedPtr;
+		typedef std::shared_ptr<Actor> ActorSharedPtr;
+		typedef std::weak_ptr<Actor> ActorWeakPtr;
 
-	virtual void Begin();
-	virtual void Update(const float Delta);
+		Component(const ActorWeakPtr& InOwner);
 
-	ActorSharedPtr GetOwner() const;
+		virtual void Begin();
+		virtual void Update(const float Delta);
 
-	virtual ~Component() = default;
+		ActorSharedPtr GetOwner() const;
 
-private:
-	ActorWeakPtr Owner;
-};
+		virtual ~Component() = default;
+
+	private:
+		ActorWeakPtr Owner;
+	};
+}

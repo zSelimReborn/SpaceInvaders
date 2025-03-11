@@ -4,51 +4,54 @@
 #include <string>
 #include <glm/detail/type_vec.hpp>
 
-class Scene;
-class InputHandler;
-
-enum class TextOrient
+namespace pk
 {
-	Left,
-	Center,
-	Right
-};
+	class Scene;
+	class InputHandler;
 
-class Widget
-{
-public:
-	typedef std::shared_ptr<Widget> SharedPtr;
-	typedef std::shared_ptr<Scene> SceneSharedPtr;
-	typedef std::weak_ptr<Scene> SceneWeakPtr;
+	enum class TextOrient : std::uint8_t
+	{
+		Left,
+		Center,
+		Right
+	};
 
-	Widget();
+	class Widget
+	{
+	public:
+		typedef std::shared_ptr<Widget> SharedPtr;
+		typedef std::shared_ptr<Scene> SceneSharedPtr;
+		typedef std::weak_ptr<Scene> SceneWeakPtr;
 
-	int GetId() const;
+		Widget();
 
-	virtual void Construct();
-	virtual void Render();
-	virtual void Input(const InputHandler& Handler, const float Delta);
+		int GetId() const;
 
-	void Activate();
-	void Deactivate();
-	bool IsActive() const;
+		virtual void Construct();
+		virtual void Render();
+		virtual void Input(const InputHandler& Handler, const float Delta);
 
-	void SetScene(const SceneWeakPtr& InScene);
-	SceneSharedPtr GetScene() const;
+		void Activate();
+		void Deactivate();
+		bool IsActive() const;
 
-	virtual ~Widget() = default;
-protected:
-	static void RenderText(const std::string& InFontName, 
-		const glm::vec2& StartLocation, 
-		const std::string& InText, TextOrient Orient, 
-		float Scale, const glm::vec4& InColor,
-		float& OutWidth, float& OutHeight);
+		void SetScene(const SceneWeakPtr& InScene);
+		SceneSharedPtr GetScene() const;
 
-private:
-	bool bActive;
-	int Id;
+		virtual ~Widget() = default;
+	protected:
+		static void RenderText(const std::string& InFontName,
+			const glm::vec2& StartLocation,
+			const std::string& InText, TextOrient Orient,
+			float Scale, const glm::vec4& InColor,
+			float& OutWidth, float& OutHeight);
 
-	SceneWeakPtr ScenePtr;
+	private:
+		bool bActive;
+		int Id;
 
-	friend class Scene;
-};
+		SceneWeakPtr ScenePtr;
+
+		friend class Scene;
+	};
+}

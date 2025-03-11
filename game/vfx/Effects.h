@@ -2,6 +2,8 @@
 
 #include "../../pk/core/vfx/Emitter.h"
 
+using namespace pk;
+
 class Explosion : public ParticlePattern::Base
 {
 public:

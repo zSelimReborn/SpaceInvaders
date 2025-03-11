@@ -5,6 +5,8 @@
 
 class Game;
 
+using namespace pk;
+
 class Secret : public Actor
 {
 public:

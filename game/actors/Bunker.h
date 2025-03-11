@@ -4,6 +4,8 @@
 
 class Brick;
 
+using namespace pk;
+
 class Bunker : public Actor
 {
 public:

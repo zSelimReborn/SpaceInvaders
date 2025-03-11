@@ -2,20 +2,20 @@
 
 #include "Actor.h"
 
-Component::Component(const ActorWeakPtr& InOwner)
+pk::Component::Component(const ActorWeakPtr& InOwner)
 	: Owner(InOwner) { }
 
-void Component::Begin()
+void pk::Component::Begin()
 {
 	
 }
 
-void Component::Update(const float Delta)
+void pk::Component::Update(const float Delta)
 {
 	
 }
 
-Component::ActorSharedPtr Component::GetOwner() const
+pk::Component::ActorSharedPtr pk::Component::GetOwner() const
 {
 	return Owner.lock();
 }

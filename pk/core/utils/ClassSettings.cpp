@@ -3,6 +3,8 @@
 #include <sstream>
 #include <glm/gtc/matrix_transform.hpp>
 
+using namespace pk;
+
 ClassSettings::ClassSettings() = default;
 
 ClassSettings::ClassSettings(const SettingsMap& InMap)

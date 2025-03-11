@@ -2,32 +2,35 @@
 
 #include <vector>
 
-class QuadTree;
-
-class QuadPool
+namespace pk
 {
-public:
-	// A POOL CANNOT BE COPIED, TRUE?
-	QuadPool(const QuadPool&) = delete;
-	QuadPool(const QuadPool&&) = delete;
-	void operator=(const QuadPool&) = delete;
-	void operator=(const QuadPool&&) = delete;
+	class QuadTree;
 
-	static QuadPool& Get()
+	class QuadPool
 	{
-		static QuadPool Instance;
-		return Instance;
-	}
+	public:
+		// A POOL SHOULD NOT BE COPIED, TRUE?
+		QuadPool(const QuadPool&) = delete;
+		QuadPool(const QuadPool&&) = delete;
+		void operator=(const QuadPool&) = delete;
+		void operator=(const QuadPool&&) = delete;
 
-	QuadTree* GetQuadTree();
-	void Reset();
-	bool IsEmpty() const;
+		static QuadPool& Get()
+		{
+			static QuadPool Instance;
+			return Instance;
+		}
 
-	~QuadPool();
-private:
-	QuadPool();
-	void AddPool(int Size);
+		QuadTree* GetQuadTree();
+		void Reset();
+		bool IsEmpty() const;
 
-	std::vector<QuadTree*> Pool;
-	int NextIndex;
-};
+		~QuadPool();
+	private:
+		QuadPool();
+		void AddPool(int Size);
+
+		std::vector<QuadTree*> Pool;
+		int NextIndex;
+	};
+}

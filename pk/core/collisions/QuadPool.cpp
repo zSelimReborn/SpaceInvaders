@@ -5,6 +5,8 @@
 #include "Constants.h"
 #include "QuadTree.h"
 
+using namespace pk;
+
 QuadTree* QuadPool::GetQuadTree()
 {
 	// Should be an assert

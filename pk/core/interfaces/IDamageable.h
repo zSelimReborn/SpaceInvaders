@@ -1,8 +1,11 @@
 #pragma once
 
-class IDamageable
+namespace pk
 {
-public:
-	virtual bool TakeDamage(float InDamage) = 0;
-	virtual ~IDamageable() = default;
-};
+	class IDamageable
+	{
+	public:
+		virtual bool TakeDamage(float InDamage) = 0;
+		virtual ~IDamageable() = default;
+	};
+}

@@ -7,10 +7,12 @@
 #include "../render/Renderer.h"
 #include "Scene.h"
 
+using namespace pk;
+
 Actor::Actor()
 	: Id(-1), InitialLifeSpan(0.f), LifeSpan(0.f), Velocity(0.f), Color(Colors::Black), bPendingDestroy(false), bHasCollision(false) {}
 
-Actor::Actor(const ::Transform& InTransform)
+Actor::Actor(const Transform& InTransform)
 	: Actor()
 {
 	mTransform = InTransform;
@@ -26,12 +28,12 @@ int Actor::GetId() const
 	return Id;
 }
 
-void Actor::SetScene(const Scene::WeakPtr& InScene)
+void Actor::SetScene(const SceneWeakPtr& InScene)
 {
 	ScenePtr = InScene;
 }
 
-Scene::SharedPtr Actor::GetScene() const
+Actor::SceneSharedPtr Actor::GetScene() const
 {
 	return ScenePtr.lock();
 }

@@ -2,30 +2,33 @@
 
 #include <memory>
 
-class Window;
-class Scene;
-
-class Engine
+namespace pk
 {
-public:
-	typedef std::shared_ptr<Window> WindowSharedPtr;
-	typedef std::shared_ptr<Scene> SceneSharedPtr;
+	class Window;
+	class Scene;
 
-	Engine();
-	Engine(Engine& InEngine) = delete;
-	Engine(Engine&& InEngine) = delete;
-	void operator=(const Engine& InEngine) = delete;
-	void operator=(const Engine&& InEngine) = delete;
+	class Engine
+	{
+	public:
+		typedef std::shared_ptr<Window> WindowSharedPtr;
+		typedef std::shared_ptr<Scene> SceneSharedPtr;
 
-	void SetWindow(const WindowSharedPtr& InWindow);
-	void SetCurrentScene(const SceneSharedPtr& InScene);
+		Engine();
+		Engine(Engine& InEngine) = delete;
+		Engine(Engine&& InEngine) = delete;
+		void operator=(const Engine& InEngine) = delete;
+		void operator=(const Engine&& InEngine) = delete;
 
-	void Begin() const;
-	void Run() const;
+		void SetWindow(const WindowSharedPtr& InWindow);
+		void SetCurrentScene(const SceneSharedPtr& InScene);
 
-	~Engine();
+		void Begin() const;
+		void Run() const;
 
-private:
-	WindowSharedPtr WindowPtr;
-	SceneSharedPtr CurrentScene;
+		~Engine();
+
+	private:
+		WindowSharedPtr WindowPtr;
+		SceneSharedPtr CurrentScene;
+	};
 };

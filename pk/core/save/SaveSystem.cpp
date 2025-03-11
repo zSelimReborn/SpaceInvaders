@@ -3,6 +3,8 @@
 #include <fstream>
 #include <sstream>
 
+using namespace pk;
+
 void SaveSystem::TriggerSave() const
 {
 	if (!IsValid())

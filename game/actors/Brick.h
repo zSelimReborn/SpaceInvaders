@@ -4,6 +4,8 @@
 #include "../../pk/core/world/Actor.h"
 #include "../../pk/core/interfaces/IDamageable.h"
 
+using namespace pk;
+
 class Brick : public Actor, public IDamageable
 {
 public:

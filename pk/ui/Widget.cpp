@@ -4,6 +4,8 @@
 
 #include "../core/asset/AssetManager.h"
 
+using namespace pk;
+
 Widget::Widget()
 	: bActive(false), Id(-1)
 {

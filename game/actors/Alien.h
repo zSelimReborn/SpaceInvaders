@@ -7,6 +7,8 @@ class ProjectilePool;
 class TeamComponent;
 class Game;
 
+using namespace pk;
+
 enum class AlienType : uint8_t
 {
 	Squid,

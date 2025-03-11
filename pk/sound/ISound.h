@@ -2,9 +2,12 @@
 
 #include <string>
 
-class ISound
+namespace pk
 {
-public:
-	virtual std::string GetPath() = 0;
-	virtual ~ISound() = default;
-};
+	class ISound
+	{
+	public:
+		virtual std::string GetPath() = 0;
+		virtual ~ISound() = default;
+	};
+}

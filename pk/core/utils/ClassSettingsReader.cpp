@@ -4,6 +4,8 @@
 #include <iostream>
 #include <sstream>
 
+using namespace pk;
+
 ClassSettingsReader::Map ClassSettingsReader::AllSettings{};
 
 ClassSettings::SharedConstPtr ClassSettingsReader::Load(const Map::key_type& InPath)

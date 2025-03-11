@@ -2,6 +2,8 @@
 
 #include "../core/utils/Random.h"
 
+using namespace pk;
+
 SequenceSound::SequenceSound()
 	: CurrentIndex(0)
 {

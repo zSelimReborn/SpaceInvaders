@@ -2,49 +2,52 @@
 
 #include <map>
 
-class Window;
-
-enum class InputType : std::uint8_t
+namespace pk
 {
-	Press,
-	Hold
-};
+	class Window;
 
-enum class InputStatus : std::uint8_t
-{
-	None,
-	Pressing,
-	WaitingRelease
-};
+	enum class InputType : std::uint8_t
+	{
+		Press,
+		Hold
+	};
 
-class InputHandler
-{
-public:
-	InputHandler();
+	enum class InputStatus : std::uint8_t
+	{
+		None,
+		Pressing,
+		WaitingRelease
+	};
 
-	void HandleKey(int InKey, InputType InType);
-	void HandlePad(int PadId);
-	void HandlePadKey(int InKey, InputType InType);
-	void Update(const Window& InWindow, float Delta);
-	void Clean();
+	class InputHandler
+	{
+	public:
+		InputHandler();
 
-	bool IsPressed(int InKey) const;
-	bool IsReleased(int InKey) const;
-	bool IsPadPressed(int InKey) const;
-	bool IsPadReleased(int InKey) const;
+		void HandleKey(int InKey, InputType InType);
+		void HandlePad(int PadId);
+		void HandlePadKey(int InKey, InputType InType);
+		void Update(const Window& InWindow, float Delta);
+		void Clean();
 
-private:
-	bool IsValidPad(int PadId) const;
-	void UpdateKeys(const Window& InWindow, float Delta);
-	void UpdatePadKeys(const Window& InWindow, float Delta);
+		bool IsPressed(int InKey) const;
+		bool IsReleased(int InKey) const;
+		bool IsPadPressed(int InKey) const;
+		bool IsPadReleased(int InKey) const;
 
-	void CleanKeys();
-	void CleanPadKeys();
+	private:
+		bool IsValidPad(int PadId) const;
+		void UpdateKeys(const Window& InWindow, float Delta);
+		void UpdatePadKeys(const Window& InWindow, float Delta);
 
-	std::map<int, InputStatus> ActiveKeys;
-	std::map<int, InputType> HandledKeys;
+		void CleanKeys();
+		void CleanPadKeys();
 
-	int HandledPad;
-	std::map<int, InputStatus> ActivePadKeys;
-	std::map<int, InputType> HandledPadKeys;
-};
+		std::map<int, InputStatus> ActiveKeys;
+		std::map<int, InputType> HandledKeys;
+
+		int HandledPad;
+		std::map<int, InputStatus> ActivePadKeys;
+		std::map<int, InputType> HandledPadKeys;
+	};
+}

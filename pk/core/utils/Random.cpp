@@ -1,5 +1,7 @@
 #include "Random.h"
 
+using namespace pk;
+
 std::random_device Random::Device{};
 std::default_random_engine Random::Engine{ Device()};
 
