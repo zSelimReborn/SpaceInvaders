@@ -2,17 +2,10 @@
 
 Remake of the 80s classic game **SPACE INVADERS** using **OpenGL** and **C++**.
 
-[Gameplay video](TODO)
-
-# Shots
-![Menu](Screenshots/main_menu.png)
-![Highscores](Screenshots/highscores.png)
-![Gameplay1](Screenshots/gameplay_1.png)
-![Gameplay2](Screenshots/gameplay_2.png)
-![PlayerHit](Screenshots/player_hit.png)
-![GameOver](Screenshots/game_over.png)
+[Gameplay Video](https://youtu.be/TqB_-VCNxtg)
 
 # Table of contents
+- [Some screenshots](#shots)
 - [Introduction](#introduction)
 - [Dependencies](#dependencies)
 - [Controls](#controls)
@@ -21,6 +14,23 @@ Remake of the 80s classic game **SPACE INVADERS** using **OpenGL** and **C++**.
 - [pkEngine](#pkengine)
 - [Download](#download)
 - [Future Improvements](#future-improvements)
+
+# Shots
+#### Main menu
+![Menu](Screenshots/main_menu.png)
+
+#### Highscores menu
+![Highscores](Screenshots/highscores.png)
+
+#### Gameplay
+![Gameplay1](Screenshots/gameplay_1.png)
+![Gameplay2](Screenshots/gameplay_2.png)
+
+#### Player Hit
+![PlayerHit](Screenshots/player_hit.png)
+
+#### GameOver
+![GameOver](Screenshots/game_over.png)
 
 # Introduction
 
