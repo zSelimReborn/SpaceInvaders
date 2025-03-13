@@ -167,6 +167,14 @@ I introduced a TeamComponent that can be attached to any actor.
 In this case it has been added to the ```Alien```, ```Player```, ```Bunker``` and ```Projectile``` class.
 
 ```cpp
+enum class Team : std::uint8_t
+{
+	None,
+	Human,
+	Alien,
+	Brick
+};
+
 class TeamComponent : public Component
 {
 public:
@@ -383,7 +391,7 @@ It needs to be configured to detect Keys and Buttons to detect three types of ev
 - **Hold**
 - **Release**
 
-```
+```cpp
 enum class InputType : std::uint8_t
 {
 	Press,
@@ -448,7 +456,7 @@ pkEngine includes classes to handle gameplay mechanics:
 
 You can download a working build of the game [here](https://github.com/zSelimReborn/SpaceInvaders/releases/tag/v1.0).
 
-Since there is not cooked content I encourage you to change the configuration files to make the game
+Since there is no cooked content I encourage you to change the configuration files to make the game
 more dynamic :)
 
 # Future improvements
