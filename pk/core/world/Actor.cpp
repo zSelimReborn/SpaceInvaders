@@ -221,8 +221,8 @@ bool Actor::Collide(const Actor& Other, CollisionResult& OutResult) const
 	const BoundingBox Me(GetBoundingBox());
 	const BoundingBox OtherBox(Other.GetBoundingBox());
 
-	bool bCollidedX = (Me.Right() >= OtherBox.Left()  && OtherBox.Right() >= Me.Left());
-	bool bCollidedY = (Me.Bottom() <= OtherBox.Top()  && OtherBox.Bottom() <= Me.Top());
+	bool bCollidedX = (Me.Right() >= OtherBox.Left() && OtherBox.Right() >= Me.Left());
+	bool bCollidedY = (Me.Top() <= OtherBox.Bottom() && OtherBox.Top() <= Me.Bottom());
 
 	float IntersectLeft = std::max(Me.Left(), OtherBox.Left());
 	float IntersectRight = std::min(Me.Right(), OtherBox.Right());

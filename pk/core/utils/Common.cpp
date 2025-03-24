@@ -151,12 +151,12 @@ BoundingBox::BoundingBox(const Transform& InTransform)
 
 float BoundingBox::Top() const
 {
-	return mTransform.Location.y + ScaleOffset.y;
+	return mTransform.Location.y - ScaleOffset.y;
 }
 
 float BoundingBox::Bottom() const
 {
-	return mTransform.Location.y - ScaleOffset.y;
+	return mTransform.Location.y + ScaleOffset.y;
 }
 
 float BoundingBox::Right() const
